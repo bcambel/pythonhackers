@@ -4,6 +4,7 @@
 *.so
 
 *.local.cfg
+newrelic.ini
 
 # Packages
 *.egg
