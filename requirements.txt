@@ -43,4 +43,5 @@ simplekv==0.6
 six==1.3.0
 speaklater==1.3
 tornado==3.1
+uWSGI==1.9.14
 wsgiref==0.1.2

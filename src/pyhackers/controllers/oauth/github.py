@@ -43,4 +43,3 @@ def authorized():
 
     user_info = user_data.json()
     return jsonify(user_info) #, response_data.get("access_token")
-    
