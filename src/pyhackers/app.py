@@ -1,4 +1,11 @@
 import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+source_dir = os.path.dirname(current_dir)
+
+sys.path.insert(0,source_dir)
+
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, abort, render_template, redirect, jsonify, session
 
@@ -6,7 +13,6 @@ from flaskext.kvsession import KVSessionExtension
 import logging
 from config import config, SENTRY_DSN
 from raven.contrib.flask import Sentry
-
 from setup import setup_application_extensions
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +52,11 @@ else:
 setup_application_extensions(app, '/authenticate')
 
 if __name__ == "__main__":
-    from controllers import *
+    from pyhackers.controllers.main import *
+    from pyhackers.controllers.oauth.twitter import twitter_bp
+    from pyhackers.controllers.oauth.github import github_bp
 
-    app.run(use_debugger=True, port=5000)
+    app.register_blueprint(twitter_bp)
+    app.register_blueprint(github_bp)
+
+    app.run(use_debugger=True, port=5001)

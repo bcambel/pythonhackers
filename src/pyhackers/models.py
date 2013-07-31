@@ -47,6 +47,14 @@ class User(object):
     def __unicode__(self):
         return self.__str__()
 
+    @classmethod
+    def load(cls, oauth_id):
+        pass
+
+    @classmethod
+    def add(cls, param):
+        pass
+
 
 class UserStore(object):
 

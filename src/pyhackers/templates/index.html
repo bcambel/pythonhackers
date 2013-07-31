@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class='links container'>
+    {% for link in links %}
+        <div class='row'>
+            <div class='col-lg-1 front-action'>
+                <i class='icon-arrow-up icon-2x'></i>
+            </div>
+            <div class='col-lg-12' style="padding-left:0;">
+                <div class='clear link-container'>
+
+                    <a href='{{ link.url }}' target="_blank" class='link'>
+                        <span class="label label-success">{{ link.popularity }}</span>
+                        {{ link.title }}
+                    </a>
+                </div>
+                <a href="#comments" class='link-discuss'>Discuss&nbsp;<span class='badge'>{{ link.comment }}</span></a>
+                <span>By </span><a href="@bahadir">@Bahadir</a>
+                <span class="pull-right">{{ link.ago }} mins ago</span>
+                <a href="#/tag/flask" class='tag'>
+                    <span class="">#Flask</span>
+                </a>
+                <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                <div class='pull-right'>
+
+
+                <a href="#ajax"><span class="label label-success" style="position: absolute;top:5px;right:0;"><i class='icon-ok'></i>&nbsp;</span></a>
+                    </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

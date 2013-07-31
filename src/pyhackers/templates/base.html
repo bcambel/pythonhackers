@@ -2,16 +2,81 @@
 <html>
 <head>
     <title>Python Hackers Community</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        a:hover{
+            text-decoration: none;
+        }
+        .links {
+
+        }
+        .links .row{
+            margin-bottom:10px;
+            padding-bottom:14px;
+            border-bottom: 1px solid #d3d3d3;
+        }
+        .tag{
+            color:#d9534f;
+        }
+        .link-container{
+            padding-top:5px;
+            margin-bottom: 10px;;
+        }
+        .link-container .label{
+
+        }
+        .links .front-action{
+            max-width:50px;
+            padding-top:5px;
+
+        }
+
+        @media(min-width:768px){
+            .links .front-action{
+                margin-left:-70px;
+            }
+        }
+
+        .link-discuss{
+            color:gray;
+            font-weight: bolder;
+        }
+        .links .front-action i{
+            color: lightgray;
+            cursor: pointer;
+            font-size: 3em;
+        }
+
+        .links a.link{
+            font-size:1.7em;
+        }
+        .links a{
+            font-size: 1.2em;
+        }
+        .navbar-brand{
+            font-size:1.5em;
+        }
+    </style>
 </head>
 <body>
-
+    <div class="navbar">
+        <div class="container">
+  <a class="navbar-brand" href="#">Python Hackers</a>
+  <ul class="nav navbar-nav">
+    <li class="active"><a href="#home">Home</a></li>
+    <li><a href="#articles">Articles</a></li>
+    <li><a href="#open-source">Open Source</a></li>
+  </ul>
+            </div>
+</div>
 
     <div class="container-fluid">
             <div id='main'>
+                {% block content %}{% endblock %}
             </div>
     </div>
 

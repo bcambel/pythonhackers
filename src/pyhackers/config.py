@@ -10,7 +10,7 @@ config = ConfigParser.RawConfigParser()
 configfiles = list()
 
 # load default config file
-dev_cfg = os.path.join(os.path.dirname(__file__), 'default.cfg')
+dev_cfg = os.path.join(os.path.dirname(__file__), 'app.local.cfg')
 logging.warn("Dev: %s" % dev_cfg)
 configfiles += [dev_cfg]
 
