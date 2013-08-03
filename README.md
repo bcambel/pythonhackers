@@ -12,3 +12,10 @@ pip install -r requirements.txt
 ```
 
 That will do the job for you.
+
+Support PythonHackers
+----------------------
+
+<iframe style="border: 0; margin: 0; padding: 0;"
+        src="https://www.gittip.com/bcambel/widget.html"
+        width="48pt" height="22pt"></iframe>
