@@ -4,11 +4,11 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 source_dir = os.path.dirname(current_dir)
 
-sys.path.insert(0,source_dir)
+sys.path.insert(0, source_dir)
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, abort, render_template, redirect, jsonify, session
-
+from flask.ext.cache import Cache
 from flaskext.kvsession import KVSessionExtension
 import logging
 from config import config, SENTRY_DSN
@@ -26,6 +26,9 @@ app.debug = bool(config.get("app", "debug"))
 app.config['SQLALCHEMY_DATABASE_URI'] = db_conf
 
 db = SQLAlchemy(app)
+
+cache = Cache(app,config={'CACHE_TYPE':'simple'})
+cache.init_app(app)
 
 from raven.base import DummyClient
 
@@ -48,7 +51,6 @@ else:
 ======The application will run now...
 """ % SENTRY_DSN)
 
-
 setup_application_extensions(app, '/authenticate')
 
 from pyhackers.controllers.main import *
@@ -57,7 +59,6 @@ from pyhackers.controllers.oauth.github import github_bp
 
 app.register_blueprint(twitter_bp)
 app.register_blueprint(github_bp)
-
 
 if __name__ == "__main__":
     app.run(use_debugger=True, port=5001)

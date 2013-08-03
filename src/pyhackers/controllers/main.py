@@ -4,11 +4,12 @@ from flask.ext.wtf import (Form, TextField, PasswordField,
 from flask import Flask, request, abort, render_template, redirect, jsonify, session, url_for
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from pyhackers.setup import login_manager
-from pyhackers.app import app
+from pyhackers.app import app, cache
 from pyhackers.models import init_store, User
-from json import loads,dumps
+from json import loads, dumps
 import time
 import requests
+
 
 userStorage = init_store("pyhackers")
 
@@ -49,15 +50,32 @@ def rand_int(maximum=60):
     return int(random.random() * 100) % maximum
 
 
+@cache.memoize(timeout=100)
+def get_reddit_top_python_articles():
+    logging.warn("Fetching REDDIT!!")
+    r = requests.get("http://www.reddit.com/r/python/top.json?limit=100")
+
+    reddit_posts = r.json()
+    reddit_python_posts = []
+    for red in reddit_posts['data']['children']:
+        post = {}
+        data = red['data']
+        post['url'] = data['url']
+        post['popularity'] = data['score']
+        post['comment'] = data.get('num_comments', 0)
+        post['title'] = data.get('title', '')
+        post['domain'] = data.get('domain', '')
+        post['ago'] = int((int(time.time()) - data.get('created_utc'))/3600)
+        post['user'] = data.get("author")
+        reddit_python_posts.append(post)
+
+    return reddit_python_posts
+
+
 @app.route("/", methods=("GET",))
 @app.route("/index", methods=("GET",))
 def index():
-    links = [
-        {'url': 'http://google.com', 'title': 'Google Homepage is updated', 'ago': rand_int(),
-         'comment': rand_int(100), 'popularity': rand_int(1004)},
-        {'url': 'http://yahoo.com', 'title': 'Yahoo is rising high to the sky with Marissa Meyer', 'ago': rand_int(),
-         'comment': rand_int(100), 'popularity': rand_int(1000)},
-    ]
+    links = get_reddit_top_python_articles()
     return render_base_template("index.html", links=sorted(links, key=lambda x: x.get("popularity"), reverse=True))
 
 

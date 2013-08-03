@@ -15,9 +15,10 @@
                         <span class="label label-success">{{ link.popularity }}</span>
                         {{ link.title }}
                     </a>
+                    ({{ link.domain }})
                 </div>
                 <a href="#comments" class='link-discuss'>Discuss&nbsp;<span class='badge'>{{ link.comment }}</span></a>
-                <span>By </span><a href="@bahadir">@Bahadir</a>
+                <span>By </span><a href="@bahadir">@{{ link.user }}</a>
                 <span class="pull-right">{{ link.ago }} mins ago</span>
                 <a href="#/tag/flask" class='tag'>
                     <span class="">#Flask</span>
