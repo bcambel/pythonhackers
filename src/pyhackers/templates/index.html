@@ -5,30 +5,41 @@
     <div class='links container'>
     {% for link in links %}
         <div class='row'>
-            <div class='col-lg-1 front-action'>
+            <div class='front-action'>
                 <i class='icon-arrow-up icon-2x'></i>
-            </div>
-            <div class='col-lg-12' style="padding-left:0;">
-                <div class='clear link-container'>
+                <span class="label label-success">{{ link.popularity }} / {{ link.comment }} </span>
 
-                    <a href='{{ link.url }}' target="_blank" class='link'>
-                        <span class="label label-success">{{ link.popularity }}</span>
+            </div>
+            <div class='col-lg-8 link-box' style="padding-left:0;">
+                <div class='clear link-container row'>
+                    <div class='col-lg-10'>
+                        <a href='{{ link.url }}' target="_blank" class='link'>
                         {{ link.title }}
                     </a>
                     ({{ link.domain }})
-                </div>
-                <a href="#comments" class='link-discuss'>Discuss&nbsp;<span class='badge'>{{ link.comment }}</span></a>
-                <span>By </span><a href="@bahadir">@{{ link.user }}</a>
-                <span class="pull-right">{{ link.ago }} mins ago</span>
-                <a href="#/tag/flask" class='tag'>
-                    <span class="">#Flask</span>
-                </a>
-                <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
-                <div class='pull-right'>
 
-
-                <a href="#ajax"><span class="label label-success" style="position: absolute;top:5px;right:0;"><i class='icon-ok'></i>&nbsp;</span></a>
                     </div>
+                    <div class='col-lg-2' style="text-align: right;padding-top:12px;">
+                            {{ link.ago }} mins ago
+                        </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-2'>
+                        <a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>
+                    </div>
+
+                    <div class='col-lg-3'>
+                        <a href="@bahadir">@{{ link.user }}</a>
+                    </div>
+                    <div class="col-7" style="text-align: right">
+                        <a href="#/tag/flask" class='tag'>
+                            <span class="">#Flask</span>
+                        </a>
+                        <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                    </div>
+
+
+                </div>
             </div>
         </div>
     {% endfor %}

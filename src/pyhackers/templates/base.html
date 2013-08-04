@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
     <style>
         a:hover{
@@ -14,10 +15,11 @@
         .links {
 
         }
-        .links .row{
+        .links .row .link-box{
             margin-bottom:10px;
             padding-bottom:14px;
             border-bottom: 1px solid #d3d3d3;
+            padding-right:0;
         }
         .tag{
             color:#d9534f;
@@ -32,19 +34,25 @@
         .links .front-action{
             max-width:50px;
             padding-top:5px;
-
+            width: 100px;
+            float: left;
+            margin-right: 10px;
+            line-height: 25px;
         }
 
         @media(min-width:768px){
             .links .front-action{
-                margin-left:-70px;
+{#                margin-left:-70px;#}
             }
         }
+        .user-info{
+            float:left;
 
-        .link-discuss{
-            color:gray;
-            font-weight: bolder;
         }
+        .link-discuss{
+            color:darkgray;
+        }
+
         .links .front-action i{
             color: lightgray;
             cursor: pointer;
@@ -71,6 +79,13 @@
     <li><a href="#articles">Articles</a></li>
     <li><a href="#open-source">Open Source</a></li>
   </ul>
+            <ul class='nav navbar-nav pull-right'>
+                <li>
+                    <a class="btn-auth btn-github" href="/oauth/github">
+    Sign in with <b>Github</b>
+</a>
+                </li>
+            </ul>
             </div>
 </div>
 
@@ -79,6 +94,7 @@
                 {% block content %}{% endblock %}
             </div>
     </div>
+
 
     {%  include "modals.html" %}
     {%  include "js_templates.html" %}
