@@ -1,3 +1,0 @@
-#!/bin/sh
-echo eval "fab $@"
-fab $@ -i ~/.ssh/digital -f fab.py
