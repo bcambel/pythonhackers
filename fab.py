@@ -10,7 +10,7 @@ def restart_nginx():
     run("/service nginx restart")
 
 
-def restart_processes():
+def restart_process():
     sudo("supervisorctl restart pythonhackers")
 
 
@@ -24,14 +24,14 @@ def update_code():
         run("git pull")
 
 
-def install(package=None):
-    assert package is not None
-    sudo("apt-get -y install %s" % package)
+def install(*packages):
+    assert packages is not None
+    sudo("apt-get -y install %s" % packages)
 
 
-def get_latest_release():
+def deploy():
     update_code()
-    restart_nginx()
+    restart_process()
 
 
 def super(mode=""):
