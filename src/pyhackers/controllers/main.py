@@ -50,10 +50,21 @@ def rand_int(maximum=60):
     return int(random.random() * 100) % maximum
 
 
-@cache.memoize(timeout=100)
-def get_reddit_top_python_articles():
-    logging.warn("Fetching REDDIT!!")
-    r = requests.get("http://www.reddit.com/r/python/top.json?limit=100")
+def request_force_non_cache():
+    return request.args.get("purge", False) in ["True", "1", "ok", True]
+
+
+@cache.memoize(timeout=20, unless=request_force_non_cache)
+def get_reddit_top_python_articles(list_type='top'):
+
+    keys = ['top', 'new', 'hot']
+
+    url = "http://www.reddit.com/r/python/%s.json" % list_type
+    logging.warn("Fetch REDDIT %s" % url )
+
+    assert list_type in keys
+
+    r = requests.get(url)
 
     reddit_posts = r.json()
     reddit_python_posts = []
@@ -65,7 +76,7 @@ def get_reddit_top_python_articles():
         post['comment'] = data.get('num_comments', 0)
         post['title'] = data.get('title', '')
         post['domain'] = data.get('domain', '')
-        post['ago'] = int((int(time.time()) - data.get('created_utc'))/3600)
+        post['ago'] = int((int(time.time()) - data.get('created_utc')) / 3600)
         post['user'] = data.get("author")
         reddit_python_posts.append(post)
 
@@ -75,7 +86,8 @@ def get_reddit_top_python_articles():
 @app.route("/", methods=("GET",))
 @app.route("/index", methods=("GET",))
 def index():
-    links = get_reddit_top_python_articles()
+    list_type = request.args.get("list", 'top')
+    links = get_reddit_top_python_articles(list_type=list_type)
     return render_base_template("index.html", links=sorted(links, key=lambda x: x.get("popularity"), reverse=True))
 
 
