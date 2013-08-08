@@ -9,7 +9,7 @@ from pyhackers.models import init_store, User
 from json import loads, dumps
 import time
 import requests
-
+from pyhackers.model.user import User, new_user
 
 userStorage = init_store("pyhackers")
 
@@ -68,6 +68,7 @@ def get_reddit_top_python_articles(list_type='top'):
 
     reddit_posts = r.json()
     reddit_python_posts = []
+
     for red in reddit_posts['data']['children']:
         post = {}
         data = red['data']
@@ -78,6 +79,7 @@ def get_reddit_top_python_articles(list_type='top'):
         post['domain'] = data.get('domain', '')
         post['ago'] = int((int(time.time()) - data.get('created_utc')) / 3600)
         post['user'] = data.get("author")
+        new_user(post['user'],"%s@gmail.com" % post['user'])
         reddit_python_posts.append(post)
 
     return reddit_python_posts
