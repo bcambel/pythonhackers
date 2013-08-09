@@ -14,6 +14,7 @@ from pyhackers.model.user import User, new_user
 userStorage = init_store("pyhackers")
 
 
+
 def render_base_template(*args, **kwargs):
     try:
         is_logged = int(request.args.get("logged", "1"))
@@ -79,7 +80,7 @@ def get_reddit_top_python_articles(list_type='top'):
         post['domain'] = data.get('domain', '')
         post['ago'] = int((int(time.time()) - data.get('created_utc')) / 3600)
         post['user'] = data.get("author")
-        new_user(post['user'],"%s@gmail.com" % post['user'])
+
         reddit_python_posts.append(post)
 
     return reddit_python_posts
@@ -92,6 +93,21 @@ def index():
     links = get_reddit_top_python_articles(list_type=list_type)
     return render_base_template("index.html", links=sorted(links, key=lambda x: x.get("popularity"), reverse=True))
 
+from pyhackers.model.os_project import OpenSourceProject
+
+@app.route('/os/<regex(".+"):project>')
+def os(project):
+    print "looking for", project
+    project = OpenSourceProject.query.filter_by(slug=project).first()
+
+    return render_base_template("os.html",project=project)
+
+@app.route('/os')
+def os_list():
+
+    projects= OpenSourceProject.query.limit(2000)
+
+    return render_base_template("os_list.html",projects=projects)
 
 def current_user_logged_in():
     if hasattr(current_user, "id"):

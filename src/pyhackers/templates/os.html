@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class='container'>
+    <h1>{{ project.name }}</h1>
+
+    <a href='{{ project.src_url}}'>{{ project.src_url }}</a>
+
+    <h3>{{ project.stars }}</h3>
+    <h3>{{ project.watchers }}</h3>
+    <p>
+        {{ project.description }}
+    </p>
+</div>
+{% endblock %}

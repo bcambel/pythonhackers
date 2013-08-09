@@ -1,5 +1,6 @@
 import os
 import sys
+from werkzeug.routing import BaseConverter
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 source_dir = os.path.dirname(current_dir)
@@ -61,8 +62,16 @@ from pyhackers.controllers.oauth.github import github_bp
 app.register_blueprint(twitter_bp)
 app.register_blueprint(github_bp)
 
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+
+app.url_map.converters['regex'] = RegexConverter
+
 
 
 if __name__ == "__main__":
-    db.create_all()
+    # db.create_all()
     app.run(use_debugger=True, port=5001)

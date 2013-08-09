@@ -17,17 +17,17 @@ import sqlalchemy as sa
 def upgrade():
     op.create_table(
         'user',
-        sa.Column('id', sa.Integer, primary_key=True,autoincrement=True),
-        sa.Column('nick', sa.String(64), unique = True, index=True, nullable=False),
-        sa.Column('email', sa.Unicode(200),index = True, unique = True),
+        sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
+        sa.Column('nick', sa.String(64), unique=True, index=True, nullable=False),
+        sa.Column('email', sa.Unicode(200), index=True, unique=True),
     )
 
     op.create_table(
         'os_project',
-        sa.Column('id', sa.Integer, primary_key=True,autoincrement=True),
+        sa.Column('id', sa.Integer, primary_key=True, autoincrement=True),
         sa.Column('name', sa.String(100), nullable=False),
-        sa.Column('slug', sa.String(64), unique = True, index=True, nullable=False),
-        sa.Column('description', sa.Unicode(200)),
+        sa.Column('slug', sa.String(100), unique=True, index=True, nullable=False),
+        sa.Column('description', sa.Unicode(500)),
         sa.Column('src_url', sa.Unicode(200)),
         sa.Column('doc_url', sa.Unicode(200)),
         sa.Column('starts', sa.Integer),
