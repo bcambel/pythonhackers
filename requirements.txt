@@ -14,10 +14,12 @@ Flask-SQLAlchemy==1.0
 Flask-Security==1.6.7
 Flask-WTF==0.8.4
 Jinja2==2.7
+Mako==0.8.1
 MarkupSafe==0.18
 SQLAlchemy==0.8.2
 WTForms==1.0.4
 Werkzeug==0.9.3
+alembic==0.6.0
 amqp==1.0.12
 anyjson==0.3.3
 billiard==2.7.3.31
@@ -31,6 +33,7 @@ newrelic==1.13.1.31
 oauth2==1.5.211
 paramiko==1.11.0
 passlib==1.6.1
+psycopg2==2.5.1
 pycrypto==2.6
 python-dateutil==2.1
 python-memcached==1.53
