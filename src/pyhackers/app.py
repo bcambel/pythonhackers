@@ -28,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_conf
 
 db = SQLAlchemy(app)
 
-cache = Cache(app,config={'CACHE_TYPE':'simple'})
+cache = Cache(app, config={'CACHE_TYPE': 'memcached'})
 cache.init_app(app)
 
 from raven.base import DummyClient
@@ -54,13 +54,13 @@ else:
 
 setup_application_extensions(app, '/authenticate')
 
-
 from pyhackers.controllers.main import *
 from pyhackers.controllers.oauth.twitter import twitter_bp
 from pyhackers.controllers.oauth.github import github_bp
 
 app.register_blueprint(twitter_bp)
 app.register_blueprint(github_bp)
+
 
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
@@ -69,8 +69,6 @@ class RegexConverter(BaseConverter):
 
 
 app.url_map.converters['regex'] = RegexConverter
-
-
 
 if __name__ == "__main__":
     # db.create_all()

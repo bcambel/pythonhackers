@@ -13,7 +13,9 @@ from pyhackers.models import init_store, User
 
 from pyhackers.model.user import User, new_user
 from pyhackers.model.os_project import OpenSourceProject
+from pyhackers.config import config
 
+purge_key = config.get("app", 'purge_key')
 userStorage = init_store("pyhackers")
 
 
@@ -51,10 +53,10 @@ def rand_int(maximum=60):
 
 
 def request_force_non_cache():
-    return request.args.get("purge", False) in ["True", "1", "ok", True]
+    return request.args.get(purge_key, False) in ["True", "1", "ok", True]
 
 
-@cache.memoize(timeout=20, unless=request_force_non_cache)
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def get_reddit_top_python_articles(list_type='top'):
     keys = ['top', 'new', 'hot']
 
@@ -88,8 +90,15 @@ def get_reddit_top_python_articles(list_type='top'):
 @app.route("/index", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
+
     links = get_reddit_top_python_articles(list_type=list_type)
-    return render_base_template("index.html", links=sorted(links, key=lambda x: x.get("popularity"), reverse=True))
+    kwargs = {'links': sorted(links, key=lambda x: x.get("popularity"), reverse=True),
+              'btn_hot': 'disabled' if list_type == 'hot' else '',
+              'btn_new': 'disabled' if list_type == 'new' else '',
+              'btn_top': 'disabled' if list_type == 'top' else '',
+    }
+
+    return render_base_template("index.html", **kwargs)
 
 
 @app.route('/os/<regex(".+"):project>')

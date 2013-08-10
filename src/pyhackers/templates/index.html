@@ -3,6 +3,20 @@
 
 {% block content %}
     <div class='links container'>
+
+        <div class="row" style="">
+            <div class='col-lg-9'>
+                <div class='bs-callout bs-callout-warning'>
+            <h4>Reddit Posts</h4>
+            <p>The following list fetched from Reddit's API and does not reflect PythonHacker's post.</p>
+        </div>
+            <div class="btn-group pull-right">
+            <a href="?list=top"  class='btn btn-default {{ btn_top }}'>Top</a>
+            <a href="?list=hot" class='btn btn-default {{ btn_hot }}'>Hot</a>
+            <a href="?list=new" class='btn btn-default {{ btn_new }}'>New</a>
+                </div></div>
+        </div>
+    <div class='linklist'>
     {% for link in links %}
         <div class='row'>
             <div class='front-action'>
@@ -29,7 +43,7 @@
                     </div>
 
                     <div class='col-lg-3'>
-                        <a href="@bahadir">@{{ link.user }}</a>
+                        <a href="#">@{{ link.user }}</a>
                     </div>
                     <div class="col-7" style="text-align: right">
                         <a href="#/tag/flask" class='tag'>
@@ -43,5 +57,6 @@
             </div>
         </div>
     {% endfor %}
+    </div>
     </div>
 {% endblock %}
