@@ -27,6 +27,25 @@
         .tag{
             color:#d9534f;
         }
+        .ositem{
+            padding-bottom: 5px;
+        }
+        .ositem:hover{
+            cursor: pointer;
+            background-color: lemonchiffon;
+        }
+        .ositem .info .project{
+            font-size:1.9em;
+        }
+        .ositem .description p{
+            font-size:1.5em;
+        }
+        .ositem .number{
+            padding-top:4px;text-align: center;
+        }
+        .ositem .number span{
+            font-size:1.5em;color:gray;
+        }
         .link-container{
             padding-top:5px;
             margin-bottom: 10px;;
@@ -71,22 +90,27 @@
         .navbar-brand{
             font-size:1.5em;
         }
+        #join-us{
+            border-bottom: 2px solid crimson;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
         <div class="container">
-  <a class="navbar-brand" href="#">Python Hackers</a>
+  <a class="navbar-brand" href="/">Python Hackers</a>
   <ul class="nav navbar-nav">
-    <li class="active"><a href="#home">Home</a></li>
-    <li><a href="#articles">Articles</a></li>
-    <li><a href="#open-source">Open Source</a></li>
+
+    <li><a href="http://pythonarticles.com/" target='_blank'>Articles</a></li>
+    <li><a href="/os">Open Source</a></li>
+      <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta</a></li>
   </ul>
             <ul class='nav navbar-nav pull-right'>
-                <li>
-                    <a class="btn-auth btn-github" href="/oauth/github">
-    Sign in with <b>Github</b>
-</a>
+                <li style='padding-top:10px;'>
+                    <a href="https://twitter.com/pythonhackers" class="twitter-follow-button pull-right" data-show-count="true" data-size='large' data-show-count="false" data-lang="en">Follow @pythonhackers</a>
+{#                    <a class="btn-auth btn-github" href="/oauth/github">#}
+{#    Sign in with <b>Github</b>#}
+{#</a>#}
                 </li>
             </ul>
             </div>
@@ -97,6 +121,9 @@
                 {% block content %}{% endblock %}
             </div>
     </div>
+    <div class='container footer'>
+        
+    </div>
 
 
     {%  include "modals.html" %}
@@ -105,11 +132,17 @@
     <script src="/static/js/libs/underscore.js" type="text/javascript"></script>
     <script src="/static/js/libs/jquery.min.js" type="text/javascript"></script>
 
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+    <script src="/static/js/libs/bootstrap.min.js"></script>
 
     <script src='/static/js/libs/backbone-min.js' type='text/javascript'></script>
     <script src='/static/js/libs/backbone.marionette.js' type='text/javascript'></script>
-    <script src="/static/js/libs/bootstrap.min.js"></script>
     <script src="/static/js/libs/parsley-standalone.min.js"></script>
+<script type="text/javascript">
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.asyc=true;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+    {% block scripts %}{% endblock %}
+</script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    {%  include "mailchimp_form.html" %}
 </body>
 </html>

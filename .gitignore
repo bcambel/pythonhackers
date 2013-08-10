@@ -5,6 +5,7 @@
 
 *.local.cfg
 newrelic.ini
+alembic.ini
 
 # Packages
 *.egg

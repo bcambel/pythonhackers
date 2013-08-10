@@ -3,24 +3,30 @@
 
 {% block content %}
 <div class='container'>
+<div class='col-lg-8'>
     {% for project in projects %}
-        <div class='row link-box'>
+        <div class='row link-box ositem'>
             <div class='row'>
-                <div class='col-lg-1'>
-                {{ project.stars }}/{{ project.watchers }}
+                <div class='col-lg-1 number'>
+                    <span style=''>{{ project.watchers }}</span>
                 </div>
-                <div class='col-lg-10 '>
-                    <h4><a href='/os/{{ project.slug }}'>{{ project.name }}</a></h4>
+                <div class='col-lg-10 info'>
+                    <a class='project' href='/os/{{ project.slug }}'>{{ project.name }}</a>
+                    <a href='{{ project.src_url }}' target="_blank">(git)</a>
                 </div>
             </div>
-            <div class='row'>
+            <div class='row description'>
                 <div class='col-lg-1'></div>
                 <div class='col-lg-11'>
-                <p>{{ project.description }}</p>
+                <p style=''>{{ project.description }}</p>
             </div>
             </div>
 
         </div>
     {% endfor %}
+</div>
+<div class='col-lg-4'>
+
+</div>
 </div>
 {% endblock %}

@@ -10,7 +10,6 @@ from app import app
 
 import newrelic.agent
 
-newrelic.agent.initialize(os.path.join(source_dir,'newrelic.ini'), 'staging')
-
+newrelic.agent.initialize(os.path.join(current_dir, 'newrelic.ini'), 'staging')
 
 application = newrelic.agent.wsgi_application()(app)

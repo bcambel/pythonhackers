@@ -1,4 +1,8 @@
 import logging
+import random
+from json import loads, dumps
+import time
+import requests
 from flask.ext.wtf import (Form, TextField, PasswordField,
                            SubmitField, Required, ValidationError)
 from flask import Flask, request, abort, render_template, redirect, jsonify, session, url_for
@@ -6,13 +10,11 @@ from flask.ext.login import LoginManager, login_required, login_user, current_us
 from pyhackers.setup import login_manager
 from pyhackers.app import app, cache
 from pyhackers.models import init_store, User
-from json import loads, dumps
-import time
-import requests
+
 from pyhackers.model.user import User, new_user
+from pyhackers.model.os_project import OpenSourceProject
 
 userStorage = init_store("pyhackers")
-
 
 
 def render_base_template(*args, **kwargs):
@@ -44,9 +46,6 @@ class LoginForm(Form):
     password = PasswordField("password", [Required()])
 
 
-import random
-
-
 def rand_int(maximum=60):
     return int(random.random() * 100) % maximum
 
@@ -57,11 +56,10 @@ def request_force_non_cache():
 
 @cache.memoize(timeout=20, unless=request_force_non_cache)
 def get_reddit_top_python_articles(list_type='top'):
-
     keys = ['top', 'new', 'hot']
 
     url = "http://www.reddit.com/r/python/%s.json" % list_type
-    logging.warn("Fetch REDDIT %s" % url )
+    logging.warn("Fetch REDDIT %s" % url)
 
     assert list_type in keys
 
@@ -93,21 +91,23 @@ def index():
     links = get_reddit_top_python_articles(list_type=list_type)
     return render_base_template("index.html", links=sorted(links, key=lambda x: x.get("popularity"), reverse=True))
 
-from pyhackers.model.os_project import OpenSourceProject
 
 @app.route('/os/<regex(".+"):project>')
 def os(project):
     print "looking for", project
     project = OpenSourceProject.query.filter_by(slug=project).first()
 
-    return render_base_template("os.html",project=project)
+    return render_base_template("os.html", project=project)
 
+
+@cache.cached(timeout=10000)
 @app.route('/os')
+@app.route('/os/')
 def os_list():
+    projects = OpenSourceProject.query.limit(2000)
 
-    projects= OpenSourceProject.query.limit(2000)
+    return render_base_template("os_list.html", projects=projects)
 
-    return render_base_template("os_list.html",projects=projects)
 
 def current_user_logged_in():
     if hasattr(current_user, "id"):
