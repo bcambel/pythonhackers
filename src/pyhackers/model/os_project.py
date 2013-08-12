@@ -12,5 +12,6 @@ class OpenSourceProject(db.Model):
     stars = db.Column('starts', db.Integer)
     watchers = db.Column('watchers', db.Integer)
     forks = db.Column('forks', db.Integer)
+    parent = db.Column("parent", db.String(100), nullable=True, index=True )
 
     __tablename__ = 'os_project'

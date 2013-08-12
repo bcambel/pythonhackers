@@ -87,6 +87,7 @@ def get_reddit_top_python_articles(list_type='top'):
 
 
 @app.route("/", methods=("GET",))
+@app.route("/home", methods=("GET",))
 @app.route("/index", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
@@ -101,12 +102,15 @@ def index():
     return render_base_template("index.html", **kwargs)
 
 
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 @app.route('/os/<regex(".+"):project>')
 def os(project):
     print "looking for", project
     project = OpenSourceProject.query.filter_by(slug=project).first()
+    related_projects = OpenSourceProject.query.filter_by(parent=project.slug).order_by(
+        OpenSourceProject.watchers.desc())
 
-    return render_base_template("os.html", project=project)
+    return render_base_template("os.html", project=project, related_projects=related_projects)
 
 
 @cache.cached(timeout=10000)

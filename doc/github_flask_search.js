@@ -1,4 +1,4 @@
-{
+var a = {
     "total_count": 2241,
     "items": [
         {
