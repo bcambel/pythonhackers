@@ -3,26 +3,29 @@
 
 {% block content %}
 <div class='container'>
-    <div class='row'>
+    <div class='row' style='box-shadow: 5px 5px 5px 5px #AEAEAE;border-radius: 10px;'>
         <div class='col-lg-9'>
-            <h1>{{ project.name }}</h1>
-        </div>
-        <div class='col-lg-3'>
-            <h3>{{ project.watchers }}</h3>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='col-lg-4'>
+            <h1 style="color:#a9302a;">{{ project.name }}</h1>
             <a href='{{ project.src_url}}'>{{ project.src_url }}</a>
-        </div>
-        <div class='col-lg-8'>
-            <p>
-            {{ project.description }}</p>
-        </div>
 
+            <p style='padding-top:10px;padding-bottom: 10px;'>{{ project.description }}</p>
+        </div>
+        <div class='col-lg-3' style="text-align: right">
+            <h3 style='padding-bottom: 10px;'><i class='icon-star' style='color:goldenrod'></i>&nbsp;{{ project.watchers }}</h3>
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                       data-via="pythonhackers" data-size="large" data-related="pythonhackers"
+                       data-hashtags="python,hackers">Tell your friends</a>
+        </div>
     </div>
+
     <hr />
-    <h3>Related Projects</h3>
+{% if not related_projects.length %}
+        <div class='bs-callout bs-callout-warning col-lg-8' style="">
+            <h4>Oopss</h4>
+            <p>No related projects found yet for {{ project.name }}?! Pff...</p>
+        </div>
+{%  else  %}
+    <h3>{{ project.name }} Related Projects</h3>
 
     {% for project in related_projects %}
          <div class='row link-box ositem'>
@@ -47,10 +50,11 @@
             <p style=''>{{ project.description }}</p>
         </div>
     </div>
-
 </div>
     {% endfor %}
 
+
+    {%  endif %}
     <hr />
     <div id="disqus_thread"></div>
 
