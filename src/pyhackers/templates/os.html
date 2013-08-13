@@ -19,12 +19,7 @@
     </div>
 
     <hr />
-{% if not related_projects.length %}
-        <div class='bs-callout bs-callout-warning col-lg-8' style="">
-            <h4>Oopss</h4>
-            <p>No related projects found yet for {{ project.name }}?! Pff...</p>
-        </div>
-{%  else  %}
+
     <h3>{{ project.name }} Related Projects</h3>
 
     {% for project in related_projects %}
@@ -54,7 +49,7 @@
     {% endfor %}
 
 
-    {%  endif %}
+    
     <hr />
     <div id="disqus_thread"></div>
 
