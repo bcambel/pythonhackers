@@ -89,6 +89,7 @@ def get_reddit_top_python_articles(list_type='top'):
 @app.route("/", methods=("GET",))
 @app.route("/home", methods=("GET",))
 @app.route("/index", methods=("GET",))
+@app.route("/links", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
 
