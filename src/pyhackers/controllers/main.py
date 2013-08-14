@@ -103,12 +103,18 @@ def index():
 
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
-@app.route('/os/<regex(".+"):project>')
-def os(project):
+@app.route('/os/<regex(".+"):user>/<regex(".+"):project>')
+def os(user, project):
     print "looking for", project
-    project = OpenSourceProject.query.filter_by(slug=project).first()
-    related_projects = OpenSourceProject.query.filter_by(parent=project.slug).order_by(
-        OpenSourceProject.watchers.desc())
+    project = project[:-1] if project[-1] == "/" else project
+    print "looking for", project
+    slug = "%s/%s" % (user, project)
+    project = OpenSourceProject.query.filter_by(slug=slug).first()
+    if project is None:
+        return "Not found", 404
+
+    related_projects = OpenSourceProject.query.filter_by(parent=slug).order_by(
+        OpenSourceProject.watchers.desc()).limit(100)
 
     return render_base_template("os.html", project=project, related_projects=related_projects)
 
@@ -117,7 +123,7 @@ def os(project):
 @app.route('/os')
 @app.route('/os/')
 def os_list():
-    projects = OpenSourceProject.query.limit(2000)
+    projects = OpenSourceProject.query.limit(400)
 
     return render_base_template("os_list.html", projects=projects)
 

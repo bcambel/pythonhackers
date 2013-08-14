@@ -163,7 +163,9 @@
 
   ga('create', 'UA-42128994-1', 'pythonhackers.com');
   ga('send', 'pageview');
+  window.setTimeout(function(){
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.asyc=true;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+      },2000);
     {% block scripts %}{% endblock %}
 </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
