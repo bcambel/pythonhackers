@@ -56,7 +56,7 @@ setup_application_extensions(app, '/authenticate')
 
 from pyhackers.controllers.main import *
 from pyhackers.controllers.oauth.twitter import twitter_bp
-from pyhackers.controllers.oauth.github import github_bp
+from pyhackers.controllers.oauth.ghub import github_bp
 
 app.register_blueprint(twitter_bp)
 app.register_blueprint(github_bp)

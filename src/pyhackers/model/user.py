@@ -1,15 +1,51 @@
-from sqlalchemy import Boolean,Column, Integer, String, Float, SmallInteger,DateTime, Text
+from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
+from sqlalchemy.orm import relationship
 from pyhackers.app import db
 
 class User(db.Model):
-    __tablename__		= 'user'
+    __tablename__ = 'user'
 
-    id 					= Column(Integer, primary_key = True, autoincrement=True)
-    nick			    = Column(String(64), unique = True, index=True)
-    email 				= Column(String(120), index = True, unique = True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nick = Column(String(64), unique=True, index=True)
+    email = Column(String(120), index=True, unique=True)
+    password = Column(String(120), index=True, unique=True)
+    first_name = Column(String(80), nullable=True)
+    last_name = Column(String(200), nullable=True)
+
+    follower_count = Column(Integer, nullable=True)
+    following_count = Column(Integer, nullable=True)
+
+    lang = Column(String(5), nullable=True)
+    loc = Column(String(50), nullable=True)
+
+    pic_url = Column(String(200))
+
+    social_accounts = relationship('SocialUser', lazy='dynamic')
+
+    def __repr__(self):
+        return '<User %r>' % self.title
 
 
-def new_user(nick,email):
+class SocialUser(db.Model):
+    __tablename__ = 'social_user'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=True)
+    email = Column(String(120), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    nick = Column(String(64), index=True)
+    acc_type = Column(String(2), nullable=False)
+    follower_count = Column(Integer, nullable=True)
+    following_count = Column(Integer, nullable=True)
+    ext_id = Column(String(50))
+    access_token = Column(String(100))
+    hireable = Column(Boolean)
+
+    def __repr__(self):
+        return '<SocialUser %s-%s->' % (self.acc_type, self.user_id)
+
+
+def new_user(nick, email):
     u = User()
     u.nick = nick
     u.email = email
