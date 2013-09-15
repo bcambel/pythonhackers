@@ -1,8 +1,9 @@
+from flask.ext.login import UserMixin
 from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
 from sqlalchemy.orm import relationship
-from pyhackers.app import db
+from db import DB as db
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -23,7 +24,7 @@ class User(db.Model):
     social_accounts = relationship('SocialUser', lazy='dynamic')
 
     def __repr__(self):
-        return '<User %r>' % self.title
+        return '<User %r>' % self.nick
 
 
 class SocialUser(db.Model):

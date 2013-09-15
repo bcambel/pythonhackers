@@ -1,22 +1,21 @@
 import logging
 import random
-from json import loads, dumps
+from json import dumps
 import time
 import requests
-from flask.ext.wtf import (Form, TextField, PasswordField,
-                           SubmitField, Required, ValidationError)
-from flask import Flask, request, abort, render_template, redirect, jsonify, session, url_for
-from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
-from pyhackers.setup import login_manager
-from pyhackers.app import app, cache
-from pyhackers.models import init_store, User
+from flask.ext.wtf import Form, TextField, PasswordField, Required
+from flask import request, render_template, Blueprint
+from flask.ext.login import current_user, logout_user
+from setup import login_manager
 
-from pyhackers.model.user import User, new_user
-from pyhackers.model.os_project import OpenSourceProject
-from pyhackers.config import config
+from cache import cache
+from model.user import User
+from model.os_project import OpenSourceProject
+from config import config
 
 purge_key = config.get("app", 'purge_key')
-userStorage = init_store("pyhackers")
+
+main_app = Blueprint('main', __name__, template_folder='templates')
 
 
 def render_base_template(*args, **kwargs):
@@ -32,15 +31,18 @@ def render_base_template(*args, **kwargs):
     return render_template(*args, **kwargs)
 
 
-@app.errorhandler(400)
+@main_app.errorhandler(400)
 def unauthorized(e):
     return render_template('400.html'), 400
 
 
 @login_manager.user_loader
 def load_user(userid):
+
     logging.warn("Finding user %s" % userid)
-    return userStorage.get(userid)
+    user = User.query.get(userid)
+
+    return user
 
 
 class LoginForm(Form):
@@ -86,10 +88,10 @@ def get_reddit_top_python_articles(list_type='top'):
     return reddit_python_posts
 
 
-@app.route("/", methods=("GET",))
-@app.route("/home", methods=("GET",))
-@app.route("/index", methods=("GET",))
-@app.route("/links", methods=("GET",))
+@main_app.route("/", methods=("GET",))
+@main_app.route("/home", methods=("GET",))
+@main_app.route("/index", methods=("GET",))
+@main_app.route("/links", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
 
@@ -104,7 +106,7 @@ def index():
 
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
-@app.route('/os/<regex(".+"):user>/<regex(".+"):project>')
+@main_app.route('/os/<regex(".+"):user>/<regex(".+"):project>')
 def os(user, project):
     print "looking for", project
     project = project[:-1] if project[-1] == "/" else project
@@ -121,27 +123,36 @@ def os(user, project):
 
 
 @cache.cached(timeout=10000)
-@app.route('/os')
-@app.route('/os/')
+@main_app.route('/os')
+@main_app.route('/os/')
 def os_list():
     projects = OpenSourceProject.query.limit(400)
 
     return render_base_template("os_list.html", projects=projects)
 
 
+@main_app.route("/user")
+def user():
+    user = current_user
+    return render_base_template("user.html", user=user)
+
+
 def current_user_logged_in():
     if hasattr(current_user, "id"):
-        logging.debug("This is our GUY!!!!! %s" % current_user.id)
-        logging.debug("Current User Type: %s, %r" % (type(current_user), current_user.__dict__))
         return True
     else:
         return False
 
 
-@app.route("/logout")
+@main_app.route("/coding")
+def coding():
+    return render_base_template("coding.html")
+
+
+@main_app.route("/logout")
 def logout():
     if current_user_logged_in():
-        userStorage.remove(current_user.id)
+        pass
 
     logout_user()
     return render_base_template("logout.html", master="login_master.html")
