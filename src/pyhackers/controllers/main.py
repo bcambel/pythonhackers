@@ -28,7 +28,7 @@ def render_base_template(*args, **kwargs):
     user_data = dumps({'logged': bool(is_logged),
                        'user': current_user.jsonable()})
 
-    kwargs.update(**{'__v__': int(time.time()), 'user_data': user_data})
+    kwargs.update(**{'__v__': int(time.time()), 'user_data': user_data, 'logged_in': bool(is_logged)})
     return render_template(*args, **kwargs)
 
 
