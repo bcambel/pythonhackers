@@ -92,6 +92,8 @@ def authorized():
 
         login_user(u)
 
+    # TODO: Create a task to fetch all the other information..
+
     # starred = user.get_starred()
     # for s in starred:
     #     print s.full_name, s.watchers
@@ -100,5 +102,5 @@ def authorized():
 
     # for e in pub_events:
     #     print e.id, e.type, e.repo.full_name
-
-    return jsonify(user_info) #, response_data.get("access_token")
+    return redirect("/")
+    # return jsonify(user_info) #, response_data.get("access_token")
