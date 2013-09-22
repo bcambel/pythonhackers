@@ -7,11 +7,10 @@ from config import config
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 
-mc = memcache.Client([config.get('app', 'mc')],
-                     debug=int(config.get('app', 'mc_debug')))
-
 
 def setup_application_extensions(app, login_view='/login'):
+    mc = memcache.Client([config.get('app', 'mc')],
+                     debug=int(config.get('app', 'mc_debug')))
     store = MemcacheStore(mc)
 
     KVSessionExtension(store, app)
