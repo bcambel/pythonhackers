@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/static/css/codemirror.css">
+    <style type="text/css" media="screen">
+    #editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+</head>
+
+
+<body>
+
+
+<div id="editor">
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Hello World!"
+
+if __name__ == "__main__":
+    app.run()
+</div>
+
+<script  type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
+
+<script type='text/javascript'>
+var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/python");
+</script>
+</body>
+</html>
+
