@@ -25,7 +25,8 @@ def render_base_template(*args, **kwargs):
         logging.exception(ex)
         is_logged = False
 
-    user_data = dumps({'logged': bool(is_logged)})
+    user_data = dumps({'logged': bool(is_logged),
+                       'user': current_user.jsonable()})
 
     kwargs.update(**{'__v__': int(time.time()), 'user_data': user_data})
     return render_template(*args, **kwargs)

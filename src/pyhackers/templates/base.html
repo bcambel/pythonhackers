@@ -149,14 +149,24 @@
             </a></li>
         </ul>
         <ul class='nav navbar-nav pull-right'>
-            <li style='padding-top:10px;'>
-                <a href="https://twitter.com/pythonhackers" class="twitter-follow-button pull-right"
-                   data-show-count="true" data-size='large' data-show-count="false" data-lang="en">Follow
-                    @pythonhackers</a>
-                {#                    <a class="btn-auth btn-github" href="/oauth/github">#}
-                {#    Sign in with <b>Github</b>#}
-                {#</a>#}
-            </li>
+            {% if logged_in %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            id='profile_link'>Dropdown </span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {#                  <li><a href="#">Action</a></li>#}
+                        <li><a href="/profile"><i class='icon-user'></i>&nbsp;Account</a></li>
+                        <li><a href="/profile/settings"><i class='icon-cogs'></i>&nbsp;Settings</a></li>
+                        <li><a href="/logout"><i class='icon-off'></i>&nbsp;Logout</a></li>
+                    </ul>
+                </li>
+            {% else %}
+                <li style=''>
+                    <a class="btn-auth btn-github" href="/oauth/github">
+                        Sign in with <b>Github</b>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </div>
@@ -171,6 +181,11 @@
         Made in Amsterdam
         <iframe src="http://ghbtns.com/github-btn.html?user=pythonhackers&repo=pythonhackers&type=watch&count=true&size=large"
                 allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
+    </p>
+    <p>
+        <a href="https://twitter.com/pythonhackers" class="twitter-follow-button pull-right"
+           data-show-count="true" data-size='large' data-show-count="false" data-lang="en">Follow
+            @pythonhackers</a>
     </p>
 </div>
 
@@ -189,7 +204,7 @@
 {% block script_links %}{% endblock %}
 <script type="text/javascript">
     {% if PROD %}
-    {% include "third_party.html" %}
+        {% include "third_party.html" %}
     {% endif %}
     {% block scripts %}{% endblock %}
 </script>
@@ -197,5 +212,13 @@
 </noscript>
 
 {% include "mailchimp_form.html" %}
+
+<script>
+    {% autoescape off %}
+    var session = {{ user_data }};
+    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;
+    {% endautoescape %}
+
+</script>
 </body>
 </html>

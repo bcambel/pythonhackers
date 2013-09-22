@@ -27,7 +27,7 @@ def login():
 @github_bp.route('/oauth/github/authorized')
 def authorized():
     # redirect_uri = url_for('authorized', _external=True)
-    redirect_uri = "http://dev.pythonhackers.com:5001/oauth/github/authorized"
+    redirect_uri = "http://dev.pythonhackers.com/oauth/github/authorized"
 
     # data = dict(code=request.args['code'], redirect_uri=redirect_uri)
 

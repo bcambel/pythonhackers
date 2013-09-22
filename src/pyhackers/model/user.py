@@ -26,6 +26,20 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User %r>' % self.nick
 
+    def jsonable(self):
+        return dict(
+            id=self.id,
+            nick=self.nick,
+            email=self.email,
+            first_name=self.first_name,
+            last_name=self.last_name,
+            followers=self.follower_count,
+            following=self.following_count,
+            lang=self.lang,
+            loc=self.loc,
+            picture=self.pic_url
+        )
+
 
 class SocialUser(db.Model):
     __tablename__ = 'social_user'
