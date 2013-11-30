@@ -159,3 +159,7 @@ def logout():
     return render_base_template("logout.html", master="login_master.html")
 
 
+@main_app.route("/profile")
+def profile():
+
+    return render_base_template("profile.html")

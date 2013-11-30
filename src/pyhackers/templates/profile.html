@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class='container'>
+        <div class='col-lg-4'>
+            <img src='{{ current_user.pic_url }}' class='img-responsive img-rounded' />
+            <h1>{{ current_user.nick }}</h1>
+        </div>
+        <div class='col-lg-8'>
+            </div>
+    </div>
+{% endblock %}
