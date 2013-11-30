@@ -20,15 +20,18 @@ main_app = Blueprint('main', __name__, template_folder='templates')
 
 def render_base_template(*args, **kwargs):
     try:
-        is_logged = int(request.args.get("logged", "1"))
+        logging.warn(current_user.is_anonymous())
+        is_logged = current_user.is_anonymous()  #int(request.args.get("logged", "1"))
     except Exception as ex:
         logging.exception(ex)
         is_logged = False
 
-    user_data = dumps({'logged': bool(is_logged),
-                       'user': current_user.jsonable()})
+    user_data = dumps(current_user.jsonable() if not current_user.is_anonymous() else {})
 
-    kwargs.update(**{'__v__': int(time.time()), 'user_data': user_data, 'logged_in': bool(is_logged)})
+    kwargs.update(**{'__v__': int(time.time()),
+                     'user': user_data,
+                     'logged_in': bool(is_logged)})
+
     return render_template(*args, **kwargs)
 
 
@@ -127,7 +130,7 @@ def os(user, project):
 @main_app.route('/os')
 @main_app.route('/os/')
 def os_list():
-    projects = OpenSourceProject.query.limit(400)
+    projects = projects = OpenSourceProject.query.order_by(OpenSourceProject.watchers.desc()).limit(400)
 
     return render_base_template("os_list.html", projects=projects)
 

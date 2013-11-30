@@ -4,9 +4,31 @@
 {% block content %}
     <div class='container'>
 
-        <div class='col-lg-8'>
+        <div class=' col-lg-2 bs-callout bs-callout-warning' style="margin-right:20px;position:fixed;">
+
+            <a href="#mc_embed_signup" data-toggle='modal' class="btn btn-success"
+               data-track='newsletter'
+               >Join Beta Now</a>
+
+            <hr/>
+            <p>No spamming,<br/> I promise!</p>
+
+{#            <p>#}
+{#                <a href='https://github.com/pythonhackers/pythonhackers' target='_blank'>PythonHackers on Github</a>#}
+{#                &nbsp;&nbsp;#}
+{#            </p>#}
+
+            <p>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-text="Top 400 Python Projects"
+                   data-via="pythonhackers" data-size="large" data-related="pythonhackers"
+                   data-hashtags="python,hackers">Tell your friends</a>
+            </p>
+        </div>
+
+        <div class='col-lg-6 col-lg-offset-3'>
+            <h4>Top 400 Python Projects in Github</h4>
             {% for project in projects %}
-               <div class='row link-box ositem'>
+                <div class='row link-box ositem'>
                     <div class='row'>
                         <div class='col-lg-1 number'>
                             <span class='index'>{{ loop.index }}.</span>
@@ -25,51 +47,32 @@
 
                         </div>
                         <div class='col-lg-11'>
-                            <p style=''>{{ project.description }}</p>
+                            <p>{{ project.description }}</p>
                         </div>
                     </div>
 
                 </div>
             {% endfor %}
-            <div class='bs-callout bs-callout-warning' style="">
-                <h4>Top 400 Python Projects in Github</h4>
 
-               <p>Popular Python projects in Github. <a href="#mc_embed_signup" data-toggle='modal'
-                                                         data-track='newsletter'
-                                                         style='border-bottom:1px solid crimson;font-size:1.4em;'>Join
-                    Beta</a> to have more of this. <b>No spamming, I promise!</b> </p>
-                <p>
-                    Also checkout <a href='https://github.com/pythonhackers/pythonhackers' target='_blank'>PythonHackers on Github</a>
-                    &nbsp;&nbsp;
-                </p>
-                <p>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Top 400 Python Projects"
-                       data-via="pythonhackers" data-size="large" data-related="pythonhackers"
-                       data-hashtags="python,hackers">Tell your friends</a>
-                </p>
-            </div>
         </div>
 
 
-        <div class='col-lg-4'>
-            <div class='bs-callout bs-callout-warning' style="">
-                <h4>Top 400 Python Projects in Github</h4>
-
-                <p>Popular Python projects in Github. <a href="#mc_embed_signup" data-toggle='modal'
-                                                         data-track='newsletter'
-                                                         style='border-bottom:1px solid crimson;font-size:1.4em;'>Join
-                    Beta</a> to have more of this. <b>No spamming, I promise!</b> </p>
-                <p>
-                    Also checkout <a href='https://github.com/pythonhackers/pythonhackers' target='_blank'>PythonHackers on Github</a>
-                    &nbsp;&nbsp;
-                </p>
-                <p>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Top 400 Python Projects"
-                       data-via="pythonhackers" data-size="large" data-related="pythonhackers"
-                       data-hashtags="python,hackers">Tell your friends</a>
-                </p>
-            </div>
-        </div>
+{#        <div class='col-lg-4'>#}
+{#            <div class='bs-callout bs-callout-warning' style="">#}
+{#                <h4>Top 400 Python Projects in Github</h4>#}
+{##}
+{#                <p>Popular Python projects in Github. <a href="#mc_embed_signup" data-toggle='modal'#}
+{#                                                         data-track='newsletter'#}
+{#                                                         style='border-bottom:1px solid crimson;font-size:1.4em;'>Join#}
+{#                    Beta</a> to have more of this. <b>No spamming, I promise!</b></p>#}
+{#                #}
+{#                <p>#}
+{#                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Top 400 Python Projects"#}
+{#                       data-via="pythonhackers" data-size="large" data-related="pythonhackers"#}
+{#                       data-hashtags="python,hackers">Tell your friends</a>#}
+{#                </p>#}
+{#            </div>#}
+{#        </div>#}
     </div>
 
 {% endblock %}

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-{#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
-    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">
+{#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
+    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">
     <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
     <style>
@@ -34,11 +34,11 @@
         }
 
         .ositem {
-            padding-bottom: 5px;
+            padding-bottom: 1px;
         }
 
         .ositem .index {
-            font-size: 16px;
+            font-size: 13px;
             color: slategray;
             font-weight: bold;
         }
@@ -48,28 +48,23 @@
         }
 
         .ositem .info .project {
-            font-size: 1.6em;
+            font-size: 14px;
         }
 
         .ositem .description p {
-            font-size: 1.2em;
+            font-size: 12px;
         }
 
         .ositem .number {
             padding-top: 4px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 13px;
             color: gray;
         }
 
         .link-container {
             padding-top: 5px;
-        }
-        .link-container .col-lg-10{
-            padding-right:5px;
-        }
-        .link-container .col-lg-2{
-            padding-left:5px;
+            margin-bottom: 10px;;
         }
 
         .link-container .label {
@@ -86,7 +81,7 @@
         }
 
         .bs-callout {
-            margin: 20px 0;
+            margin: 10px 0;
             padding: 15px 30px 15px 15px;
             border-left: 5px solid #eee;
         }
@@ -118,21 +113,15 @@
         .links .front-action i {
             color: lightgray;
             cursor: pointer;
-            font-size: 24px;
-            text-align:center;
-            padding-left:5px;
+            font-size: 3em;
         }
-        .front-action span.label{
-            color: lightgray;
-            font-size: 12px;
-        }
+
         .links a.link {
-            font-size: 14px;
-            color:#336699;
+            font-size: 1.7em;
         }
 
         .links a {
-            font-size: 12px;
+            font-size: 1.2em;
         }
 
         .navbar-brand {
@@ -158,15 +147,14 @@
             <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta</a></li>
             <li><a href='http://pythonhackers.com'>About</a></li>
             <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;
+            <li><a href="https://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;
             </a></li>
         </ul>
         <ul class='nav navbar-nav pull-right'>
             {% if logged_in %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src='{{ user.pic_url }}' height='25px' width="25px" class="img-rounded"/>&nbsp;
-                        &nbsp;
-                        <span id='profile_link'>{{ user.nick }} </span><b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            id='profile_link'>Dropdown </span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {#                  <li><a href="#">Action</a></li>#}
                         <li><a href="/profile"><i class='icon-user'></i>&nbsp;Account</a></li>
@@ -176,9 +164,9 @@
                 </li>
             {% else %}
                 <li style=''>
-                    <a class="btn-auth btn-github" href="/oauth/github">
-                        Sign in with <b>Github</b>
-                    </a>
+{#                    <a class="btn-auth btn-github" href="/oauth/github">#}
+{#                        Sign in with <b>Github</b>#}
+{#                    </a>#}
                 </li>
             {% endif %}
         </ul>
@@ -190,7 +178,6 @@
         {% block content %}{% endblock %}
     </div>
 </div>
-<hr/>
 <div class='container footer'>
     <p>
         Made in Amsterdam
@@ -231,7 +218,7 @@
 <script>
     {% autoescape off %}
     var session = {{ user_data }};
-    {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
+    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;
     {% endautoescape %}
 
 </script>

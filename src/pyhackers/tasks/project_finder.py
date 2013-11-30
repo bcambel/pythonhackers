@@ -50,7 +50,7 @@ def importer(query, parent=None, exclude=None):
                 continue
 
             os_proj.slug = slug
-            os_proj.description = project.get('description', '')[:500]
+            os_proj.description = project.get('description', '')
             os_proj.watchers = project['watchers_count']
             os_proj.stars = project['watchers_count']
             os_proj.src_url = project['html_url']

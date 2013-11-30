@@ -3,16 +3,18 @@
 
 {% block content %}
 <div class='container'>
-    <div class='row' style='box-shadow: 5px 5px 5px 5px #AEAEAE;border-radius: 10px;padding-bottom:10px'>
+    <div class='row' style='border-radius: 10px;padding-bottom:10px'>
         <div class='col-lg-2' style="text-align: center;padding-top:15px;">
             <h3 style='padding-bottom: 10px;'><i class='icon-star' style='color:goldenrod'></i>&nbsp;{{ project.watchers }}</h3>
             <a href='#' class='btn btn-default disabled' title='Not ready yet..'><i class='icon-heart'></i>&nbsp;Love it</a>
         </div>
         <div class='col-lg-8'>
-            <h1 style="color:#a9302a;">{{ project.name }}</h1>
-            <a href='{{ project.src_url}}'>{{ project.src_url }}</a>
+            <h1>{{ project.name }}</h1>
+            <a href='{{ project.src_url}}'>
+                {{ project.src_url }}
+            </a>
 
-            <p style='padding-top:10px;padding-bottom: 10px;font-size:1.6em;'>{{ project.description }}</p>
+            <p style='padding-top:10px;padding-bottom: 10px;font-size:14px;'>{{ project.description }}</p>
 {#            <span class='label label-success'>Web Framework&nbsp;&nbsp;<i class='icon-plus'></i></span>#}
         </div>
         <div class='col-lg-2' style='padding-top:20px;'>
@@ -68,6 +70,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {% if PROD %}
 var disqus_shortname = 'pythonhackers';
 
         (function() {
@@ -75,4 +78,5 @@ var disqus_shortname = 'pythonhackers';
             dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         })();
+    {% endif %}
 {%  endblock %}

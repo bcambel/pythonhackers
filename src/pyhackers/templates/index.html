@@ -2,61 +2,65 @@
 
 
 {% block content %}
-    <div class='links container'>
+    <div class='links container row'>
 
-        <div class="row" style="">
-            <div class='col-lg-9'>
-                <div class='bs-callout bs-callout-warning'>
-            <h4>Reddit Posts</h4>
-            <p>The following list fetched from Reddit's API and does not reflect PythonHacker's post. Nothing functional except links themselves...</p>
-        </div>
-            <div class="btn-group pull-right">
-            <a href="?list=top"  class='btn btn-default {{ btn_top }}'>Top</a>
-            <a href="?list=hot" class='btn btn-default {{ btn_hot }}'>Hot</a>
-            <a href="?list=new" class='btn btn-default {{ btn_new }}'>New</a>
-                </div></div>
-        </div>
-    <div class='linklist'>
-    {% for link in links %}
-        <div class='row'>
-            <div class='front-action'>
-                <i class='icon-arrow-up icon-2x'></i>
-                <span class="label label-success">{{ link.popularity }} / {{ link.comment }} </span>
+{#        <div class="col-lg-2" style="position: fixed;">#}
+{##}
+{#                <div class='bs-callout bs-callout-warning'>#}
+{#                    <h4>Reddit Posts</h4>#}
+{##}
+{#                    <p>The following list fetched from Reddit's API and does not reflect PythonHacker's post. Nothing#}
+{#                        functional except links themselves...</p>#}
+{#                </div>#}
 
-            </div>
-            <div class='col-lg-8 link-box' style="padding-left:0;">
-                <div class='clear link-container row'>
-                    <div class='col-lg-10'>
-                        <a href='{{ link.url }}' target="_blank" class='link'>
-                        {{ link.title }}
-                    </a>
-                    ({{ link.domain }})
 
-                    </div>
-                    <div class='col-lg-2' style="text-align: right;padding-top:12px;">
-                            {{ link.ago }} mins ago
-                        </div>
+
+        <div class='linklist row col-lg-10 col-lg-offset-2'>
+         <div class="btn-group pull-right">
+                    <a href="?list=top" class='btn btn-default {{ btn_top }}'>Top</a>
+                    <a href="?list=hot" class='btn btn-default {{ btn_hot }}'>Hot</a>
+                    <a href="?list=new" class='btn btn-default {{ btn_new }}'>New</a>
                 </div>
+            {% for link in links %}
                 <div class='row'>
-                    <div class='col-lg-2'>
-                        <a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>
-                    </div>
+                    <div class='front-action'>
+                        <i class='icon-arrow-up icon-2x'></i>
+                        <span class="label">{{ link.popularity }} </span>
 
-                    <div class='col-lg-3'>
-                        <a href="#">@{{ link.user }}</a>
                     </div>
-                    <div class="col-7" style="text-align: right">
-                        <a href="#/tag/flask" class='tag'>
-                            <span class="">#Flask</span>
-                        </a>
-                        <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
-                    </div>
+                    <div class='col-lg-8 link-box' style="padding-left:0;">
+                        <div class='clear link-container row'>
+                            <div class='col-lg-10'>
+                                <a href='{{ link.url }}' target="_blank" class='link'>
+                                    {{ link.title }}
+                                </a>
+                                ({{ link.domain }})
+
+                            </div>
+                            <div class='col-lg-2' style="text-align: right;">
+                                {{ link.ago }} mins ago
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-lg-2'>
+                                <a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>
+                            </div>
+
+                            <div class='col-lg-3'>
+                                <a href="#">@{{ link.user }}</a>
+                            </div>
+                            <div class="col-7" style="text-align: right">
+                                <a href="#/tag/flask" class='tag'>
+                                    <span class="">#Flask</span>
+                                </a>
+                                <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                            </div>
 
 
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-    </div>
     </div>
 {% endblock %}
