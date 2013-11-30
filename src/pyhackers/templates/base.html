@@ -151,8 +151,10 @@
         <ul class='nav navbar-nav pull-right'>
             {% if logged_in %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
-                            id='profile_link'>Dropdown </span><b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src='{{ current_user.pic_url }}' height='25px' width="25px" class="img-rounded"/>&nbsp;
+                        &nbsp;
+                        <span id='profile_link'>{{ current_user.nick }} </span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {#                  <li><a href="#">Action</a></li>#}
                         <li><a href="/profile"><i class='icon-user'></i>&nbsp;Account</a></li>
@@ -176,6 +178,7 @@
         {% block content %}{% endblock %}
     </div>
 </div>
+<hr/>
 <div class='container footer'>
     <p>
         Made in Amsterdam
@@ -216,7 +219,7 @@
 <script>
     {% autoescape off %}
     var session = {{ user_data }};
-    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;
+    {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
     {% endautoescape %}
 
 </script>
