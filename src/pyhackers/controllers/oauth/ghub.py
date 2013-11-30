@@ -4,8 +4,8 @@ from rauth.service import OAuth2Service
 from pyhackers.config import config
 from flask import url_for, redirect, request, Blueprint, jsonify
 import requests
-from model.user import SocialUser, User
-from db import DB as db
+from pyhackers.model.user import SocialUser, User
+from pyhackers.db import DB as db
 
 github_bp = Blueprint('github', __name__)
 
@@ -49,12 +49,10 @@ def authorized():
 
     user_info = user_data.json()
 
-    from github import Github
-
-
-    g = Github(access_token,
-               client_id=config.get("github", 'client_id'),
-               client_secret=config.get("github", 'client_secret'), per_page=100)
+    #from github import Github
+    #g = Github(access_token,
+    #           client_id=config.get("github", 'client_id'),
+    #           client_secret=config.get("github", 'client_secret'), per_page=100)
 
     # user = g.get_user("mitsuhiko")
 

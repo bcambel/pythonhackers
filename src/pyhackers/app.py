@@ -38,22 +38,33 @@ app.url_map.converters['regex'] = RegexConverter
 def start_app():
     from sentry import init as init_sentry
     # init_sentry(app)
-    setup_application_extensions(app, '/authenticate')
+    login_manager = setup_application_extensions(app, '/authenticate')
+
     from flask.ext.sqlalchemy import SQLAlchemy
 
-    import db
+    from pyhackers.db import set_db, get_db
 
-    db.DB = SQLAlchemy(app)
+    set_db(SQLAlchemy(app))
+    DB = get_db()
+    @login_manager.user_loader
+    def load_user(userid):
+        from pyhackers.model.user import User
 
-    from admin import init as admin_init
-    from cache import init as cache_init
+        logging.warn("[USER]Finding user {}".format(userid))
+        try:
+            return User.query.get(userid)
+        except:
+            return None
+
+    from pyhackers.admin import init as admin_init
+    from pyhackers.cache import init as cache_init
 
     cache_init(app)
-    admin_init(app)
+    admin_init(app,DB)
 
-    from controllers.main import main_app
-    from controllers.oauth.twitter import twitter_bp
-    from controllers.oauth.ghub import github_bp
+    from pyhackers.controllers.main import main_app
+    #from controllers.oauth.twitter import twitter_bp
+    from pyhackers.controllers.oauth.ghub import github_bp
 
     # app.register_blueprint(twitter_bp)
     app.register_blueprint(github_bp)

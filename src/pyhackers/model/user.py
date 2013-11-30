@@ -1,7 +1,7 @@
 from flask.ext.login import UserMixin
 from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
 from sqlalchemy.orm import relationship
-from db import DB as db
+from pyhackers.db import DB as db
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'

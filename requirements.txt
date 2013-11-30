@@ -9,7 +9,7 @@ Flask-KVSession==0.4
 Flask-Login==0.2.6
 Flask-Mail==0.9.0
 Flask-Principal==0.4.0
-Flask-Rauth==0.3.2
+Flask-Rauth
 Flask-SQLAlchemy==1.0
 Flask-Security==1.6.7
 Flask-WTF==0.8.4

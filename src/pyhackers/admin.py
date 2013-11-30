@@ -3,10 +3,10 @@ from flask.ext.login import current_user
 import pytz
 from flask.ext.admin import Admin, BaseView, expose, Admin, AdminIndexView
 from flask.ext.admin.contrib.sqlamodel import ModelView
-from db import DB as db
+# from pyhackers.db import DB as db
 
 
-def init(app):
+def init(app, db):
     from model.user import User, SocialUser
 
     class ProtectedView(BaseView):

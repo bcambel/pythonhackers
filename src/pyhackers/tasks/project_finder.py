@@ -3,7 +3,7 @@ import requests
 import logging
 import time
 from pyhackers.model.os_project import OpenSourceProject
-from pyhackers.app import db
+from pyhackers.db import DB as db
 from sqlalchemy.exc import IntegrityError
 
 client_id = config.get("github", 'client_id')

@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
-from db import DB as db
+from pyhackers.db import DB as db
 
 
 class OpenSourceProject(db.Model):

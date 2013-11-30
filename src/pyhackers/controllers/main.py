@@ -6,12 +6,12 @@ import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint
 from flask.ext.login import current_user, logout_user
-from setup import login_manager
+from pyhackers.setup import login_manager
 
-from cache import cache
-from model.user import User
-from model.os_project import OpenSourceProject
-from config import config
+from pyhackers.cache import cache
+from pyhackers.model.user import User
+from pyhackers.model.os_project import OpenSourceProject
+from pyhackers.config import config
 
 purge_key = config.get("app", 'purge_key')
 
