@@ -1,0 +1,285 @@
+# Cassandra Schema
+
+CREATE TABLE status_replies (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE status (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=blob AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE channel_timeline (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_resweets (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE status_upvotes (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_downvotes (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_following (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=blob AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE status_favs (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE status_resweets (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_following_timeline (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE counters (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=text AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=counter AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_replies (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE status_downvotes (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_upvotes (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_followers (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=blob AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user2 (
+  KEY blob PRIMARY KEY,
+  nick text,
+  data blob
+) WITH
+  comment='' AND
+  comparator=ascii AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE INDEX user2_nick_idx ON user2 (nick);
+
+CREATE TABLE user_timeline (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE tweets (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=blob AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=blob AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
+
+CREATE TABLE user_favs (
+  KEY blob PRIMARY KEY
+) WITH
+  comment='' AND
+  comparator=varint AND
+  read_repair_chance=0.100000 AND
+  gc_grace_seconds=864000 AND
+  default_validation=blob AND
+  min_compaction_threshold=4 AND
+  max_compaction_threshold=32 AND
+  replicate_on_write='true' AND
+  compaction_strategy_class='SizeTieredCompactionStrategy' AND
+  compression_parameters:sstable_compression='SnappyCompressor';
