@@ -130,7 +130,7 @@ def os(user, project):
 @main_app.route('/os')
 @main_app.route('/os/')
 def os_list():
-    projects = projects = OpenSourceProject.query.order_by(OpenSourceProject.watchers.desc()).limit(400)
+    projects = OpenSourceProject.query.order_by(OpenSourceProject.watchers.desc()).limit(400)
 
     return render_base_template("os_list.html", projects=projects)
 

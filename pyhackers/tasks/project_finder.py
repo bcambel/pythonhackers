@@ -25,8 +25,7 @@ def search_repo(query, page=1):
                        params=qs,
                        # params={'q': query, 'sort': 'stars', 'order': 'desc',
                        #         'client_id': client_id, 'client_secret': client_secret},
-                       headers={'Accept': 'application/vnd.github.preview'}
-    )
+                       headers={'Accept': 'application/vnd.github.preview'})
 
     return data.json().get('items', None)
 
@@ -92,10 +91,6 @@ def import_repos():
         importer(flask_search, 'mitsuhiko/flask')
     finally:
         pass
-
-# django_projects = search_repo('django')
-# python_projects = search_repo('python')
-# flask_projects = search_repo('flask')
 
 
 

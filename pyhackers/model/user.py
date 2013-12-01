@@ -21,6 +21,8 @@ class User(db.Model, UserMixin):
 
     pic_url = Column(String(200))
 
+    role = Column(db.Integer, default=1, nullable=False)
+
     social_accounts = relationship('SocialUser', lazy='dynamic')
 
     def __repr__(self):

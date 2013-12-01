@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
+from sqlalchemy.dialects import postgresql
 from pyhackers.db import DB as db
 
 
@@ -13,5 +14,7 @@ class OpenSourceProject(db.Model):
     watchers = db.Column('watchers', db.Integer)
     forks = db.Column('forks', db.Integer)
     parent = db.Column("parent", db.String(100), nullable=True, index=True )
+    categories = db.Column("categories", postgresql.ARRAY(db.String))
+
 
     __tablename__ = 'os_project'
