@@ -7,7 +7,7 @@ from pyhackers.config import config, APPS_TO_RUN
 class IdGenerator():
     max_time = int(time() * 1000)
     sequence = 0
-    worker_id = None
+    worker_id = 1
     epoch = 1356998400000  # 2013-01-01
 
     def create(self, worker_id=None):

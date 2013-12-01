@@ -10,8 +10,10 @@ from pyhackers.setup import login_manager
 
 from pyhackers.cache import cache
 from pyhackers.model.user import User
+from pyhackers.model.message import Message
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.config import config
+from pyhackers.db import DB as db
 
 purge_key = config.get("app", 'purge_key')
 
@@ -140,6 +142,19 @@ def user():
     user = current_user
     return render_base_template("user.html", user=user)
 
+@main_app.route("/new", methods=['GET', 'POST'])
+def new_message():
+    if request.method == "POST":
+        logging.warn(request.form)
+        m = Message()
+        m.user_id = current_user.id
+        m.content = request.form.get('message')
+        m.content_html = request.form.get('code')
+        db.session.add(m)
+        db.session.commit()
+
+    return render_base_template("new_message.html")
+
 
 def current_user_logged_in():
     if hasattr(current_user, "id"):
@@ -151,7 +166,6 @@ def current_user_logged_in():
 @main_app.route("/coding")
 def coding():
     return render_base_template("coding.html")
-
 
 @main_app.route("/logout")
 def logout():

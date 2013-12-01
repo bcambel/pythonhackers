@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block head %}
+    <link href="/static/css/codemirror.css">
+    <style type="text/css" media="screen">
+        #editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <form method="post" action="/new" role="form" id="form-message">
+    <div class="row">
+        <div class="row col-lg-9">
+                <p class="col-lg-offset-1">
+                    Place a link, a text, or a piece of code.
+                </p>
+            <div class="col-lg-7 col-lg-offset-1" style="margin-bottom:20px;">
+
+                <textarea class="form-control" rows="1" name="message" id="message"></textarea>
+            </div>
+            <div class="col-lg-2">
+                <button type="submit" class="btn btn-primary" style="vertical-align:bottom;">Post</button>
+            </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-lg-7 col-lg-offset-1">
+
+                <textarea id="code" name='code' style="width:100%;height:200px;">
+
+                </textarea>
+
+                <div id="editor">
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+return "Hello World!"
+
+if __name__ == "__main__":
+app.run()
+                </div>
+
+
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+            <div class="">
+            Hello
+        </div>
+    </div>
+    </div>
+    </form>
+{% endblock %}
+{% block script_links %}
+    <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
+{% endblock %}
+{% block scripts %}
+    var editor;
+    $(function(){
+        editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/python");
+
+        $("#form-message").submit(function(evt){
+            evt.stopPropagation();
+            evt.preventDefault();
+            //debugger;
+            postData = {
+                'name' : $('#message').val()
+            }
+
+            $form = $(this);
+            //data = $form.serializeArray();
+            postData['code'] = editor.getValue();
+
+            $.post("/new", postData);
+            return false;
+        });
+    })
+
+{% endblock %}

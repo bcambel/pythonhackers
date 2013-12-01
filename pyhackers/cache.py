@@ -1,6 +1,8 @@
 
 from flask.ext.cache import Cache
 
+cache = None
+
 
 def init(app):
     global cache

@@ -1,8 +1,8 @@
 
 
 from flask import request, jsonify, Blueprint
-from idgen import IDGen, StatsHandler, idgen_client
-from config import config
+from pyhackers.idgen import IdGenerator, StatsHandler, idgen_client
+from pyhackers.config import config
 
 url_prefix = config.get("idgen", "url_prefix")
 
@@ -10,6 +10,7 @@ idgen_app = Blueprint('idgen_service', __name__, url_prefix=url_prefix)
 
 # idgenerator = IDGen()
 stats_handler = StatsHandler()
+
 
 @idgen_app.route("/new", methods=['GET'])
 def generate():

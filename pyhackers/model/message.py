@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, ForeignKey, Boolean, BigInteger
 from sqlalchemy.dialects import postgresql
+from sqlalchemy import event
 from pyhackers.db import DB as db
 from pyhackers.common import format_date
 
 class Message(db.Model):
-    __tablename__ = "sweet_post"
+    __tablename__ = "message"
 
     id = Column(BigInteger, primary_key=True)
     user_id = Column(Integer)
@@ -70,3 +71,9 @@ class Message(db.Model):
 
     def __str__(self):
         return str(self.json())
+
+from pyhackers.idgen import idgen_client
+
+@event.listens_for(Message, 'before_insert')
+def before_inventory_source_insert(mapper, connection, target):
+    target.id = idgen_client.get()
