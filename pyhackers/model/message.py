@@ -3,57 +3,53 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy import event
 from pyhackers.db import DB as db
 from pyhackers.common import format_date
+from pyhackers.model.user import User
+from pyhackers.model.channel import Channel
 
 class Message(db.Model):
     __tablename__ = "message"
 
-    id = Column(BigInteger, primary_key=True)
-    user_id = Column(Integer)
-    user_nick = Column(String)
-    reply_to_id = Column(String)
-    reply_to_uid = Column(String)
-    reply_to_uname = Column(String())
-    ext_id = Column(String())
-    ext_reply_id = Column(String())
+    id = db.Column(BigInteger, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship(User)
+    user_nick = db.Column(db.String)
+    reply_to_id = db.Column(db.String)
+    reply_to_uid = db.Column(db.String)
+    reply_to_uname = db.Column(db.String)
 
-    slug = Column(Text)
-    content = Column(Text())
-    content_html = Column(Text())
-    lang = Column(String(length=3))
+    ext_id = db.Column(String)
+    ext_reply_id = db.Column(String())
 
-    mentions = Column(postgresql.ARRAY(String))
-    urls = Column(postgresql.ARRAY(String))
-    tags = Column(postgresql.ARRAY(String))
-    media = Column(postgresql.ARRAY(String))
+    slug = db.Column(Text)
+    content = db.Column(Text)
+    content_html = db.Column(Text)
+    lang = db.Column(String(length=3))
 
-    has_url = Column(Boolean)
-    has_channel = Column(Boolean)
+    mentions = db.Column(postgresql.ARRAY(String))
+    urls = db.Column(postgresql.ARRAY(String))
+    tags = db.Column(postgresql.ARRAY(String))
+    media = db.Column(postgresql.ARRAY(String))
 
-    karma = Column(Float())
-    up_votes = Column(Integer())
-    down_votes = Column(Integer())
-    favorites = Column(Integer())
+    has_url = db.Column(db.Boolean)
+    has_channel = db.Column(db.Boolean)
 
-    published_at = Column(DateTime)
+    karma = db.Column(db.Float)
+    up_votes = db.Column(db.Integer)
+    down_votes = db.Column(db.Integer)
+    favorites = db.Column(db.Integer)
 
-    channel_id = Column(Integer, index=True)
+    published_at = db.Column(db.DateTime)
 
-    channels = Column(postgresql.ARRAY(String))
+    channel_id = db.Column(db.Integer,db.ForeignKey('channel.id'),index=True,)
+    channel = db.relationship(Channel)
+    channels = db.Column(postgresql.ARRAY(String))
 
-    spam = Column(Boolean)
-    flagged = Column(Boolean)
+    spam = db.Column(db.Boolean)
+    flagged = db.Column(db.Boolean)
 
-    deleted = Column(Boolean)
+    deleted = db.Column(db.Boolean)
 
-    __user = None
-
-    def get_user(self):
-        return self.__user
-
-    def set_user(self, val):
-        self.__user = val
-
-    def json(self, date_converter=format_date):
+    def jsonable(self, date_converter=format_date):
         return {
             'id': str(self.id),
             'user_id': str(self.user_id),
@@ -70,7 +66,7 @@ class Message(db.Model):
         }
 
     def __str__(self):
-        return str(self.json())
+        return str(self.jsonable())
 
 from pyhackers.idgen import idgen_client
 

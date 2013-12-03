@@ -7,11 +7,11 @@ class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nick = Column(String(64), unique=True, index=True)
-    email = Column(String(120), index=True, unique=True)
-    password = Column(String(120), index=True, unique=True)
-    first_name = Column(String(80), nullable=True)
-    last_name = Column(String(200), nullable=True)
+    nick = Column(db.Text, unique=True, index=True)
+    email = Column(db.Text, index=True, unique=True)
+    password = Column(db.Text)
+    first_name = Column(db.Text, nullable=True)
+    last_name = Column(db.Text, nullable=True)
 
     follower_count = Column(Integer, nullable=True)
     following_count = Column(Integer, nullable=True)
@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     social_accounts = relationship('SocialUser', lazy='dynamic')
 
     def __repr__(self):
-        return '<User %r>' % self.nick
+        return unicode(self.nick)
 
     def jsonable(self):
         return dict(

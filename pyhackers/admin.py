@@ -6,6 +6,8 @@ from flask.ext.admin.contrib.sqlamodel import ModelView
 from pyhackers.model.user import User, SocialUser
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.message import Message
+from pyhackers.model.channel import Channel
+from pyhackers.model.action import Action
 from jinja2 import Markup
 
 
@@ -79,3 +81,5 @@ def init(app, db):
     admin.add_view(SocialUserModelView(SocialUser, db.session, category='User'))
     admin.add_view(ProjectModelView(OpenSourceProject, db.session, name='Project'))
     admin.add_view(ProtectedModelView(Message, db.session))
+    admin.add_view(ProtectedModelView(Action, db.session))
+    admin.add_view(ProtectedModelView(Channel, db.session))
