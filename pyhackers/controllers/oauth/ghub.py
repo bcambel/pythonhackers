@@ -6,6 +6,7 @@ from flask import url_for, redirect, request, Blueprint, jsonify
 import requests
 from pyhackers.model.user import SocialUser, User
 from pyhackers.db import DB as db
+import logging
 
 github_bp = Blueprint('github', __name__)
 
@@ -27,10 +28,12 @@ def login():
 @github_bp.route('/oauth/github/authorized')
 def authorized():
     # redirect_uri = url_for('authorized', _external=True)
-    redirect_uri = "http://dev.pythonhackers.com/oauth/github/authorized"
+    #raise ValueError(request.host)
+    #raise ValueError(request.host_url)
+    redirect_uri = "{}oauth/github/authorized".format(request.host_url)
 
     # data = dict(code=request.args['code'], redirect_uri=redirect_uri)
-
+    logging.warn(redirect_uri)
     r = requests.post('https://github.com/login/oauth/access_token', data={
         'client_id': config.get("github", 'client_id'),
         'client_secret': config.get("github", 'client_secret'),
