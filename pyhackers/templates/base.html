@@ -10,170 +10,14 @@
     <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">
     <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-    <style>
-        .bs-masthead {
-  position: relative;
-  padding: 30px 15px;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(0,0,0,.15);
-}
-.bs-masthead h1 {
-  font-size: 50px;
-  line-height: 1;
-{#  color: #fff;#}
-}
-.bs-masthead .btn-outline-inverse {
-  margin: 10px;
-}
 
-        a:hover {
-            text-decoration: none;
-        }
-
-        .links {
-
-        }
-         .bs-masthead .lead {
-    margin-right: 25%;
-    font-size: 30px;
-             text-align: left;
-  }
-          .bs-masthead h1 {
-    font-size: 100px;
-              text-align:left;
-  }
-
-        .link-box {
-            margin-bottom: 10px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid #d3d3d3;
-            padding-right: 0;
-        }
-
-        h4 a {
-            text-transform: uppercase;
-        }
-
-        .tag {
-            color: #d9534f;
-        }
-
-        .ositem {
-            padding-bottom: 5px;
-        }
-
-        .ositem .index {
-            font-size: 16px;
-            color: slategray;
-            font-weight: bold;
-        }
-
-        .ositem:hover {
-            background-color: lemonchiffon;
-        }
-
-        .ositem .info .project {
-            font-size: 1.6em;
-        }
-
-        .ositem .description p {
-            font-size: 1.2em;
-        }
-
-        .ositem .number {
-            padding-top: 4px;
-            text-align: center;
-            font-size: 1.2em;
-            color: gray;
-        }
-
-        .link-container {
-            padding-top: 5px;
-        }
-        .link-container .col-lg-10{
-            padding-right:5px;
-        }
-        .link-container .col-lg-2{
-            padding-left:5px;
-        }
-
-        .link-container .label {
-
-        }
-
-        .links .front-action {
-            max-width: 50px;
-            padding-top: 5px;
-            width: 100px;
-            float: left;
-            margin-right: 10px;
-            line-height: 25px;
-        }
-
-        .bs-callout {
-            margin: 20px 0;
-            padding: 15px 30px 15px 15px;
-            border-left: 5px solid #eee;
-        }
-
-        .bs-callout-warning {
-            background-color: #fefbed;
-            border-color: #f1e7bc;
-        }
-
-        .linklist {
-            box-shadow: 1px;
-        }
-
-        @media (min-width:768px) {
-            .links .front-action {
-            {#                margin-left:-70px;#}
-            }
-        }
-
-        .user-info {
-            float: left;
-
-        }
-
-        .link-discuss {
-            color: darkgray;
-        }
-
-        .links .front-action i {
-            color: lightgray;
-            cursor: pointer;
-            font-size: 24px;
-            text-align:center;
-            padding-left:5px;
-        }
-        .front-action span.label{
-            color: lightgray;
-            font-size: 12px;
-        }
-        .links a.link {
-            font-size: 14px;
-            color:#336699;
-        }
-
-        .links a {
-            font-size: 12px;
-        }
-
-        .navbar-brand {
-            font-size: 1.5em;
-        }
-
-        #join-us {
-            border-bottom: 2px solid crimson;
-        }
-
-    </style>
     {% block head %}{% endblock %}
 
 </head>
 <body>
+<div id="page-wrap">
 <div class="navbar navbar-inverse">
     <div class="container col-lg-offset-1">
         <a class="navbar-brand" href="/">Python Hackers</a>
@@ -184,7 +28,7 @@
             <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta&nbsp;(200+)</a></li>
             <li><a href='http://pythonhackers.com'>About</a></li>
             <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;27</a></li>
-            <li><a href="http://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;229
+            <li><a href="http://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;232
             </a></li>
         </ul>
         <ul class='nav navbar-nav pull-right'>
@@ -210,16 +54,19 @@
     </div>
 </div>
 
-<div class="container-fluid">
+<div id="body" class="container-fluid">
     <div id='main'>
         {% block content %}{% endblock %}
     </div>
 </div>
-<hr/>
-<div class='container footer'>
-    <p>
-        Made in Amsterdam
+
+<div id="footer" class='container-fluid footer'>
+    <div class="container">
+        <p>
+        Made with <i class="icon-heart"></i> in Amsterdam. 2013 &copy;
     </p>
+    </div>
+
     <p>
 
     </p>
@@ -262,5 +109,6 @@
     {% endautoescape %}
 
 </script>
+</div>
 </body>
 </html>

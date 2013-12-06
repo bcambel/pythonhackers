@@ -78,7 +78,7 @@ class UserModelView(ProtectedModelView):
 
 class SocialUserModelView(ProtectedModelView):
     column_formatters = {'nick': _nick_href}
-    
+
 
 def init(app, db):
     admin = Admin(app)
