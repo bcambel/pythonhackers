@@ -19,20 +19,14 @@ github = OAuth2Service(name='github',
 
 @github_bp.route('/oauth/github')
 def login():
-
-    redirect_uri = urllib.quote("http://localhost:5001/oauth/github/authorized")
-
-    return redirect(github.get_authorize_url()) #**params))
+    return redirect(github.get_authorize_url())
 
 
 @github_bp.route('/oauth/github/authorized')
 def authorized():
-    # redirect_uri = url_for('authorized', _external=True)
-    #raise ValueError(request.host)
-    #raise ValueError(request.host_url)
+
     redirect_uri = "{}oauth/github/authorized".format(request.host_url)
 
-    # data = dict(code=request.args['code'], redirect_uri=redirect_uri)
     logging.warn(redirect_uri)
     r = requests.post('https://github.com/login/oauth/access_token', data={
         'client_id': config.get("github", 'client_id'),
@@ -41,9 +35,7 @@ def authorized():
         'redirect_uri': redirect_uri
     }, headers={"Accept": 'application/json'})
 
-    print r.text
-    print r.json
-    # response_data = (url_decode(r.text))
+    logging.warn(r.json())
     response_data = r.json()
 
     access_token = response_data['access_token']
@@ -78,7 +70,7 @@ def authorized():
         su.user_id = u.id
         su.nick = user_login
         su.acc_type = 'gh'
-        su.email = user_info.get("email","")
+        su.email = user_info.get("email", "")
         su.follower_count = user_info.get("followers")
         su.following_count = user_info.get("following")
         su.blog = user_info.get("blog")

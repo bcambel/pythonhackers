@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     social_accounts = relationship('SocialUser', lazy='dynamic')
 
     def __repr__(self):
-        return unicode(self.nick)
+        return unicode(self.jsonable())
 
     def jsonable(self):
         return dict(

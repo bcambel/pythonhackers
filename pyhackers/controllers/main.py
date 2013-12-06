@@ -2,10 +2,12 @@ import logging
 import random
 from json import dumps
 import time
+from datetime import datetime as dt
+from pyhackers.model.action import Action, ActionType
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
-from flask import request, render_template, Blueprint
-from flask.ext.login import current_user, logout_user
+from flask import request, render_template, Blueprint,redirect, jsonify
+from flask.ext.login import current_user, logout_user, login_required
 from pyhackers.setup import login_manager
 
 from pyhackers.cache import cache
@@ -23,15 +25,18 @@ main_app = Blueprint('main', __name__, template_folder='templates')
 def render_base_template(*args, **kwargs):
     try:
         logging.warn(current_user.is_anonymous())
-        is_logged = current_user.is_anonymous()  #int(request.args.get("logged", "1"))
+        is_logged = not current_user.is_anonymous()  #int(request.args.get("logged", "1"))
     except Exception as ex:
         logging.exception(ex)
         is_logged = False
 
-    user_data = dumps(current_user.jsonable() if not current_user.is_anonymous() else {})
-
+    active_user = current_user.jsonable() if not current_user.is_anonymous() else {}
+    user_data = dumps(active_user)
+    logging.warn(user_data)
     kwargs.update(**{'__v__': int(time.time()),
-                     'user': user_data,
+                     'user': active_user,
+                     'user_json' : user_data,
+                     'PROD' : True,
                      'logged_in': bool(is_logged)})
 
     return render_template(*args, **kwargs)
@@ -95,6 +100,12 @@ def get_reddit_top_python_articles(list_type='top'):
 
 
 @main_app.route("/", methods=("GET",))
+def main():
+    if current_user.is_anonymous():
+        return render_base_template("welcome.html")
+    else:
+        return redirect('/home')
+
 @main_app.route("/home", methods=("GET",))
 @main_app.route("/index", methods=("GET",))
 @main_app.route("/links", methods=("GET",))
@@ -180,3 +191,24 @@ def logout():
 def profile():
 
     return render_base_template("profile.html")
+
+
+@main_app.route("/ajax/follow", methods=("POST",))
+@login_required
+def follow():
+    project_id = request.form.get("id")
+    slug = request.form.get("slug")
+
+    logging.warn("Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
+
+    a = Action()
+    a.from_id = current_user.id
+    a.to_id = project_id
+    a.action = ActionType.FollowProject
+    a.created_at = dt.utcnow()
+    db.session.add(a)
+    db.session.commit()
+
+
+
+    return jsonify({'ok':1})

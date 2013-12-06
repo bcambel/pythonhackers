@@ -38,3 +38,9 @@ from pyhackers.idgen import idgen_client
 @event.listens_for(Action, 'before_insert')
 def before_inventory_source_insert(mapper, connection, target):
     target.id = idgen_client.get()
+
+
+class ActionType():
+
+    FollowProject = 1
+    UnFollowProject = 2

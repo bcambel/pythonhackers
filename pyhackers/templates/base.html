@@ -6,11 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
-    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">
+{#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
+    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">
     <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
     <style>
+        .bs-masthead {
+  position: relative;
+  padding: 30px 15px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+}
+.bs-masthead h1 {
+  font-size: 50px;
+  line-height: 1;
+{#  color: #fff;#}
+}
+.bs-masthead .btn-outline-inverse {
+  margin: 10px;
+}
+
         a:hover {
             text-decoration: none;
         }
@@ -18,6 +34,15 @@
         .links {
 
         }
+         .bs-masthead .lead {
+    margin-right: 25%;
+    font-size: 30px;
+             text-align: left;
+  }
+          .bs-masthead h1 {
+    font-size: 100px;
+              text-align:left;
+  }
 
         .link-box {
             margin-bottom: 10px;
@@ -149,26 +174,27 @@
 
 </head>
 <body>
-<div class="navbar">
-    <div class="container col-lg-offset-2">
+<div class="navbar navbar-inverse">
+    <div class="container col-lg-offset-1">
         <a class="navbar-brand" href="/">Python Hackers</a>
         <ul class="nav navbar-nav">
 
             <li><a href="/links">Links</a></li>
             <li><a href="/os">Open Source</a></li>
-            <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta</a></li>
+            <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta&nbsp;(200+)</a></li>
             <li><a href='http://pythonhackers.com'>About</a></li>
-            <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;
-            <li><a href="http://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;
+            <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;27</a></li>
+            <li><a href="http://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;229
             </a></li>
         </ul>
         <ul class='nav navbar-nav pull-right'>
             {% if logged_in %}
+                <!-- {{ current_user }} -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src='{{ user.pic_url }}' height='25px' width="25px" class="img-rounded"/>&nbsp;
+                        <img src='{{ current_user.pic_url }}' height='25px' width="25px" class="img-rounded"/>&nbsp;
                         &nbsp;
-                        <span id='profile_link'>{{ user.nick }} </span><b class="caret"></b></a>
+                        <span id='profile_link'>{{ current_user.nick }} </span><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {#                  <li><a href="#">Action</a></li>#}
                         <li><a href="/profile"><i class='icon-user'></i>&nbsp;Account</a></li>
@@ -178,9 +204,6 @@
                 </li>
             {% else %}
                 <li style=''>
-{#                    <a class="btn-auth btn-github" href="/oauth/github">#}
-{#                        Sign in with <b>Github</b>#}
-{#                    </a>#}
                 </li>
             {% endif %}
         </ul>
@@ -196,13 +219,9 @@
 <div class='container footer'>
     <p>
         Made in Amsterdam
-        <iframe src="http://ghbtns.com/github-btn.html?user=pythonhackers&repo=pythonhackers&type=watch&count=true&size=large"
-                allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
     </p>
     <p>
-        <a href="https://twitter.com/pythonhackers" class="twitter-follow-button pull-right"
-           data-show-count="true" data-size='large' data-show-count="false" data-lang="en">Follow
-            @pythonhackers</a>
+
     </p>
 </div>
 
@@ -221,11 +240,13 @@
 
 <script src="/static/js/libs/wysihtml5-0.3.0.min.js"></script>
 <script src="/static/js/libs/bootstrap-wysihtml5.js"></script>
+<script src="/static/js/require.js"></script>
+<script src="/static/js/app/main.js"></script>
 
 {% block script_links %}{% endblock %}
 <script type="text/javascript">
     {% if PROD %}
-        {% include "third_party.html" %}
+        {% include "3rd_party.html" %}
     {% endif %}
     {% block scripts %}{% endblock %}
 </script>
@@ -236,7 +257,7 @@
 
 <script>
     {% autoescape off %}
-    var session = {{ user }};
+    var session = {{ user_json }};
     {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
     {% endautoescape %}
 

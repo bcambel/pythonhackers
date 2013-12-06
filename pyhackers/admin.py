@@ -34,10 +34,10 @@ def truncator(field, ctx, model, name):
     return Markup("<span title='{1}' data-role='tooltip'>{0}..</span>".format(truncated, original))
 
 
-def _href(field, ctx, model, name, url=None):
-    original = getattr(model, field)
+def _href(kls, model, name, url=None):
+    original = getattr(model, name)
     title = original.replace("http://", "").replace("https://", "").replace("www", "") \
-        .replace("github.com", "<i class='icon-github'></i>")
+        .replace("github.com", "")
 
     if url is not None:
         original = "{}/{}".format(url, original)
@@ -50,6 +50,11 @@ def _img(field, ctx, model, name):
     original = getattr(model, field)
     return Markup('<img src="{0}" />'.format(original))
 
+
+def _nick_href(*args):
+    return _href(*args, url='https://github.com')
+
+
 class ProtectedModelView(ModelView, ProtectedView):
     column_display_pk = True
 
@@ -57,11 +62,11 @@ class ProtectedModelView(ModelView, ProtectedView):
 _desc_trunc = partial(truncator, 'description')
 _src_href_ = partial(_href, 'src_url')
 _img_img = partial(_img, 'pic_url')
-_nick_href = partial(_href, 'nick', url='https://github.com')
+
 
 class ProjectModelView(ProtectedModelView):
     column_formatters = {'description': _desc_trunc,
-                         'src_url': _src_href_}
+                         'src_url': _href}
 
     column_searchable_list = ('name', 'description')
 
@@ -73,6 +78,7 @@ class UserModelView(ProtectedModelView):
 
 class SocialUserModelView(ProtectedModelView):
     column_formatters = {'nick': _nick_href}
+    
 
 def init(app, db):
     admin = Admin(app)
