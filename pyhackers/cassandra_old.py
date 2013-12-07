@@ -101,7 +101,7 @@ class CassandraGateway(Gateway):
     def get_single_status(self, status_id):
         status = status_cf.get(status_id)
         # write(status)
-        data = status.get("data");
+        data = status.get("data")
         status_post = msgpack.unpackb(zlib.decompress(data))
         status_post["user"] = self.get_user(status_post.get("user_id"))
 

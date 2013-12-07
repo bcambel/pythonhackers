@@ -1,5 +1,6 @@
 import urllib
 from flask.ext.login import login_user
+from pyhackers.service.user import create_user_from_github_user
 from rauth.service import OAuth2Service
 from pyhackers.config import config
 from flask import url_for, redirect, request, Blueprint, jsonify
@@ -44,56 +45,13 @@ def authorized():
 
     user_info = user_data.json()
 
-    #from github import Github
-    #g = Github(access_token,
-    #           client_id=config.get("github", 'client_id'),
-    #           client_secret=config.get("github", 'client_secret'), per_page=100)
-
-    # user = g.get_user("mitsuhiko")
-
-    user_login = user_info.get("login")
-
-    social_account = SocialUser.query.filter_by(nick=user_login, acc_type='gh').first()
-
-    user = User.query.filter_by(nick=user_login).first()
+    user = create_user_from_github_user(access_token, user_info)
 
     if user is not None:
         login_user(user)
+        return redirect("/")
+    else:
+        return redirect("/")
 
-    if social_account is None:
-        u = User()
-        u.nick = user_login
-        u.email = user_info.get("email", "")
-        u.pic_url = user_info.get("avatar_url")
 
-        su = SocialUser()
-        su.user_id = u.id
-        su.nick = user_login
-        su.acc_type = 'gh'
-        su.email = user_info.get("email", "")
-        su.follower_count = user_info.get("followers")
-        su.following_count = user_info.get("following")
-        su.blog = user_info.get("blog")
-        su.ext_id = user_info.get("id")
-        su.name = user_info.get("name")
-        su.hireable = user_info.get("hireable", False)
-        su.access_token = access_token
-        u.social_accounts.append(su)
-
-        db.session.add(u)
-        db.session.commit()
-
-        login_user(u)
-
-    # TODO: Create a task to fetch all the other information..
-
-    # starred = user.get_starred()
-    # for s in starred:
-    #     print s.full_name, s.watchers
-
-    # pub_events = user.get_public_events()
-
-    # for e in pub_events:
-    #     print e.id, e.type, e.repo.full_name
-    return redirect("/")
     # return jsonify(user_info) #, response_data.get("access_token")

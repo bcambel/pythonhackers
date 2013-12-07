@@ -3,6 +3,7 @@ from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, Da
 from sqlalchemy.orm import relationship
 from pyhackers.db import DB as db
 
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
 

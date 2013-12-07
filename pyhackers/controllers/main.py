@@ -153,6 +153,7 @@ def user():
     user = current_user
     return render_base_template("user.html", user=user)
 
+
 @main_app.route("/new", methods=['GET', 'POST'])
 def new_message():
     if request.method == "POST":

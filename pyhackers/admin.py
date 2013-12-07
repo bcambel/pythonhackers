@@ -18,7 +18,7 @@ class ProtectedView(BaseView):
             return False
 
         if hasattr(current_user, "role"):
-            logging.warn("Checking user.. %s-%s" % (current_user, current_user.role))
+            logging.warn("Checking user.. %s-%s" % (current_user.id, current_user.role))
 
         if not current_user.role == 0:
             return False

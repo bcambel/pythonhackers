@@ -12,6 +12,7 @@
     </style>
 {% endblock %}
 {% block content %}
+    <div class="container">
     <form method="post" action="/new" role="form" id="form-message">
     <div class="row">
         <div class="row col-lg-9">
@@ -39,10 +40,10 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-return "Hello World!"
+    return "Hello World!"
 
 if __name__ == "__main__":
-app.run()
+    app.run()
                 </div>
 
 
@@ -60,7 +61,7 @@ app.run()
         </div>
     </div>
     </div>
-    </form>
+    </form></div>
 {% endblock %}
 {% block script_links %}
     <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
