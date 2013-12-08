@@ -1,3 +1,4 @@
+from datetime import datetime as dt
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, ForeignKey, Boolean, BigInteger
 from sqlalchemy.dialects import postgresql
 from sqlalchemy import event
@@ -5,6 +6,7 @@ from pyhackers.db import DB as db
 from pyhackers.common import format_date
 from pyhackers.model.user import User
 from pyhackers.model.channel import Channel
+
 
 class Message(db.Model):
     __tablename__ = "message"
@@ -38,16 +40,16 @@ class Message(db.Model):
     down_votes = db.Column(db.Integer)
     favorites = db.Column(db.Integer)
 
-    published_at = db.Column(db.DateTime)
+    published_at = db.Column(db.DateTime, default=dt.utcnow())
 
-    channel_id = db.Column(db.Integer,db.ForeignKey('channel.id'),index=True,)
+    channel_id = db.Column(db.Integer,db.ForeignKey('channel.id'), index=True,)
     channel = db.relationship(Channel)
     channels = db.Column(postgresql.ARRAY(String))
 
-    spam = db.Column(db.Boolean)
-    flagged = db.Column(db.Boolean)
+    spam = db.Column(db.Boolean, default=False)
+    flagged = db.Column(db.Boolean, default=False)
 
-    deleted = db.Column(db.Boolean)
+    deleted = db.Column(db.Boolean, default=False)
 
     def jsonable(self, date_converter=format_date):
         return {

@@ -3,6 +3,7 @@ from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
 
+
 class MBase(Model):
     __abstract__ = True
     __keyspace__ = 'pyhackers'
@@ -10,7 +11,7 @@ class MBase(Model):
 
 class Post(MBase):
     id = columns.TimeUUID(primary_key=True, default=uuid.uuid1)
-    orig_id = columns.BigInt(index=True)
+    orig_id = columns.BigInt(index=True, primary_key=True)
     text = columns.Text(required=True)
     likes = columns.Counter
 
@@ -34,21 +35,41 @@ class User(MBase):
 
 
 class UserTimeLine(MBase):
+    """
+    POSTs that user will see in their timeline
+    """
     user_id = columns.Integer(primary_key=True)
     post_id = columns.TimeUUID(primary_key=True)
 
 
+class UserProject(MBase):
+    """
+    Projects that user follows
+    """
+    user_id = columns.Integer(primary_key=True)
+    project_id = columns.Integer(primary_key=True)
+
+
 class UserPost(MBase):
+    """
+    All the POSTs of a user
+    """
     user_id = columns.Integer(primary_key=True)
     post_id = columns.TimeUUID(primary_key=True)
 
 
 class UserFollower(MBase):
+    """
+    Followers of a user
+    """
     user_id = columns.Integer(primary_key=True)
     follower_id = columns.Integer(primary_key=True)
 
 
 class UserFollowing(MBase):
+    """
+    A user follows another user
+    """
     user_id = columns.Integer(primary_key=True)
     following_id = columns.Integer(primary_key=True)
 

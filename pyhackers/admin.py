@@ -1,5 +1,5 @@
-from functools import partial
 import logging
+from functools import partial
 from flask.ext.login import current_user
 from flask.ext.admin import Admin, BaseView, expose, Admin, AdminIndexView
 from flask.ext.admin.contrib.sqlamodel import ModelView
@@ -18,7 +18,7 @@ class ProtectedView(BaseView):
             return False
 
         if hasattr(current_user, "role"):
-            logging.warn("Checking user.. %s-%s" % (current_user.id, current_user.role))
+            logging.warn(u"Checking user.. %s-%s" % (current_user.id, current_user.role))
 
         if not current_user.role == 0:
             return False
@@ -31,7 +31,7 @@ def truncator(field, ctx, model, name):
 
     truncated = original[:10] if len(original) > 10 else original
 
-    return Markup("<span title='{1}' data-role='tooltip'>{0}..</span>".format(truncated, original))
+    return Markup(u"<span title='{1}' data-role='tooltip'>{0}..</span>".format(truncated, original))
 
 
 def _href(kls, model, name, url=None):
@@ -42,7 +42,7 @@ def _href(kls, model, name, url=None):
     if url is not None:
         original = "{}/{}".format(url, original)
 
-    return Markup('<a href="{0}" target="_blank">{1}</a>'
+    return Markup(u'<a href="{0}" target="_blank">{1}</a>'
     .format(original, title))
 
 

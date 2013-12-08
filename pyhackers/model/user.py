@@ -26,6 +26,9 @@ class User(db.Model, UserMixin):
 
     social_accounts = relationship('SocialUser', lazy='dynamic')
 
+    def __str__(self):
+        return unicode(self.nick)
+
     def __repr__(self):
         return unicode(self.jsonable())
 
@@ -51,6 +54,7 @@ class SocialUser(db.Model):
     name = Column(String(100), nullable=True)
     email = Column(String(120), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relation(User)
     nick = Column(String(64), index=True)
     acc_type = Column(String(2), nullable=False)
     follower_count = Column(Integer, nullable=True)

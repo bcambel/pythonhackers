@@ -4,6 +4,9 @@ from json import dumps
 import time
 from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
+from pyhackers.service.post import new_post
+from pyhackers.service.project import project_follow
+from pyhackers.service.user import get_profile
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint,redirect, jsonify
@@ -116,8 +119,7 @@ def index():
     kwargs = {'links': sorted(links, key=lambda x: x.get("popularity"), reverse=True),
               'btn_hot': 'disabled' if list_type == 'hot' else '',
               'btn_new': 'disabled' if list_type == 'new' else '',
-              'btn_top': 'disabled' if list_type == 'top' else '',
-    }
+              'btn_top': 'disabled' if list_type == 'top' else '',}
 
     return render_base_template("index.html", **kwargs)
 
@@ -125,10 +127,10 @@ def index():
 @cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os/<regex(".+"):user>/<regex(".+"):project>')
 def os(user, project):
-    print "looking for", project
+
     project = project[:-1] if project[-1] == "/" else project
-    print "looking for", project
-    slug = "%s/%s" % (user, project)
+    logging.info(u"looking for %s", project)
+    slug = u"%s/%s" % (user, project)
     project = OpenSourceProject.query.filter_by(slug=slug).first()
     if project is None:
         return "Not found", 404
@@ -158,12 +160,10 @@ def user():
 def new_message():
     if request.method == "POST":
         logging.warn(request.form)
-        m = Message()
-        m.user_id = current_user.id
-        m.content = request.form.get('message')
-        m.content_html = request.form.get('code')
-        db.session.add(m)
-        db.session.commit()
+        message = request.form.get('message')
+        code = request.form.get("code")
+
+        new_post(message, code, current_user)
 
     return render_base_template("new_message.html")
 
@@ -174,10 +174,15 @@ def current_user_logged_in():
     else:
         return False
 
+@main_app.route("/about")
+def about():
+    return render_base_template("about.html")
+
 
 @main_app.route("/coding")
 def coding():
     return render_base_template("coding.html")
+
 
 @main_app.route("/logout")
 def logout():
@@ -190,7 +195,7 @@ def logout():
 
 @main_app.route("/profile")
 def profile():
-
+    get_profile(current_user)
     return render_base_template("profile.html")
 
 
@@ -202,13 +207,7 @@ def follow():
 
     logging.warn("Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
 
-    a = Action()
-    a.from_id = current_user.id
-    a.to_id = project_id
-    a.action = ActionType.FollowProject
-    a.created_at = dt.utcnow()
-    db.session.add(a)
-    db.session.commit()
+    project_follow(project_id, current_user)
 
 
 

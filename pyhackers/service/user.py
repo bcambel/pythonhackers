@@ -1,8 +1,8 @@
+import logging
 from pyhackers.model.user import SocialUser, User
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserProject
 from pyhackers.apps.idgen import idgen_client
-import logging
 
 
 def create_user_from_github_user(access_token, github_user):
@@ -68,16 +68,16 @@ def create_user_from_github_user(access_token, github_user):
         #     print e.id, e.type, e.repo.full_name
 
 
-
-
 def follow_user():
     pass
 
 
+def get_profile(current_user):
+    followers = UserFollower.filter(user_id=current_user.id)
+    projects = UserProject.filter(user_id=current_user.id)
 
-
-
-
+    logging.warn("Projects:%s", [p.project_id for p in projects])
+    logging.warn("Followers: %s" % [p for p in followers])
 
 
 

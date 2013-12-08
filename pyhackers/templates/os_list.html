@@ -34,9 +34,12 @@
                             <span class='index'>{{ loop.index }}.</span>
 
                         </div>
-                        <div class='col-lg-10 info'>
+                        <div class='col-lg-9 info'>
                             <a class='project' href='/os/{{ project.slug }}'>{{ project.name }}</a>
                             <a href='{{ project.src_url }}' target="_blank">(git)</a>
+                        </div>
+                        <div class="col-lg-1">
+                            {% include "widgets/follow_btn.html" %}
                         </div>
                     </div>
                     <div class='row description'>

@@ -22,6 +22,7 @@ def create():
     sync_table(UserFollower)
     sync_table(UserFollowing)
     sync_table(UserPost)
+    sync_table(UserProject)
 
     # Post related Tables
     sync_table(PostComment)
@@ -45,3 +46,7 @@ def test_insert():
                 extended={'test':"test"})
 
     Post.create(orig_id=1,text="Testing")
+
+if __name__ == '__main__':
+    connect()
+    create()
