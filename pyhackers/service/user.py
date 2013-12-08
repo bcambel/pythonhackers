@@ -1,7 +1,8 @@
 import logging
 from pyhackers.model.user import SocialUser, User
+from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserProject
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserProject, Project
 from pyhackers.apps.idgen import idgen_client
 
 
@@ -14,10 +15,11 @@ def create_user_from_github_user(access_token, github_user):
 
     user = User.query.filter_by(nick=user_login).first()
 
-    if user is not None:
-        return user
-    
-    if social_account is None:
+    #if user is not None:
+    #    return user
+    u = user
+
+    if user is None:
         u = User()
         #u.id = idgen_client.get()
         u.nick = user_login
@@ -31,6 +33,8 @@ def create_user_from_github_user(access_token, github_user):
             u.last_name = " ".join(name_parts[1:])
         else:
             u.last_name = name
+
+    if social_account is None:
 
         su = SocialUser()
         su.user_id = u.id
@@ -56,6 +60,8 @@ def create_user_from_github_user(access_token, github_user):
         finally:
             CsUser.create(id=u.id, nick=u.nick, extended=dict(pic=u.pic_url))
 
+    return u
+
         # TODO: Create a task to fetch all the other information..
 
         # starred = user.get_starred()
@@ -72,14 +78,26 @@ def follow_user():
     pass
 
 
+def load_user(user_id):
+    user = User.query.get(user_id)
+    followers = UserFollower.filter(user_id=user_id)
+    projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
+    os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).all()
+
+    #logging.warn("Projects:%s", )
+    #logging.warn("Followers: %s" % [p for p in followers])
+    #logging.warn("Act Projects %s" % [p for p in os_projects])
+
+    return user, followers, os_projects
+
+
 def get_profile(current_user):
-    followers = UserFollower.filter(user_id=current_user.id)
-    projects = UserProject.filter(user_id=current_user.id)
-
-    logging.warn("Projects:%s", [p.project_id for p in projects])
-    logging.warn("Followers: %s" % [p for p in followers])
+    return load_user(current_user.id)
 
 
+def get_profile_by_nick(nick):
+    user = CsUser.filter(nick=nick).first()
+    return load_user(user.id)
 
 
 #from github import Github

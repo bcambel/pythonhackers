@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class='container'>
+        <div class='col-lg-4'>
+            <img src='{{ profile.pic_url }}' class='img-responsive img-rounded' />
+            <h1>{{ profile.nick }}</h1>
+        </div>
+        <div class='col-lg-8'>
+                <h4>Following projects</h4>
+                {% for project in os_projects %}
+                    <div class='row link-box ositem'>
+                    <div class='row'>
+                        <div class='col-lg-1 number'>
+                            <span class='index'>{{ loop.index }}.</span>
+
+                        </div>
+                        <div class='col-lg-9 info'>
+                            <a class='project' href='/os/{{ project.slug }}'>{{ project.name }}</a>
+                            <a href='{{ project.src_url }}' target="_blank">(git)</a>
+                        </div>
+                        <div class="col-lg-1">
+                            {% include "widgets/follow_btn.html" %}
+                        </div>
+                    </div>
+                    <div class='row description'>
+                        <div class='col-lg-1 number'>
+                            <a href="/os/{{ project.slug }}" data-toggle="tooltip"
+                               title='{{ project.name }} has <br />{{ project.watchers }} watchers on Github'
+                               data-html='true' data-placement='auto left'>{{ project.watchers }}</a>
+
+                        </div>
+                        <div class='col-lg-11'>
+                            <p>{{ project.description }}</p>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

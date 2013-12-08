@@ -6,7 +6,7 @@ from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
 from pyhackers.service.post import new_post
 from pyhackers.service.project import project_follow
-from pyhackers.service.user import get_profile
+from pyhackers.service.user import get_profile, get_profile_by_nick
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint,redirect, jsonify
@@ -198,6 +198,15 @@ def profile():
     get_profile(current_user)
     return render_base_template("profile.html")
 
+
+@main_app.route('/user/<regex(".+"):nick>')
+def user_profile(nick):
+
+    user, followers, os_projects = get_profile_by_nick(nick)
+
+    return render_base_template("user_profile.html",
+                                profile=user, followers=followers,
+                                os_projects=os_projects)
 
 @main_app.route("/ajax/follow", methods=("POST",))
 @login_required

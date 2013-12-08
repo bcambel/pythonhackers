@@ -28,7 +28,6 @@ class Channel(MBase):
 class User(MBase):
     id = columns.Integer(primary_key=True)
     nick = columns.Text(required=True, index=True)
-    created_at = columns.DateTime(default=dt.utcnow())
     follower_count = columns.Counter
     following_count = columns.Counter
     extended = columns.Map(columns.Text, columns.Text)
