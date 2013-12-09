@@ -6,6 +6,14 @@
         <div class='col-lg-4'>
             <img src='{{ profile.pic_url }}' class='img-responsive img-rounded' />
             <h1>{{ profile.nick }}</h1>
+
+            <form method="post" action="/ajax/followuser" data-remote>
+      <input type="hidden" name="id" value="{{ profile.id }}" />
+      <input type="hidden" name="slug" value="{{ profile.nick }}" />
+        <button type="submit" class='btn btn-info btn-xs'>
+            <i class='icon-heart'></i>&nbsp;&nbsp;&nbsp;Follow
+        </button>
+</form>
         </div>
         <div class='col-lg-8'>
                 <h4>Following projects</h4>

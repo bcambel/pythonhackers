@@ -1,8 +1,9 @@
 import logging
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
+from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserProject, Project
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project
 from pyhackers.apps.idgen import idgen_client
 
 
@@ -74,8 +75,28 @@ def create_user_from_github_user(access_token, github_user):
         #     print e.id, e.type, e.repo.full_name
 
 
-def follow_user():
-    pass
+def follow_user(user_id, current_user):
+    if str(user_id) == str(current_user.id):
+        logging.warn(u"Don't follow yourself {}".format(user_id))
+        return False
+
+    a = Action()
+    a.from_id = current_user.id
+    a.to_id = user_id
+    a.action = ActionType.FollowUser
+    db.session.add(a)
+    success = False
+    try:
+        db.session.commit()
+        success = True
+    except Exception,ex :
+        db.session.rollback()
+
+    if success:
+        UserFollower.create(user_id=user_id,follower_id=current_user.id)
+        UserFollowing.create(user_id=current_user.id, following_id=user_id)
+
+    return success
 
 
 def load_user(user_id):

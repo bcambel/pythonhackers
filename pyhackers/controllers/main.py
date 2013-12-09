@@ -6,7 +6,7 @@ from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
 from pyhackers.service.post import new_post
 from pyhackers.service.project import project_follow
-from pyhackers.service.user import get_profile, get_profile_by_nick
+from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint,redirect, jsonify
@@ -21,6 +21,7 @@ from pyhackers.config import config
 from pyhackers.db import DB as db
 
 purge_key = config.get("app", 'purge_key')
+debug = config.get("app","debug")
 
 main_app = Blueprint('main', __name__, template_folder='templates')
 
@@ -39,7 +40,7 @@ def render_base_template(*args, **kwargs):
     kwargs.update(**{'__v__': int(time.time()),
                      'user': active_user,
                      'user_json' : user_data,
-                     'PROD' : True,
+                     'PROD' : not (debug in ['True','1',True,1]),
                      'logged_in': bool(is_logged)})
 
     return render_template(*args, **kwargs)
@@ -208,6 +209,15 @@ def user_profile(nick):
                                 profile=user, followers=followers,
                                 os_projects=os_projects)
 
+@main_app.route("/ajax/followuser", methods=("POST",))
+def followuser():
+    user_id = request.form.get("id")
+    nick = request.form.get("slug")
+
+    result = follow_user(user_id, current_user)
+
+    return jsonify({'ok': result})
+
 @main_app.route("/ajax/follow", methods=("POST",))
 @login_required
 def follow():
@@ -217,7 +227,5 @@ def follow():
     logging.warn("Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
 
     project_follow(project_id, current_user)
-
-
 
     return jsonify({'ok':1})

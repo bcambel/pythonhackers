@@ -21,6 +21,11 @@
 
             <p style='padding-top:10px;padding-bottom: 10px;font-size:14px;'>{{ project.description }}</p>
 {#            <span class='label label-success'>Web Framework&nbsp;&nbsp;<i class='icon-plus'></i></span>#}
+            {% if project.categories %}
+            {% for cat in project.categories %}
+            <span class="label label-danger">{{ cat }}</span>
+            {% endfor %}
+            {% endif %}
         </div>
         <div class='col-lg-2' style='padding-top:20px;'>
             <a href="https://twitter.com/share" class="twitter-share-button"

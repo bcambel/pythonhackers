@@ -3,6 +3,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy import event
 from pyhackers.db import DB as db
 from pyhackers.common import format_date
+from datetime import datetime as dt
 
 
 class Action(db.Model):
@@ -12,7 +13,7 @@ class Action(db.Model):
     from_id = db.Column(db.BigInteger, nullable=False)
     to_id = db.Column(db.BigInteger)
     action = db.Column(db.SmallInteger, nullable=False)
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime,default=dt.utcnow())
     deleted_at = db.Column(db.DateTime)
     deleted = db.Column(db.Boolean, default=False)
 
@@ -44,3 +45,5 @@ class ActionType():
 
     FollowProject = 1
     UnFollowProject = 2
+    FollowUser = 3
+    UnFollowUser = 4
