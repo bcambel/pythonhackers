@@ -199,6 +199,12 @@ def profile():
     get_profile(current_user)
     return render_base_template("profile.html")
 
+@main_app.route('/channels/<regex(".+"):name>')
+def channel(name):
+    channel_name = name
+    if name == 'lobby':
+        channel_name = "Lobby"
+    return render_base_template("channel.html",channel_name=channel_name)
 
 @main_app.route('/user/<regex(".+"):nick>')
 def user_profile(nick):
