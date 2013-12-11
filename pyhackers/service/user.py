@@ -30,7 +30,7 @@ def create_user_from_github_user(access_token, github_user):
         name_parts = name.split(" ")
 
         if len(name_parts) > 1:
-            u.first_name = name_parts[0]
+            u.first_name = name_parts[0] or ""
             u.last_name = " ".join(name_parts[1:])
         else:
             u.last_name = name
@@ -38,6 +38,7 @@ def create_user_from_github_user(access_token, github_user):
     if social_account is None:
 
         su = SocialUser()
+
         su.user_id = u.id
         su.nick = user_login
         su.acc_type = 'gh'
@@ -46,7 +47,7 @@ def create_user_from_github_user(access_token, github_user):
         su.following_count = github_user.get("following")
         su.blog = github_user.get("blog")
         su.ext_id = github_user.get("id")
-        su.name = github_user.get("name")
+        su.name = github_user.get("name", "")
         su.hireable = github_user.get("hireable", False)
         su.access_token = access_token
         u.social_accounts.append(su)
@@ -100,16 +101,20 @@ def follow_user(user_id, current_user):
 
 
 def load_user(user_id):
+    logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
-    followers = UserFollower.filter(user_id=user_id)
+    followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
+    following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
+
     projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
     os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).all()
-
+    user_followers = User.query.filter(User.id.in_(followers))
+    user_following = User.query.filter(User.id.in_(following))
     #logging.warn("Projects:%s", )
     #logging.warn("Followers: %s" % [p for p in followers])
     #logging.warn("Act Projects %s" % [p for p in os_projects])
 
-    return user, followers, os_projects
+    return user, user_followers, user_following, os_projects
 
 
 def get_profile(current_user):
@@ -118,6 +123,9 @@ def get_profile(current_user):
 
 def get_profile_by_nick(nick):
     user = CsUser.filter(nick=nick).first()
+    if user is None:
+        return
+
     return load_user(user.id)
 
 

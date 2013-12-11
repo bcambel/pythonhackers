@@ -9,7 +9,7 @@ from pyhackers.service.project import project_follow
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
-from flask import request, render_template, Blueprint,redirect, jsonify
+from flask import request, render_template, Blueprint,redirect, jsonify,abort
 from flask.ext.login import current_user, logout_user, login_required
 from pyhackers.setup import login_manager
 
@@ -102,6 +102,10 @@ def get_reddit_top_python_articles(list_type='top'):
 
     return reddit_python_posts
 
+
+@main_app.route("/welcome", methods=("GET",))
+def welcome():
+    return render_base_template("welcome.html")
 
 @main_app.route("/", methods=("GET",))
 def main():
@@ -209,10 +213,15 @@ def channel(name):
 @main_app.route('/user/<regex(".+"):nick>')
 def user_profile(nick):
 
-    user, followers, os_projects = get_profile_by_nick(nick)
+    _ = get_profile_by_nick(nick)
+    if _ is not None:
+        user, followers, following, os_projects = _
+    else:
+        return abort(404)
 
     return render_base_template("user_profile.html",
                                 profile=user, followers=followers,
+                                following=following,
                                 os_projects=os_projects)
 
 @main_app.route("/ajax/followuser", methods=("POST",))

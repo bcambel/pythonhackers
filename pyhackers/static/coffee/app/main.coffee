@@ -12,6 +12,8 @@ Application = {
             $.post(action, postData)
             evt.preventDefault()
             evt.stopPropagation()
+
+        $('[data-toggle="tooltip"]').tooltip()
 }
 
 

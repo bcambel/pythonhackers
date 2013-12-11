@@ -8,7 +8,7 @@
       return this;
     },
     formSubmitter: function() {
-      return $('form[data-remote]').submit(function(evt) {
+      $('form[data-remote]').submit(function(evt) {
         var $this, action, postData;
         $this = $(this);
         action = $this.attr("action");
@@ -17,6 +17,7 @@
         evt.preventDefault();
         return evt.stopPropagation();
       });
+      return $('[data-toggle="tooltip"]').tooltip();
     }
   };
 
