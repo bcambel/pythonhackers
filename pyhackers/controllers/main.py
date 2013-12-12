@@ -5,7 +5,7 @@ import time
 from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
 from pyhackers.service.post import new_post
-from pyhackers.service.project import project_follow
+from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
 import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
@@ -136,14 +136,18 @@ def os(user, project):
     project = project[:-1] if project[-1] == "/" else project
     logging.info(u"looking for %s", project)
     slug = u"%s/%s" % (user, project)
-    project = OpenSourceProject.query.filter_by(slug=slug).first()
-    if project is None:
+    project_data = load_project(slug, current_user)
+
+    if project_data is None:
         return "Not found", 404
 
-    related_projects = OpenSourceProject.query.filter_by(parent=slug).order_by(
-        OpenSourceProject.watchers.desc()).limit(100)
+    project, related_projects, followers = project_data
 
-    return render_base_template("os.html", project=project, related_projects=related_projects)
+
+    return render_base_template("os.html",
+                                project=project,
+                                related_projects=related_projects,
+                                followers=followers)
 
 
 @cache.cached(timeout=10000)

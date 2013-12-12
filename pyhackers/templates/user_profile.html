@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% from "widgets/user_image_list.html" import image_list_macro %}
 
 {% block content %}
     <div class='container'>
@@ -16,29 +17,14 @@
 </form>
 <hr />
         <div class="clearfix">
-            {% for follower in followers %}
-                <a href="/user/{{ follower.nick }}" class="pull-left">
-                <img src='{{ follower.pic_url }}'
-                     class='img-responsive img-rounded'
-                     style="width:40px;height:40px;"
-                     data-toggle='tooltip'
-                     data-placement="bottom" title="{{ follower.nick }}"  />
-                </a>
-
-            {% endfor %}
+        Following:      <br />
+            {{ image_list_macro(following) }}
         </div>
 <hr />
         <div class="clearfix">
-        {% for follower in following %}
-                <a href="/user/{{ follower.nick }}" class="pull-left">
-                <img src='{{ follower.pic_url }}'
-                     class='img-responsive img-rounded'
-                     style="width:40px;height:40px;"
-                     data-toggle='tooltip'
-                     data-placement="bottom" title="{{ follower.nick }}"  />
-                </a>
 
-            {% endfor %}
+        Followers:      <br />
+            {{ image_list_macro(followers) }}
         </div>
         </div>
         <div class='col-lg-8'>
