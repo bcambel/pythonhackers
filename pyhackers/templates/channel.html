@@ -3,5 +3,11 @@
 {% block content %}
 <div class="container">
     <h3>{{ channel_name }}</h3>
+    <form method="post" action="/ajax/followchannel" data-remote>
+                  <input type="hidden" name="id" value="1" />
+                  <input type="hidden" name="slug" value="Flask" />
+            <button type="submit" class='btn btn-default'
+               ><i class='icon-heart'></i>&nbsp;Love it</button>
+            </form>
 </div>
 {% endblock %}

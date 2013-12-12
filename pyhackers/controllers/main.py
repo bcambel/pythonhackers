@@ -5,6 +5,7 @@ import time
 from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
 from pyhackers.service.post import new_post
+from pyhackers.service.channel import follow_channel, load_channel
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
 import requests
@@ -195,11 +196,9 @@ def coding():
 
 @main_app.route("/logout")
 def logout():
-    if current_user_logged_in():
-        pass
-
+    
     logout_user()
-    return render_base_template("logout.html", master="login_master.html")
+    return render_base_template("logout.html")
 
 
 @main_app.route("/profile")
@@ -210,6 +209,7 @@ def profile():
 @main_app.route('/channels/<regex(".+"):name>')
 def channel(name):
     channel_name = name
+    load_channel(name)
     if name == 'lobby':
         channel_name = "Lobby"
     return render_base_template("channel.html",channel_name=channel_name)
@@ -227,6 +227,15 @@ def user_profile(nick):
                                 profile=user, followers=followers,
                                 following=following,
                                 os_projects=os_projects)
+
+@main_app.route("/ajax/followchannel", methods=("POST",))
+def followchannel():
+    user_id = request.form.get("id")
+    nick = request.form.get("slug")
+
+    result = follow_channel(user_id, current_user)
+
+    return jsonify({'ok': result})
 
 @main_app.route("/ajax/followuser", methods=("POST",))
 def followuser():

@@ -23,7 +23,8 @@ class Project(MBase):
 
 class Channel(MBase):
     id = columns.Integer(primary_key=True)
-
+    slug = columns.Text(required=True, index=True)
+    name = columns.Text(required=True)
 
 class User(MBase):
     id = columns.Integer(primary_key=True)
