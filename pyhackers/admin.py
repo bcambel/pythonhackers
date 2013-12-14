@@ -3,6 +3,7 @@ from functools import partial
 from flask.ext.login import current_user
 from flask.ext.admin import Admin, BaseView, expose, Admin, AdminIndexView
 from flask.ext.admin.contrib.sqlamodel import ModelView
+from pyhackers.model.bucket import Bucket
 from pyhackers.model.user import User, SocialUser
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.message import Message
@@ -88,4 +89,5 @@ def init(app, db):
     admin.add_view(ProjectModelView(OpenSourceProject, db.session, name='Project'))
     admin.add_view(ProtectedModelView(Message, db.session))
     admin.add_view(ProtectedModelView(Action, db.session))
+    admin.add_view(ProtectedModelView(Bucket, db.session))
     admin.add_view(ProtectedModelView(Channel, db.session))

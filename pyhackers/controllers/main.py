@@ -5,7 +5,7 @@ import time
 from datetime import datetime as dt
 from pyhackers.model.action import Action, ActionType
 from pyhackers.service.post import new_post
-from pyhackers.service.channel import follow_channel, load_channel
+from pyhackers.service.channel import follow_channel, load_channel, get_channel_list
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
 import requests
@@ -41,6 +41,7 @@ def render_base_template(*args, **kwargs):
     kwargs.update(**{'__v__': int(time.time()),
                      'user': active_user,
                      'user_json' : user_data,
+                     'channels' : get_channel_list(),
                      'PROD' : not (debug in ['True','1',True,1]),
                      'logged_in': bool(is_logged)})
 
@@ -131,12 +132,12 @@ def index():
 
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
-@main_app.route('/os/<regex(".+"):user>/<regex(".+"):project>')
-def os(user, project):
+@main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
+def os(nick, project):
 
     project = project[:-1] if project[-1] == "/" else project
     logging.info(u"looking for %s", project)
-    slug = u"%s/%s" % (user, project)
+    slug = u"%s/%s" % (nick, project)
     project_data = load_project(slug, current_user)
 
     if project_data is None:
@@ -148,12 +149,13 @@ def os(user, project):
     return render_base_template("os.html",
                                 project=project,
                                 related_projects=related_projects,
-                                followers=followers)
+                                followers=followers,)
 
 
 @cache.cached(timeout=10000)
 @main_app.route('/os')
 @main_app.route('/os/')
+@main_app.route('/open-source/')
 def os_list():
     projects = OpenSourceProject.query.order_by(OpenSourceProject.watchers.desc()).limit(400)
 
