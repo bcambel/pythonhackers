@@ -133,6 +133,7 @@ def index():
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
+@main_app.route('/open-source/<regex(".+"):nick>/<regex(".+"):project>')
 def os(nick, project):
 
     project = project[:-1] if project[-1] == "/" else project
