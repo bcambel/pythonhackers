@@ -6,7 +6,9 @@ source_dir = os.path.dirname(current_dir)
 
 sys.path.append(source_dir)
 
-from app import app
+from app import app, start_app
+
+start_app()
 
 import newrelic.agent
 
