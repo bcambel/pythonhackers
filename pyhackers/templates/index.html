@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class='links container'>
+
+        <div class='linklist row'>
+         <div class="btn-group pull-right">
+                    <a href="?list=top" class='btn btn-default {{ btn_top }}'>Top</a>
+                    <a href="?list=hot" class='btn btn-default {{ btn_hot }}'>Hot</a>
+                    <a href="?list=new" class='btn btn-default {{ btn_new }}'>New</a>
+                </div>
+            {% for link in links %}
+                <div class='row'>
+                    <div class='front-action col-lg-4'>
+                        <i class='icon-arrow-up icon-2x'></i>
+                        <span class="label">{{ link.popularity }} </span>
+                    </div>
+                    <div class='col-lg-8 link-box' style="padding-left:0;">
+                        <div class='clear link-container row'>
+                            <div class='col-lg-11'>
+                                <a href='{{ link.url }}' target="_blank" class='link'>
+                                    {{ link.title }}
+                                </a>
+                                ({{ link.domain }})
+
+                            </div>
+
+                        </div>
+                        <div class='row' style="padding-top:5px;">
+                            <div class='col-lg-5'>
+                                <a href="#post" class="link-discuss">{{ link.ago }}m</a>
+                                <a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>
+                                <a href="#">@{{ link.user }}</a>
+                            </div>
+
+                            <div class="col-6" style="text-align: right">
+                                <a href="#/tag/flask" class='tag' style="">
+                                    <span class="">#Flask</span>
+                                </a>
+                                <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

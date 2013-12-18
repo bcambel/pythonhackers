@@ -5,8 +5,8 @@ from fabtools import require
 
 # env.hosts = []
 env.root = '/var/www/pythonhackers.com/'
-# env.user = 'root'
-env.key_filename = '~/.ssh/digital'
+env.user = 'root'
+#env.key_filename = '~/.ssh/digital'
 
 PACKAGES = [
     'supervisor', 'vim', 'htop', 'build-essential',
@@ -28,6 +28,11 @@ def venv():
 def restart_nginx():
     run("service nginx restart")
 
+#"moreutils"
+
+@task 
+def install_java():
+    require.deb.packages(["openjdk-7-jdk", "openjdk-7-jre"], update=True)
 
 @task
 def restart_process():

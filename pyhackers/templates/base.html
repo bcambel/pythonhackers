@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Hackers Community</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
+    {#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
+    {#    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">#}
+    <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link href="/static/css/buttons.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+<div id="page-wrap">
+    <div class="navbar navbar-inverse">
+        <div class="container col-lg-offset-1">
+            <a class="navbar-brand" href="/">Python Hackers</a>
+            <ul class="nav navbar-nav">
+
+                <li><a href="/links">Links</a></li>
+                <li><a href="/open-source/">Open Source</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Channels<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for channel in channels %}
+                            <li><a href="/channels/{{ channel.slug }}">{{ channel.name }}</a></li>
+                        {% endfor %}
+
+                        <li class="divider"></li>
+                        <li><a href="/channels/lobby">Lobby</a></li>
+                    </ul>
+
+                <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta&nbsp;(200+)</a>
+                </li>
+                <li><a href='/about'>About</a></li>
+                <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;27</a>
+                </li>
+                <li><a href="http://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;237
+                </a></li>
+            </ul>
+            <ul class='nav navbar-nav pull-right'>
+                {% if logged_in %}
+                    <!-- {{ current_user }} -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src='{{ current_user.pic_url }}' height='25px' width="25px" class="img-rounded"/>&nbsp;
+                            &nbsp;
+                            <span id='profile_link'>{{ current_user.nick }} </span><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {#                  <li><a href="#">Action</a></li>#}
+                            <li><a href="/profile"><i class='icon-user'></i>&nbsp;&nbsp;&nbsp;Profile</a></li>
+                            <li><a href="/profile/settings"><i class='icon-cogs'></i>&nbsp;&nbsp;Settings</a></li>
+                            <li><a href="/logout"><i class='icon-off'></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li style=''>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="body" class="container-fluid">
+        <div id='main'>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <div id="footer" class='container-fluid footer'>
+        <div class="container">
+            <p>
+                Made with <i class="icon-heart"></i> in Amsterdam. 2013 &copy;
+            </p>
+        </div>
+
+        <p>
+
+        </p>
+    </div>
+
+
+    {% include "modals.html" %}
+    {% include "js_templates.html" %}
+
+    <script src="/static/js/libs/underscore.js" type="text/javascript"></script>
+    <script src="/static/js/libs/jquery.min.js" type="text/javascript"></script>
+
+    <script src="/static/js/libs/bootstrap.min.js"></script>
+
+    <script src='/static/js/libs/backbone-min.js' type='text/javascript'></script>
+    <script src='/static/js/libs/backbone.marionette.js' type='text/javascript'></script>
+    <script src="/static/js/libs/parsley-standalone.min.js"></script>
+
+    <script src="/static/js/libs/wysihtml5-0.3.0.min.js"></script>
+    <script src="/static/js/libs/bootstrap-wysihtml5.js"></script>
+    <script src="/static/js/require.js"></script>
+    <script src="/static/js/app/main.js"></script>
+
+    {% block script_links %}{% endblock %}
+    <script type="text/javascript">
+        {% if PROD %}
+            {% include "3rd_party.html" %}
+        {% endif %}
+        {% block scripts %}{% endblock %}
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+        Disqus.</a>
+    </noscript>
+
+    {% include "mailchimp_form.html" %}
+
+    <script>
+        {% autoescape off %}
+        var session = {{ user_json }};
+        {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
+        {% endautoescape %}
+
+    </script>
+</div>
+</body>
+</html>

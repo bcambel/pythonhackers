@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Hackers Community</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
+    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">
+    <link href="/static/css/buttons.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        a:hover {
+            text-decoration: none;
+        }
+
+        .links {
+
+        }
+
+        .link-box {
+            margin-bottom: 10px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #d3d3d3;
+            padding-right: 0;
+        }
+
+        h4 a {
+            text-transform: uppercase;
+        }
+
+        .tag {
+            color: #d9534f;
+        }
+
+        .ositem {
+            padding-bottom: 1px;
+        }
+
+        .ositem .index {
+            font-size: 13px;
+            color: slategray;
+            font-weight: bold;
+        }
+
+        .ositem:hover {
+            background-color: lemonchiffon;
+        }
+
+        .ositem .info .project {
+            font-size: 14px;
+        }
+
+        .ositem .description p {
+            font-size: 12px;
+        }
+
+        .ositem .number {
+            padding-top: 4px;
+            text-align: center;
+            font-size: 13px;
+            color: gray;
+        }
+
+        .link-container {
+            padding-top: 5px;
+            margin-bottom: 10px;;
+        }
+
+        .link-container .label {
+
+        }
+
+        .links .front-action {
+            max-width: 50px;
+            padding-top: 5px;
+            width: 100px;
+            float: left;
+            margin-right: 10px;
+            line-height: 25px;
+        }
+
+        .bs-callout {
+            margin: 10px 0;
+            padding: 15px 30px 15px 15px;
+            border-left: 5px solid #eee;
+        }
+
+        .bs-callout-warning {
+            background-color: #fefbed;
+            border-color: #f1e7bc;
+        }
+
+        .linklist {
+            box-shadow: 1px;
+        }
+
+        @media (min-width:768px) {
+            .links .front-action {
+            {#                margin-left:-70px;#}
+            }
+        }
+
+        .user-info {
+            float: left;
+
+        }
+
+        .link-discuss {
+            color: darkgray;
+        }
+
+        .links .front-action i {
+            color: lightgray;
+            cursor: pointer;
+            font-size: 3em;
+        }
+
+        .links a.link {
+            font-size: 1.7em;
+        }
+
+        .links a {
+            font-size: 1.2em;
+        }
+
+        .navbar-brand {
+            font-size: 1.5em;
+        }
+
+        #join-us {
+            border-bottom: 2px solid crimson;
+        }
+
+    </style>
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+<div class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="/">Python Hackers</a>
+        <ul class="nav navbar-nav">
+
+            <li><a href="/links">Links</a></li>
+            <li><a href="/os">Open Source</a></li>
+            <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta</a></li>
+            <li><a href='http://pythonhackers.com'>About</a></li>
+            <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='icon-github'></i>&nbsp;
+            <li><a href="https://twitter.com/pythonhackers" target="_blank"><i class='icon-twitter'></i>&nbsp;
+            </a></li>
+        </ul>
+        <ul class='nav navbar-nav pull-right'>
+            {% if logged_in %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            id='profile_link'>Dropdown </span><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {#                  <li><a href="#">Action</a></li>#}
+                        <li><a href="/profile"><i class='icon-user'></i>&nbsp;Account</a></li>
+                        <li><a href="/profile/settings"><i class='icon-cogs'></i>&nbsp;Settings</a></li>
+                        <li><a href="/logout"><i class='icon-off'></i>&nbsp;Logout</a></li>
+                    </ul>
+                </li>
+            {% else %}
+                <li style=''>
+{#                    <a class="btn-auth btn-github" href="/oauth/github">#}
+{#                        Sign in with <b>Github</b>#}
+{#                    </a>#}
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div id='main'>
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<div class='container footer'>
+    <p>
+        Made in Amsterdam
+        <iframe src="http://ghbtns.com/github-btn.html?user=pythonhackers&repo=pythonhackers&type=watch&count=true&size=large"
+                allowtransparency="true" frameborder="0" scrolling="0" width="156px" height="30px"></iframe>
+    </p>
+    <p>
+        <a href="https://twitter.com/pythonhackers" class="twitter-follow-button pull-right"
+           data-show-count="true" data-size='large' data-show-count="false" data-lang="en">Follow
+            @pythonhackers</a>
+    </p>
+</div>
+
+
+{% include "modals.html" %}
+{% include "js_templates.html" %}
+
+<script src="/static/js/libs/underscore.js" type="text/javascript"></script>
+<script src="/static/js/libs/jquery.min.js" type="text/javascript"></script>
+
+<script src="/static/js/libs/bootstrap.min.js"></script>
+
+<script src='/static/js/libs/backbone-min.js' type='text/javascript'></script>
+<script src='/static/js/libs/backbone.marionette.js' type='text/javascript'></script>
+<script src="/static/js/libs/parsley-standalone.min.js"></script>
+{% block script_links %}{% endblock %}
+<script type="text/javascript">
+    {% if PROD %}
+        {% include "third_party.html" %}
+    {% endif %}
+    {% block scripts %}{% endblock %}
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+
+{% include "mailchimp_form.html" %}
+
+<script>
+    {% autoescape off %}
+    var session = {{ user_data }};
+    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;
+    {% endautoescape %}
+
+</script>
+</body>
+</html>
