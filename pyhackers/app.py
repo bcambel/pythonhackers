@@ -24,7 +24,6 @@ statics_folder = os.path.join(current_dir, 'static')
 app = Flask(__name__, template_folder=templates_folder, static_folder=statics_folder)
 app.secret_key = config.get("app", "flask_secret")
 app.debug = bool(config.get("app", "debug"))
-app.config['SENTRY_DSN'] = config.get("sentry", "dsn")
 app.config['SQLALCHEMY_DATABASE_URI'] = db_conf
 
 
@@ -39,14 +38,13 @@ app.url_map.converters['regex'] = RegexConverter
 
 def start_app():
     from sentry import init as init_sentry
-    # init_sentry(app)
+    init_sentry(app)
     login_manager = setup_application_extensions(app, '/authenticate')
 
     from flask.ext.sqlalchemy import SQLAlchemy
 
     from pyhackers.db import set_db, get_db
 
-    sentry = Sentry(app)
     set_db(SQLAlchemy(app))
     DB = get_db()
 

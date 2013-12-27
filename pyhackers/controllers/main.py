@@ -12,12 +12,13 @@ import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
+
 from pyhackers.setup import login_manager
 from pyhackers.cache import cache
 from pyhackers.model.user import User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.config import config
-
+from pyhackers.sentry import sentry
 from sqlalchemy import and_
 
 purge_key = config.get("app", 'purge_key')
@@ -166,7 +167,8 @@ def os(nick, project):
 @main_app.route('/os/')
 @main_app.route('/open-source/')
 def os_list():
-    projects = OpenSourceProject.query.filter(and_(OpenSourceProject.lang==0,OpenSourceProject.hide!=True)).order_by(
+    projects = OpenSourceProject.query.filter(
+        and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
         OpenSourceProject.watchers.desc()).limit(400)
 
     return render_base_template("os_list.html", projects=projects)
@@ -174,18 +176,21 @@ def os_list():
 
 from docutils.core import publish_parts
 
+
 @main_app.route('/python-packages/<regex(".+"):package>')
-def package(package):
-    package = Package.query.get(package)
+def package_details(package):
+    package_obj = Package.query.get(package)
+    if package_obj is None:
+        return abort(404)
+
     try:
-        description = publish_parts(package.description, writer_name='html')['html_body']
+        description = publish_parts(package_obj.description, writer_name='html')['html_body']
     except:
-        description = package.description
-    #description = markdown( package.description, autolink=True)
+        sentry.captureException()
+        description = package_obj.description
+        #description = markdown( package.description, autolink=True)
 
-    return render_base_template("package.html", package=package, description=description)
-
-
+    return render_base_template("package.html", package=package_obj, description=description)
 
 
 @main_app.route('/python-packages/')
@@ -193,6 +198,7 @@ def package_list():
     packages = Package.query.order_by(Package.mdown.desc()).limit(1000)
 
     return render_base_template("packages.html", packages=packages)
+
 
 @main_app.route("/user")
 def user():

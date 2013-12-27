@@ -26,7 +26,7 @@ logger.warn('Configuration files read: %s' % files_read)
 
 logger.setLevel(int(config.get('app', 'log_level')))
 
-SENTRY_DSN = None
+
 APPS_TO_RUN = ['web','idgen']
 
 try:

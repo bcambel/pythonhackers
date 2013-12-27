@@ -111,12 +111,11 @@
     <script src="/static/js/app/main.js"></script>
 
     {% block script_links %}{% endblock %}
-    <script type="text/javascript">
+
         {% if PROD %}
             {% include "3rd_party.html" %}
         {% endif %}
-        {% block scripts %}{% endblock %}
-    </script>
+
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
         Disqus.</a>
     </noscript>
@@ -124,6 +123,7 @@
     {% include "mailchimp_form.html" %}
 
     <script>
+        {% block scripts %}{% endblock %}
         {% autoescape off %}
         var session = {{ user_json }};
         {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
