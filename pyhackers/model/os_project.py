@@ -1,4 +1,3 @@
-from sqlalchemy import Boolean, Column, Integer, String, Float, SmallInteger, DateTime, Text
 from sqlalchemy.dialects import postgresql
 from pyhackers.db import DB as db
 
@@ -16,5 +15,6 @@ class OpenSourceProject(db.Model):
     parent = db.Column("parent", db.String(100), nullable=True, index=True )
     categories = db.Column("categories", postgresql.ARRAY(db.String))
 
-
+    hide = db.Column("hide", db.Boolean, default=False)
+    lang = db.Column("lang", db.SmallInteger, default=0)
     __tablename__ = 'os_project'

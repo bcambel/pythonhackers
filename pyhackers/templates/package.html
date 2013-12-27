@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "widgets/user_image_list.html" import image_list_macro %}
+
+{% block content %}
+<div class='container'>
+    <div class='row' style='border-radius: 10px;padding-bottom:10px'>
+         <div class='col-lg-8'>
+            <h1>{{ package.name }}</h1>
+            <a href="{{ package.url }}" target="_blank">
+                {{ package.url }}
+            </a>
+            <p>{{ package.summary }}</p>
+             <hr />
+             <div class="package-desc">
+             {% autoescape off %}
+            <p>{{ description }}</p>
+             {% endautoescape %}
+                 </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

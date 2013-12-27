@@ -9,6 +9,7 @@ from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.message import Message
 from pyhackers.model.channel import Channel
 from pyhackers.model.action import Action
+from pyhackers.model.package import Package
 from jinja2 import Markup
 
 
@@ -80,6 +81,10 @@ class UserModelView(ProtectedModelView):
 class SocialUserModelView(ProtectedModelView):
     column_formatters = {'nick': _nick_href}
 
+class PackageModelView(ProtectedModelView):
+    column_list = ('name','mdown','wdown','ddown', 'summary')
+    column_searchable_list = ("name",'summary','description')
+
 
 def init(app, db):
     admin = Admin(app)
@@ -91,3 +96,4 @@ def init(app, db):
     admin.add_view(ProtectedModelView(Action, db.session))
     admin.add_view(ProtectedModelView(Bucket, db.session))
     admin.add_view(ProtectedModelView(Channel, db.session))
+    admin.add_view(PackageModelView(Package, db.session))
