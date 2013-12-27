@@ -4,12 +4,12 @@ import logging
 from werkzeug.routing import BaseConverter
 from flaskext.kvsession import KVSessionExtension
 from flask import Flask, request, abort, render_template, redirect, jsonify, session
+from raven.contrib.flask import Sentry
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 source_dir = os.path.dirname(current_dir)
 
 sys.path.insert(0, source_dir)
-
 
 from pyhackers.config import config
 from pyhackers.setup import setup_application_extensions
@@ -19,12 +19,12 @@ static_folder = config.get("app", "static")
 #templates_folder = config.get("app", "templates")
 db_conf = config.get("app", "db")
 
-
 templates_folder = os.path.join(current_dir, 'templates')
 statics_folder = os.path.join(current_dir, 'static')
 app = Flask(__name__, template_folder=templates_folder, static_folder=statics_folder)
 app.secret_key = config.get("app", "flask_secret")
 app.debug = bool(config.get("app", "debug"))
+app.config['SENTRY_DSN'] = config.get("sentry", "dsn")
 app.config['SQLALCHEMY_DATABASE_URI'] = db_conf
 
 
@@ -46,7 +46,7 @@ def start_app():
 
     from pyhackers.db import set_db, get_db
 
-
+    sentry = Sentry(app)
     set_db(SQLAlchemy(app))
     DB = get_db()
 
@@ -61,6 +61,7 @@ def start_app():
         try:
             return User.query.get(userid)
         except:
+            sentry.captureException()
             return None
 
     cache_init(app)

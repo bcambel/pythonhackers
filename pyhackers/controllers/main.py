@@ -3,9 +3,6 @@ import logging
 import random
 from json import dumps
 import time
-import re
-from datetime import datetime as dt
-from pyhackers.model.action import Action, ActionType
 from pyhackers.model.package import Package
 from pyhackers.service.post import new_post
 from pyhackers.service.channel import follow_channel, load_channel, get_channel_list
@@ -18,11 +15,9 @@ from flask.ext.login import current_user, logout_user, login_required
 from pyhackers.setup import login_manager
 from pyhackers.cache import cache
 from pyhackers.model.user import User
-from pyhackers.model.message import Message
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.config import config
-from pyhackers.db import DB as db
-import markdown2
+
 from sqlalchemy import and_
 
 purge_key = config.get("app", 'purge_key')
@@ -177,8 +172,6 @@ def os_list():
     return render_base_template("os_list.html", projects=projects)
 
 
-
-from flask.ext.misaka import markdown
 from docutils.core import publish_parts
 
 @main_app.route('/python-packages/<regex(".+"):package>')
