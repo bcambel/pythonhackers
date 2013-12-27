@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset='utf-8'>
     <title>Python Hackers Community</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
-    {#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
-    {#    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">#}
+    <meta name="description" content="{{ title }}; {{ description }}" />
+    <meta property="og:title" content="{{ title }}"/>
+    <meta property="og:site_name" content="Python Hackers"/>
+    <meta property="og:description" content="{{ title }}; {{ description }}"/>
     <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">
     <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
     <link href="/static/css/app.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-
     {% block head %}{% endblock %}
-
+    {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
+    {#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
+    {#    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">#}
+    
 </head>
 <body>
 <div id="page-wrap">
