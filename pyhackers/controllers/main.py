@@ -162,7 +162,7 @@ def os(nick, project):
                                 followers=followers, )
 
 
-#@cache.cached(timeout=10000, unless=request_force_non_cache)
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
@@ -177,6 +177,7 @@ def os_list():
 from docutils.core import publish_parts
 
 
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/python-packages/<regex(".+"):package>')
 def package_details(package):
     package_obj = Package.query.get(package)
@@ -192,6 +193,7 @@ def package_details(package):
     return render_base_template("package.html", package=package_obj, description=description)
 
 
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/python-packages/')
 def package_list():
     packages = Package.query.order_by(Package.mdown.desc()).limit(1000)
@@ -255,6 +257,7 @@ def channel(name):
     return render_base_template("channel.html", channel_name=channel_name)
 
 
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/user/<regex(".+"):nick>')
 def user_profile(nick):
     _ = get_profile_by_nick(nick)
