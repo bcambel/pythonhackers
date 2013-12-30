@@ -3,12 +3,12 @@ import logging
 import random
 from json import dumps
 import time
+import requests
 from pyhackers.model.package import Package
 from pyhackers.service.post import new_post
 from pyhackers.service.channel import follow_channel, load_channel, get_channel_list
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
-import requests
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
@@ -186,7 +186,6 @@ def package_details(package):
     try:
         description = publish_parts(package_obj.description, writer_name='html')['html_body']
     except:
-        sentry.captureException()
         description = package_obj.description
         #description = markdown( package.description, autolink=True)
 
