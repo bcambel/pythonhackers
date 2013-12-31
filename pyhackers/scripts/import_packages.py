@@ -1,5 +1,6 @@
 from __future__ import print_function
 import logging
+from pyhackers.utils import files_in
 import simplejson
 from os import listdir
 from os.path import join, isfile
@@ -40,12 +41,9 @@ def import_package(package_dict):
         logging.exception(ex)
 
 
-
-
 def find_files(directory):
-    files = [join(directory, f) for f in listdir(directory) if isfile(join(directory, f))]
 
-    for file in files:
+    for file in files_in(directory):
         try:
             lines = codecs.open(file, "r", "utf-8").readlines()
             json_file = u" ".join(lines)

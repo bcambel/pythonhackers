@@ -1,22 +1,38 @@
+from os import listdir
+from os.path import join, isfile
 
-thousand = 10**3
-million = 10**6
+rules = [(10 ** 9, 'B'), (10 ** 6, 'M'), (10 ** 3, 'K')]
 
 
 def nice_number(n):
-    ident = n
-    abbr = ""
-    if n > million:
-        abbr = "M"
-        ident = (n*10/million)/10.0
+    numeric = n
+    abbreviation = ""
 
-    elif n > thousand:
-        abbr = "K"
-        ident = (n*10/thousand)/10.0
+    for number, abbr in rules:
+        if n > number:
+            abbreviation = abbr
+            ident = (n * 10 / number) / 10.0
+            break
+
+    ident_int = int(numeric)
+    if numeric - ident_int == 0:
+        numeric = ident_int
+
+    return u"{}{}".format(numeric, abbreviation)
 
 
-    ident_int = int(ident)
-    if ident - ident_int == 0:
-        ident = ident_int
+def files_in(directory):
+    for f in listdir(directory):
+        if isfile(join(directory, f)):
+            yield join(directory, f)
+    return
 
-    return u"{ident}{abbr}".format(**vars())
+if __name__ == "__main__":
+
+    def tests():
+        assert "10K" == nice_number(10020)
+        assert "102" == nice_number(102)
+        assert "1M" == nice_number(1002000)
+        assert "1.1B" == nice_number(1102000000)
+
+    tests()

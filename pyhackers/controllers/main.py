@@ -215,6 +215,7 @@ def new_message():
         code = request.form.get("code")
 
         new_post(message, code, current_user)
+        return jsonify({'ok': 1})
 
     return render_base_template("new_message.html")
 

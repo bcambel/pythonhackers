@@ -1,10 +1,13 @@
 import logging
+from pyhackers.ext.hipchat import notify_registration
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
 from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project
 from pyhackers.apps.idgen import idgen_client
+from pyhackers.sentry import sentry
+import simplejson as json
 
 
 def create_user_from_github_user(access_token, github_user):
@@ -19,14 +22,16 @@ def create_user_from_github_user(access_token, github_user):
     #if user is not None:
     #    return user
     u = user
+    email = github_user.get("email", "")
+    name = github_user.get("name", "")
 
     if user is None:
         u = User()
         #u.id = idgen_client.get()
         u.nick = user_login
-        u.email = github_user.get("email", "")
+        u.email = email
         u.pic_url = github_user.get("avatar_url")
-        name = github_user.get("name", "")
+
         name_parts = name.split(" ")
 
         if len(name_parts) > 1:
@@ -42,7 +47,7 @@ def create_user_from_github_user(access_token, github_user):
         su.user_id = u.id
         su.nick = user_login
         su.acc_type = 'gh'
-        su.email = github_user.get("email", "")
+        su.email = email
         su.follower_count = github_user.get("followers")
         su.following_count = github_user.get("following")
         su.blog = github_user.get("blog")
@@ -59,8 +64,16 @@ def create_user_from_github_user(access_token, github_user):
         except Exception, e:
             logging.warn(e)
             db.session.rollback()
+            sentry.captureException()
         finally:
             CsUser.create(id=u.id, nick=u.nick, extended=dict(pic=u.pic_url))
+        try:
+            notification = u"Id:{} Nick:[{}] Name:[{}] Email:[{}] Followers:{}".format(u.id, user_login, name,
+                                                                                   email, github_user.get("followers",0))
+            notify_registration(notification)
+        except Exception, ex:
+            logging.exception(ex)
+            sentry.captureException()
 
     return u
 
@@ -154,6 +167,9 @@ def get_profile_by_nick(nick):
         return
 
     return load_user(user.id)
+
+
+
 
 
 #from github import Github
