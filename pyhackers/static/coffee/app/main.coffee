@@ -9,7 +9,7 @@ Application = {
         $('form[data-remote]').submit (evt) ->
             evt.preventDefault()
             evt.stopPropagation()
-            
+
             unless window.session.hasOwnProperty("id")
                 document.location = '/authenticate'
                 return
