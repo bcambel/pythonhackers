@@ -285,6 +285,11 @@ def user_profile(nick):
                                 following=following,
                                 os_projects=os_projects)
 
+@main_app.route("/authenticate")
+def authenticate():
+
+    return render_base_template('authenticate.html')
+
 
 @main_app.route("/ajax/followchannel", methods=("POST",))
 @login_required
