@@ -23,6 +23,7 @@ lib
 lib64
 venv
 .idea
+.tweets
 # Installer logs
 pip-log.txt
 

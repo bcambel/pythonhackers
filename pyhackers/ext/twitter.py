@@ -5,14 +5,14 @@ from tweepy import Stream
 from dateutil import parser as dtparser
 from pyhackers.config import config
 import redis
-from kafka.client import KafkaClient
-from kafka.producer import SimpleProducer
+#from kafka.client import KafkaClient
+#from kafka.producer import SimpleProducer
 
 
 class StdOutListener(StreamListener):
-    """ A listener handles tweets are the received from the stream.
+    """
+    A listener handles tweets are the received from the stream.
     This is a basic listener that just prints received tweets to stdout.
-
     """
 
     def __init__(self):

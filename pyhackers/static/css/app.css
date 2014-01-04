@@ -14,7 +14,7 @@ div#page-wrap {
 #body #main .container{
     background-color:white;
     border-radius: 5px;
-    padding-left:50px;
+    /*padding-left:50px;*/
     padding-top:20px;
     padding-bottom: 20px;
 }
@@ -40,7 +40,7 @@ div#page-wrap {
     float:right;
 
 }
-#footer p i.icon-heart{
+#footer p i.fa-heart{
     color:red;
 }
 
@@ -84,7 +84,7 @@ a:hover {
     padding-bottom: 7px;
     border-bottom: 1px solid #d3d3d3;
     padding-right: 0;
-    margin-left:70px;
+    margin-left:0;
 }
 
 h4 a {
@@ -223,4 +223,15 @@ body{
 
 .package-desc h1{
     font-size:18px;
+}
+
+.right-border{
+    border-right:1px solid #eee;
+}
+.left-border{
+    border-left:1px solid #eee;
+}
+
+.fullheight{
+    height: 100%;
 }

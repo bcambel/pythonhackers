@@ -129,30 +129,26 @@ def user_list_from_ids(ids, dict=True):
         return temp_user
 
 
-
-
-def load_user(user_id):
+def load_user(user_id, current_user=None):
     logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
+
+    #logging.warn("{} -> {} ".format(user, type(user)))
     followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
     following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
 
     projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
-    os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).all()
+    os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).order_by(OpenSourceProject.stars.desc()).all()
     cassa_users = user_list_from_ids(set(followers+following), dict=True)
 
-    #print [user for user in csUsers]
-
     def expand(o):
-        #d = o._as_dict()
-        #d = d.update(d.get('extended'))
         extras = o.extended
         dict_val = o._as_dict()
         dict_val.update(**extras)
         return dict_val
 
-    user_followers = [filter(lambda x: x.get('id') == user, cassa_users)[0] for user in followers]
-    user_following = [filter(lambda x: x.get('id') == user, cassa_users)[0] for user in following]
+    user_followers = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in followers]
+    user_following = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in following]
 
     return user, user_followers, user_following, os_projects
 

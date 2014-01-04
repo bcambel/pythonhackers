@@ -8,11 +8,11 @@ from pyhackers.model.package import Package
 from pyhackers.service.post import new_post
 from pyhackers.service.channel import follow_channel, load_channel, get_channel_list
 from pyhackers.service.project import project_follow, load_project
-from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user
+from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user, load_user
 from flask.ext.wtf import Form, TextField, PasswordField, Required
 from flask import request, render_template, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
-
+from datetime import datetime as dt
 from pyhackers.setup import login_manager
 from pyhackers.cache import cache
 from pyhackers.model.user import User
@@ -38,12 +38,15 @@ def render_base_template(*args, **kwargs):
     active_user = current_user.jsonable() if not current_user.is_anonymous() else {}
     user_data = dumps(active_user)
     logging.warn(user_data)
+
     kwargs.update(**{'__v__': int(time.time()),
                      'user': active_user,
                      'user_json': user_data,
                      'channels': get_channel_list(),
                      'PROD': PRODUCTION,
-                     'logged_in': bool(is_logged)})
+                     'logged_in': bool(is_logged),
+                        'year' : dt.utcnow().year,
+                        })
 
     return render_template(*args, **kwargs)
 
@@ -54,7 +57,7 @@ def unauthorized(e):
 
 
 @login_manager.user_loader
-def load_user(userid):
+def login_load_user(userid):
     logging.warn("Finding user %s" % userid)
     user = User.query.get(userid)
 
@@ -244,9 +247,19 @@ def logout():
 
 
 @main_app.route("/profile")
+@login_required
 def profile():
-    get_profile(current_user)
-    return render_base_template("profile.html")
+    #get_profile(current_user)
+
+    user_data = load_user(current_user.id, current_user)
+    if user_data is not None:
+        user, followers, following, os_projects = user_data
+        #print user
+        return render_base_template("profile.html", profile=user, followers=followers,
+                                following=following,
+                                os_projects=os_projects)
+
+    return abort(404)
 
 
 @main_app.route('/channels/<regex(".+"):name>')
@@ -274,6 +287,7 @@ def user_profile(nick):
 
 
 @main_app.route("/ajax/followchannel", methods=("POST",))
+@login_required
 def followchannel():
     user_id = request.form.get("id")
     nick = request.form.get("slug")
@@ -284,6 +298,7 @@ def followchannel():
 
 
 @main_app.route("/ajax/followuser", methods=("POST",))
+@login_required
 def followuser():
     user_id = request.form.get("id")
     nick = request.form.get("slug")

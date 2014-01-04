@@ -4,40 +4,43 @@
 
 {% block content %}
     <div class='container'>
-        <div class='col-lg-4'>
-            <img src='{{ profile.pic_url }}' class='img-responsive img-rounded' />
-            <h1>{{ profile.nick }}</h1>
+        <div class='col-lg-3 right-border fullheight'>
+            <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
+             <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+            <h5>@{{ profile.nick }}</h5>
+            <hr/>
 
             <form method="post" action="/ajax/followuser" data-remote>
-      <input type="hidden" name="id" value="{{ profile.id }}" />
-      <input type="hidden" name="slug" value="{{ profile.nick }}" />
-        <button type="submit" class='btn btn-info btn-xs'>
-            <i class='icon-heart'></i>&nbsp;&nbsp;&nbsp;Follow
-        </button>
-</form>
-<hr />
-        <div class="clearfix">
-        Following:      <br />
-            {{ image_list_macro(following) }}
-        </div>
-<hr />
-        <div class="clearfix">
+                <input type="hidden" name="id" value="{{ profile.id }}"/>
+                <input type="hidden" name="slug" value="{{ profile.nick }}"/>
+                <button type="submit" class='btn btn-success btn-md'>
+                    <i class='fa fa-heart'></i>&nbsp;&nbsp;&nbsp;Follow
+                </button>
+            </form>
+            <hr/>
+            <div class="clearfix">
+                Followers: <br/>
+                {{ image_list_macro(followers) }}
+            </div>
+            <hr/>
+            <div class="clearfix">
+                Following: <br/>
+                {{ image_list_macro(following) }}
+            </div>
 
-        Followers:      <br />
-            {{ image_list_macro(followers) }}
+
         </div>
-        </div>
-        <div class='col-lg-8'>
-                <h4>Following projects</h4>
-                {% for project in os_projects %}
-                    <div class='row link-box ositem'>
+        <div class='col-lg-8 left-border'>
+            <h4>Following projects</h4>
+            {% for project in os_projects %}
+                <div class='row link-box ositem'>
                     <div class='row'>
                         <div class='col-lg-1 number'>
                             <span class='index'>{{ loop.index }}.</span>
 
                         </div>
                         <div class='col-lg-9 info'>
-                            <a class='project' href='/os/{{ project.slug }}'>{{ project.name }}</a>
+                            <a class='project' href='/open-source/{{ project.slug }}'>{{ project.name }}</a>
                             <a href='{{ project.src_url }}' target="_blank">(git)</a>
                         </div>
                         <div class="col-lg-1">
@@ -46,7 +49,7 @@
                     </div>
                     <div class='row description'>
                         <div class='col-lg-1 number'>
-                            <a href="/os/{{ project.slug }}" data-toggle="tooltip"
+                            <a href="/open-source/{{ project.slug }}" data-toggle="tooltip"
                                title='{{ project.name }} has <br />{{ project.watchers }} watchers on Github'
                                data-html='true' data-placement='auto left'>{{ project.watchers }}</a>
 
@@ -57,7 +60,7 @@
                     </div>
 
                 </div>
-                {% endfor %}
+            {% endfor %}
 
         </div>
     </div>
