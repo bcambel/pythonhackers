@@ -10,12 +10,16 @@
     formSubmitter: function() {
       $('form[data-remote]').submit(function(evt) {
         var $this, action, postData;
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (!window.session.hasOwnProperty("id")) {
+          document.location = '/authenticate';
+          return;
+        }
         $this = $(this);
         action = $this.attr("action");
         postData = $this.serializeArray();
-        $.post(action, postData);
-        evt.preventDefault();
-        return evt.stopPropagation();
+        return $.post(action, postData);
       });
       return $('[data-toggle="tooltip"]').tooltip();
     }

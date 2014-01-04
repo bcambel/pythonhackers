@@ -5,13 +5,20 @@ Application = {
         @
 
     formSubmitter : () ->
+
         $('form[data-remote]').submit (evt) ->
+            evt.preventDefault()
+            evt.stopPropagation()
+            
+            unless window.session.hasOwnProperty("id")
+                document.location = '/authenticate'
+                return
+
             $this = $(this)
             action = $this.attr("action")
             postData = $this.serializeArray()
             $.post(action, postData)
-            evt.preventDefault()
-            evt.stopPropagation()
+
 
         $('[data-toggle="tooltip"]').tooltip()
 }
