@@ -65,7 +65,7 @@ a:hover {
 }
 
 .links {
-
+    padding-left:50px;
 }
 
 .bs-masthead .lead {
@@ -84,7 +84,7 @@ a:hover {
     padding-bottom: 7px;
     border-bottom: 1px solid #d3d3d3;
     padding-right: 0;
-    margin-left:0;
+    margin-left: 65px;
 }
 
 h4 a {
