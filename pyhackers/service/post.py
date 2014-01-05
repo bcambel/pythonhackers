@@ -4,6 +4,8 @@ from pyhackers.model.message import Message
 from pyhackers.model.cassandra.hierachy import (
     User as CsUser, Post as CsPost, UserPost as CsUserPost)
 
+from pyhackers.events import Event
+
 
 def new_post(message, code, current_user):
     m = Message()
@@ -26,6 +28,8 @@ def new_post(message, code, current_user):
         post_id = post.id
 
         CsUserPost.create(user_id=current_user.id, post_id=post_id)
+        Event.message(current_user.jsonable(),m.jsonable(), None)
+
     else:
         logging.warn("Misery sinks in...")
 

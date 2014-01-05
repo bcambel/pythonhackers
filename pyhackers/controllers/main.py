@@ -287,7 +287,6 @@ def user_profile(nick):
 
 @main_app.route("/authenticate")
 def authenticate():
-
     return render_base_template('authenticate.html')
 
 
