@@ -1,8 +1,6 @@
 from rq import Queue, Connection
 from pyhackers.worker.message import foo
-
-with Connection():
-    q = Queue()
+from pyhackers.job_scheduler import worker_queue as q
 
 
 class Event(object):
@@ -20,7 +18,7 @@ class Event(object):
     @classmethod
     def message(cls, user, message, context):
         """A user sent a message"""
-        q.enqueue(foo, args=(user, message, context))
+        q.enqueue(foo, args=(user, message, context), result_ttl=0)
         pass
 
     @classmethod

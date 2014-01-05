@@ -1,13 +1,14 @@
 import logging
-from pyhackers.ext.hipchat import notify_registration
+from pyhackers.worker.hipchat import notify_registration
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
 from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project
 from pyhackers.apps.idgen import idgen_client
-from pyhackers.sentry import sentry
+from pyhackers.sentry import sentry_client
 import simplejson as json
+from pyhackers.job_scheduler import worker_queue
 
 
 def create_user_from_github_user(access_token, github_user):
@@ -64,29 +65,31 @@ def create_user_from_github_user(access_token, github_user):
         except Exception, e:
             logging.warn(e)
             db.session.rollback()
-            sentry.captureException()
+            sentry_client.captureException()
         finally:
             CsUser.create(id=u.id, nick=u.nick, extended=dict(pic=u.pic_url))
         try:
             notification = u"Id:{} Nick:[{}] Name:[{}] Email:[{}] Followers:{}".format(u.id, user_login, name,
-                                                                                   email, github_user.get("followers",0))
-            notify_registration(notification)
+                                                                                       email,
+                                                                                       github_user.get("followers", 0))
+
+            worker_queue.enqueue(notify_registration, args=(notification,), result_ttl=0)
         except Exception, ex:
             logging.exception(ex)
-            sentry.captureException()
+            sentry_client.captureException()
 
     return u
 
-        # TODO: Create a task to fetch all the other information..
+    # TODO: Create a task to fetch all the other information..
 
-        # starred = user.get_starred()
-        # for s in starred:
-        #     print s.full_name, s.watchers
+    # starred = user.get_starred()
+    # for s in starred:
+    #     print s.full_name, s.watchers
 
-        # pub_events = user.get_public_events()
+    # pub_events = user.get_public_events()
 
-        # for e in pub_events:
-        #     print e.id, e.type, e.repo.full_name
+    # for e in pub_events:
+    #     print e.id, e.type, e.repo.full_name
 
 
 def follow_user(user_id, current_user):
@@ -103,11 +106,11 @@ def follow_user(user_id, current_user):
     try:
         db.session.commit()
         success = True
-    except Exception,ex :
+    except Exception, ex:
         db.session.rollback()
 
     if success:
-        UserFollower.create(user_id=user_id,follower_id=current_user.id)
+        UserFollower.create(user_id=user_id, follower_id=current_user.id)
         UserFollowing.create(user_id=current_user.id, following_id=user_id)
 
     return success
@@ -133,22 +136,29 @@ def load_user(user_id, current_user=None):
     logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
 
-    #logging.warn("{} -> {} ".format(user, type(user)))
-    followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
-    following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
+    user_followers, user_following, os_projects = [], [], []
 
-    projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
-    os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).order_by(OpenSourceProject.stars.desc()).all()
-    cassa_users = user_list_from_ids(set(followers+following), dict=True)
+    try:
+        followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
+        following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
 
-    def expand(o):
-        extras = o.extended
-        dict_val = o._as_dict()
-        dict_val.update(**extras)
-        return dict_val
+        projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
+        os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).order_by(
+            OpenSourceProject.stars.desc()).all()
+        cassa_users = user_list_from_ids(set(followers + following), dict=True)
 
-    user_followers = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in followers]
-    user_following = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in following]
+        def expand(o):
+            extras = o.extended
+            dict_val = o._as_dict()
+            dict_val.update(**extras)
+            return dict_val
+
+        user_followers = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in followers]
+        user_following = [filter(lambda x: x.get('id') == u, cassa_users)[0] for u in following]
+
+    except Exception, ex:
+        logging.warn(ex)
+        sentry_client.captureException()
 
     return user, user_followers, user_following, os_projects
 
@@ -158,14 +168,22 @@ def get_profile(current_user):
 
 
 def get_profile_by_nick(nick):
-    user = CsUser.filter(nick=nick).first()
-    if user is None:
-        return
+    user = None
+    exception = False
+
+    try:
+        user = CsUser.filter(nick=nick).first()
+    except Exception, ex:
+        exception = True
+        logging.exception(ex)
+        sentry_client.captureException()
+
+    if user is None and exception:
+        # backoff to our Postgres
+        user = User.query.filter_by(nick=nick)
+        return user, [], [], []
 
     return load_user(user.id)
-
-
-
 
 
 #from github import Github

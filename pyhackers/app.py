@@ -4,7 +4,7 @@ import logging
 from werkzeug.routing import BaseConverter
 from flaskext.kvsession import KVSessionExtension
 from flask import Flask, request, abort, render_template, redirect, jsonify, session
-from raven.contrib.flask import Sentry
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 source_dir = os.path.dirname(current_dir)
@@ -36,9 +36,10 @@ class RegexConverter(BaseConverter):
 app.url_map.converters['regex'] = RegexConverter
 
 
-def start_app():
+def start_app(soft=False):
+
     from sentry import init as init_sentry
-    init_sentry(app)
+    #init_sentry(app)
     login_manager = setup_application_extensions(app, '/authenticate')
 
     from flask.ext.sqlalchemy import SQLAlchemy
@@ -49,6 +50,10 @@ def start_app():
     DB = get_db()
 
     from pyhackers.model.user import User
+
+    if soft:
+        return
+
     from pyhackers.admin import init as admin_init
     from pyhackers.cache import init as cache_init
 
@@ -76,4 +81,5 @@ def start_app():
 
 if __name__ == "__main__":
     start_app()
+    #from pyhackers.sentry import get_sentry_client
     app.run(use_debugger=True, port=5001)

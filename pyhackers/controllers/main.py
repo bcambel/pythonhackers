@@ -18,7 +18,7 @@ from pyhackers.cache import cache
 from pyhackers.model.user import User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.config import config
-from pyhackers.sentry import sentry
+from pyhackers.sentry import sentry_client
 from sqlalchemy import and_
 
 purge_key = config.get("app", 'purge_key')

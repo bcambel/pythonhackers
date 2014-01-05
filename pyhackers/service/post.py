@@ -24,11 +24,7 @@ def new_post(message, code, current_user):
         logging.error(ex)
 
     if success:
-        post = CsPost.create(orig_id=m.id, text=message)
-        post_id = post.id
-
-        CsUserPost.create(user_id=current_user.id, post_id=post_id)
-        Event.message(current_user.jsonable(),m.jsonable(), None)
+        Event.message(current_user.id, m.id, None)
 
     else:
         logging.warn("Misery sinks in...")

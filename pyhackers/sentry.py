@@ -1,24 +1,24 @@
-from config import SENTRY_DSN
+from pyhackers.config import SENTRY_DSN
 from raven.contrib.flask import Sentry
 from raven.base import DummyClient
 import logging
-
-sentry = None
+from pyhackers.app import app
 
 
 def init(app):
-    global sentry
+    global sentry_client
+    logging.warn("Initialization sentry {}".format(SENTRY_DSN))
 
     if SENTRY_DSN is None:
-        sentry = DummyClient()
+        sentry_client = DummyClient()
     else:
         try:
-            sentry = Sentry(app, dsn=SENTRY_DSN)
+            sentry_client = Sentry(app, dsn=SENTRY_DSN)
             #sentry.captureMessage("Configuration is loaded. App is restarted...")
         except Exception, ex:
             logging.exception(ex)
             try:
-                sentry = DummyClient(SENTRY_DSN)
+                sentry_client = DummyClient(SENTRY_DSN)
             except:
                 logging.error("""
     ======Failed to initialize Sentry client... The sentry client will run in DummyMode
@@ -27,3 +27,8 @@ def init(app):
     ======CONFIG: SENTRY_DSN => [%s]
     ======The application will run now...
     """ % SENTRY_DSN)
+
+    return sentry_client
+
+
+init(app)

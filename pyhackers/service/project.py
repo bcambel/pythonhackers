@@ -5,7 +5,9 @@ from pyhackers.model.action import Action, ActionType
 from pyhackers.model.cassandra.hierachy import ProjectFollower, UserProject
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.service.user import user_list_from_ids
+from pyhackers.sentry import sentry_client
 
+#sentry_client = get_sentry_client()
 
 def project_follow(project_id, current_user):
     a = Action()
@@ -38,8 +40,13 @@ def load_project(slug, current_user):
     related_projects = OpenSourceProject.query.filter_by(parent=slug).order_by(
         OpenSourceProject.watchers.desc()).limit(100)
 
-    followers = [f.user_id for f in ProjectFollower.filter(project_id=project.id).limit(20)]
-    follower_list = [f for f in user_list_from_ids(followers)]
-    print follower_list
+    follower_list = []
+
+    try:
+        followers = [f.user_id for f in ProjectFollower.filter(project_id=project.id).limit(20)]
+        follower_list = [f for f in user_list_from_ids(followers)]
+    except Exception, ex:
+        sentry_client.captureException()
+        logging.exception(ex)
 
     return project, related_projects, follower_list

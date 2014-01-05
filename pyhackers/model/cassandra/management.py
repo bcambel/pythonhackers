@@ -1,11 +1,14 @@
 from hierachy import *
 from cqlengine.management import sync_table, create_keyspace
 from cqlengine import connection
-#from pyhackers.config import config
 
 
-def connect():
-    connection.setup(['127.0.0.1:9160'])
+def connect(hosts=None):
+    if hosts is None:
+        pass
+        #hosts = ['127.0.0.1:9160']
+
+    connection.setup(hosts)
 
 
 def create():
