@@ -1,19 +1,16 @@
-from hierachy import *
+import sys
+import logging
 from cqlengine.management import sync_table, create_keyspace
-from cqlengine import connection
+import argparse
+import textwrap
 
 
-def connect(hosts=None):
-    if hosts is None:
-        pass
-        #hosts = ['127.0.0.1:9160']
+def create(cassa_keyspace='pyhackers'):
+    assert cassa_keyspace != '' or cassa_keyspace is not None
 
-    connection.setup(hosts)
+    logging.warn("Creating/Sync'ing {}".format(cassa_keyspace))
 
-
-def create():
-    connect()
-    create_keyspace('pyhackers')
+    create_keyspace(cassa_keyspace)
 
     sync_table(User)
     sync_table(Post)
@@ -42,14 +39,67 @@ def create():
 
 
 def test_insert():
-
     from datetime import datetime as dt
 
-    User.create(id=1,nick='bcambel',created_at=dt.utcnow(),
-                extended={'test':"test"})
+    User.create(id=1, nick='bcambel', created_at=dt.utcnow(),
+                extended={'test': "test"})
 
-    Post.create(orig_id=1,text="Testing")
+    Post.create(orig_id=1, text="Testing")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description=textwrap.dedent("""Screen6"""))
+    parser.add_argument('hosts', )
+    parser.add_argument('keyspace')
+
+    return parser.parse_args()
+
+
+def query_yes_no(question, default="yes"):
+    """Ask a yes/no question via raw_input() and return their answer.
+
+    "question" is a string that is presented to the user.
+    "default" is the presumed answer if the user just hits <Enter>.
+        It must be "yes" (the default), "no" or None (meaning
+        an answer is required of the user).
+
+    The "answer" return value is one of "yes" or "no".
+    """
+    valid = {"yes": True, "y": True, "ye": True,
+             "no": False, "n": False}
+
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = raw_input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
+
+# Usage example
 
 if __name__ == '__main__':
-    connect()
-    create()
+
+    args = parse_args()
+    from connection import setup, connect
+
+    connect(*setup(args.hosts, args.keyspace))
+    from hierachy import *
+
+    if query_yes_no('Are you sure to sync ?', default='no'):
+        create(args.keyspace)
+        print "Done...."
+    else:
+        print "No is also a good thing. Bye!"

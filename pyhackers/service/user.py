@@ -138,6 +138,7 @@ def load_user(user_id, current_user=None):
 
     user_followers, user_following, os_projects = [], [], []
 
+    # FIXME: This try/except block is ugly as hell. Refactor please!
     try:
         followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
         following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
@@ -179,7 +180,7 @@ def get_profile_by_nick(nick):
         sentry_client.captureException()
 
     if user is None and exception:
-        # backoff to our Postgres
+        # FIXME: backoff to our Postgres. Field Names are different!
         user = User.query.filter_by(nick=nick)
         return user, [], [], []
 

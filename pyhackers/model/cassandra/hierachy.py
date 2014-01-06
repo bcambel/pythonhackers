@@ -2,15 +2,11 @@ import uuid
 from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
-from pyhackers.config import config
-
-hosts = config.get("cassandra", "host")
-keyspace = config.get("cassandra", "keyspace")
 
 
 class MBase(Model):
     __abstract__ = True
-    __keyspace__ = keyspace
+    #__keyspace__ = model_keyspace
 
 
 class Post(MBase):
@@ -112,10 +108,3 @@ class PostLike(MBase):
 class PostComment(MBase):
     post_id = columns.BigInt(primary_key=True)
     comment_id = columns.BigInt(primary_key=True)
-
-
-from management import connect
-
-
-host_list = hosts.split(",")
-#connect(host_list)

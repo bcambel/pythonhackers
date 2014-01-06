@@ -35,11 +35,18 @@ class RegexConverter(BaseConverter):
 
 app.url_map.converters['regex'] = RegexConverter
 
-
+login_manager = None
 def start_app(soft=False):
-
+    """
+    Well starts the application. But it's a complete mess!
+    I seriously need to get better at application start, and import
+    statements logic!!
+    """
+    global login_manager
     from sentry import init as init_sentry
     #init_sentry(app)
+
+
     login_manager = setup_application_extensions(app, '/authenticate')
 
     from flask.ext.sqlalchemy import SQLAlchemy
@@ -48,38 +55,43 @@ def start_app(soft=False):
 
     set_db(SQLAlchemy(app))
     DB = get_db()
+    from pyhackers.model.cassandra.connection import setup,connect
+    connect(*setup())
 
     from pyhackers.model.user import User
 
-    if soft:
+    if soft:  # When not in web mode
         return
 
     from pyhackers.admin import init as admin_init
     from pyhackers.cache import init as cache_init
 
+    #noinspection PyUnusedLocal
     @login_manager.user_loader
-    def load_user(userid):
-
-        logging.warn("[USER]Finding user {}".format(userid))
+    def load_user(user_id):
+        logging.warn("[USER]Finding user {}".format(user_id))
         try:
-            return User.query.get(userid)
-        except:
-            sentry.captureException()
-            return None
+            return User.query.get(user_id)
+        except Exception, ex:
+            logging.exception(ex)
+            try:
+                from pyhackers.sentry import sentry_client  # OMG
+                sentry_client.captureException()
+            finally:
+                return None
 
     cache_init(app)
     admin_init(app, DB)
 
     from pyhackers.controllers.main import main_app
-    #from controllers.oauth.twitter import twitter_bp
     from pyhackers.controllers.oauth.ghub import github_bp
-
-    # app.register_blueprint(twitter_bp)
     app.register_blueprint(github_bp)
     app.register_blueprint(main_app)
+
+    # from controllers.oauth.twitter import twitter_bp
+    # app.register_blueprint(twitter_bp)
 
 
 if __name__ == "__main__":
     start_app()
-    #from pyhackers.sentry import get_sentry_client
     app.run(use_debugger=True, port=5001)
