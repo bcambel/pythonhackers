@@ -57,5 +57,22 @@ academia, big startups like <a href="http://disqus.com">Disqus</a>, <a href="htt
 
         <hr />
 
-    </div></div>
+        <div id="disqus_thread"></div>
+
+        </div>
+
+    </div>
 {% endblock %}
+
+
+{% block scripts %}
+    {% if PROD %}
+var disqus_shortname = 'pythonhackers';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    {% endif %}
+{%  endblock %}
