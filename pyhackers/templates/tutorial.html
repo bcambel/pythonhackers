@@ -6,22 +6,22 @@
 {% block content %}
 <div class='container'>
     <div class='row' style='border-radius: 10px;padding-bottom:10px'>
-        <div class='col-lg-2' style="text-align: center;padding-top:15px;">
-            <h3 style='padding-bottom: 10px;'><i class='icon-star' style='color:goldenrod'></i>&nbsp;{{ tutorial.watchers }}</h3>
-            <form method="post" action="/ajax/follow" data-remote>
-                  <input type="hidden" name="id" value="{{ tutorial.id }}" />
-                  <input type="hidden" name="slug" value="{{ tutorial.slug }}" />
-            <button type="submit" class='btn btn-default'
-               ><i class='fa fa-heart'></i>&nbsp;Love it</button>
-            </form>
-            <hr />
+        <div class="col-lg-2 bs-callout bs-callout-warning" style="position: fixed; ">
+{#            <h3 style='padding-bottom: 10px;'><i class='icon-star' style='color:goldenrod'></i>&nbsp;{{ tutorial.watchers }}</h3>#}
+{#            <form method="post" action="/ajax/follow" data-remote>#}
+{#                  <input type="hidden" name="id" value="{{ tutorial.id }}" />#}
+{#                  <input type="hidden" name="slug" value="{{ tutorial.slug }}" />#}
+{#            <button type="submit" class='btn btn-default'#}
+{#               ><i class='fa fa-heart'></i>&nbsp;Love it</button>#}
+{#            </form>#}
+{#            <hr />#}
 
             <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{ tutorial.title }}"
                    data-via="pythonhackers" data-size="large" data-related="pythonhackers"
                    data-hashtags="python,hackers,github">Tell your friends</a>
 
         </div>
-        <div class='col-lg-8'>
+        <div class='col-lg-8 col-lg-offset-3'>
             <h1>{{ tutorial.title}}</h1>
 
             <div class="content">
