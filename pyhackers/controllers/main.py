@@ -3,6 +3,7 @@ import logging
 import random
 from json import dumps
 import time
+from pyhackers.model.tutorial import Tutorial
 import requests
 from pyhackers.model.package import Package
 from pyhackers.service.post import new_post
@@ -284,6 +285,13 @@ def user_profile(nick):
                                 profile=user, followers=followers,
                                 following=following,
                                 os_projects=os_projects)
+
+@main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):tutorial>')
+def tutorial(nick, tutorial):
+    slug = "{}/{}".format(nick,tutorial)
+    tutorial_obj = Tutorial.query.filter_by(slug=slug).first()
+
+    return render_base_template("tutorial.html", tutorial=tutorial_obj)
 
 @main_app.route("/authenticate")
 def authenticate():

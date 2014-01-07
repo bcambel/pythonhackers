@@ -15,6 +15,7 @@
     <link href="/static/css/buttons.css" rel="stylesheet">
     <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
     <link href="/static/css/app.css" rel="stylesheet">
+    <link href="/static/css/pygments_tango.css?v=2" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
     {% block head %}{% endblock %}
     {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
@@ -110,6 +111,20 @@
         {% if PROD %}
             {% include "3rd_party.html" %}
         {% endif %}
+        <script>
+            window.setTimeout(function () {
+        !function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.asyc = true;
+                js.src = "//platform.twitter.com/widgets.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, "script", "twitter-wjs");
+    }, 1);
+        </script>
 
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
         Disqus.</a>

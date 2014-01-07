@@ -10,6 +10,7 @@ from pyhackers.model.message import Message
 from pyhackers.model.channel import Channel
 from pyhackers.model.action import Action
 from pyhackers.model.package import Package
+from pyhackers.model.tutorial import Tutorial
 from jinja2 import Markup
 
 
@@ -96,4 +97,5 @@ def init(app, db):
     admin.add_view(ProtectedModelView(Action, db.session))
     admin.add_view(ProtectedModelView(Bucket, db.session))
     admin.add_view(ProtectedModelView(Channel, db.session))
+    admin.add_view(ProtectedModelView(Tutorial, db.session))
     admin.add_view(PackageModelView(Package, db.session))
