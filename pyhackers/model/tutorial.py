@@ -1,4 +1,6 @@
-from sqlalchemy.dialects import postgresql
+import logging
+from datetime import datetime as dt
+import markdown2
 from pyhackers.db import DB as db
 from pyhackers.common import format_date
 
@@ -51,3 +53,18 @@ class Tutorial(db.Model):
 
     def __str__(self):
         return str(self.name)
+
+
+@db.event.listens_for(Tutorial, 'before_insert')
+@db.event.listens_for(Tutorial, 'before_update')
+def before_insert(mapper, connection, target):
+    logging.warn("Running for before insert")
+    target.content_html = markdown2.markdown(target.content, extras=['fenced-code-blocks'])
+    target.content_html = target.content_html.encode('ascii', 'xmlcharrefreplace').replace("codehilite","syntax")
+    target.generated_at = dt.utcnow()
+
+
+#
+#def after_insert(mapper, connection, target):
+#    logging.warn("Running for after insert")
+#    target.content_html  = markdown2.markdown(target.content, extras=['fenced-code-blocks'])

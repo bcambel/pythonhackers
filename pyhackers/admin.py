@@ -82,10 +82,14 @@ class UserModelView(ProtectedModelView):
 class SocialUserModelView(ProtectedModelView):
     column_formatters = {'nick': _nick_href}
 
+
 class PackageModelView(ProtectedModelView):
     column_list = ('name','mdown','wdown','ddown', 'summary')
     column_searchable_list = ("name",'summary','description')
 
+
+class TutorialModelView(ProtectedModelView):
+    column_list = ('id', 'title','slug','keywords','meta_description', 'publish', 'spam','upvote_count')
 
 def init(app, db):
     admin = Admin(app)
@@ -97,5 +101,5 @@ def init(app, db):
     admin.add_view(ProtectedModelView(Action, db.session))
     admin.add_view(ProtectedModelView(Bucket, db.session))
     admin.add_view(ProtectedModelView(Channel, db.session))
-    admin.add_view(ProtectedModelView(Tutorial, db.session))
+    admin.add_view(TutorialModelView(Tutorial, db.session))
     admin.add_view(PackageModelView(Package, db.session))
