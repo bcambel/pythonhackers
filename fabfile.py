@@ -4,9 +4,12 @@ import logging
 from fabtools import require
 
 # env.hosts = []
-env.root = '/var/www/pythonhackers.com/'
+setup = {
+    'stg': {'dir': '/var/www/stg.pythonhackers.com', 'supervisor': 'staging_pythonhackers'},
+    'prd': {'dir': '/var/www/beta.pythonhackers.com', 'supervisor': 'prod_pythonhackers'},
+}
+
 env.user = 'root'
-#env.key_filename = '~/.ssh/digital'
 
 PACKAGES = [
     'supervisor', 'vim', 'htop', 'build-essential',
@@ -20,9 +23,11 @@ PACKAGES = [
 def install_packages():
     require.deb.package(PACKAGES)
 
+
 @task
 def venv():
     run("pip install virtualenv")
+
 
 @task
 def restart_nginx():
@@ -30,13 +35,15 @@ def restart_nginx():
 
 #"moreutils"
 
-@task 
+@task
 def install_java():
     require.deb.packages(["openjdk-7-jdk", "openjdk-7-jre"], update=True)
 
+
 @task
-def restart_process():
-    sudo("supervisorctl restart pythonhackers")
+def restart_process(setup):
+    project = setup['supervisor']
+    sudo("supervisorctl restart {}".format(project))
 
 
 @task
@@ -46,8 +53,8 @@ def glog():
 
 
 @task
-def update_code():
-    with cd(env.root):
+def update_code(settings):
+    with cd(settings['dir']):
         run("git pull")
 
 
@@ -64,11 +71,15 @@ def ntp():
 
 
 @task
-def deploy(restart=False):
-    update_code()
+def deploy(settings='stg', restart=False):
+
+    setting = setup[settings]
+
+    update_code(setting)
     logging.warn("Should restart? %s %s" % (restart, bool(restart)))
     if bool(restart):
-        restart_process()
+        restart_process(setting)
+        log()
 
 
 @task
@@ -85,11 +96,16 @@ def hostname_check():
 def disc_status():
     run("df -h")
 
+@task
+def log(directory='/var/log/python/stg.pythonhackers/', tail_file='app.log'):
+    with cd(directory):
+        run("tail -f {}".format(tail_file))
+
 
 @task
 def nlog():
     with cd("/var/log/nginx/stg.pythonhackers.com"):
-        run("tail -100 access.log")
+        run("tail -f access.log")
 
 
 @task

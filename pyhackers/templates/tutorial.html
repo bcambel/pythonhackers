@@ -6,7 +6,7 @@
 {% block content %}
 <div class='container'>
     <div class='row' style='border-radius: 10px;padding-bottom:10px'>
-        <div class="col-lg-2 bs-callout bs-callout-warning" style="position: fixed; ">
+        <div class="col-lg-1 bs-callout bs-callout-warning" style="position: fixed; ">
 {#            <h3 style='padding-bottom: 10px;'><i class='icon-star' style='color:goldenrod'></i>&nbsp;{{ tutorial.watchers }}</h3>#}
 {#            <form method="post" action="/ajax/follow" data-remote>#}
 {#                  <input type="hidden" name="id" value="{{ tutorial.id }}" />#}
@@ -29,10 +29,12 @@
                    {{ tutorial.content_html }}
                 {% endautoescape %}
             </div>
+
+            <hr />
+            <div id="disqus_thread"></div>
         </div>
     </div>
-    <hr />
-    <div id="disqus_thread"></div>
+
 </div>
 
 {% endblock %}
