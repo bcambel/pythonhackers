@@ -77,6 +77,7 @@ def deploy(settings='stg', restart=False):
 
     update_code(setting)
     logging.warn("Should restart? %s %s" % (restart, bool(restart)))
+
     if bool(restart):
         restart_process(setting)
         log()

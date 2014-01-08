@@ -286,6 +286,8 @@ def user_profile(nick):
                                 following=following,
                                 os_projects=os_projects)
 
+
+@cache.cached(timeout=10000)
 @main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):tutorial>')
 def tutorial(nick, tutorial):
     slug = "{}/{}".format(nick,tutorial)
