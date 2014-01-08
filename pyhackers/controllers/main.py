@@ -287,13 +287,13 @@ def user_profile(nick):
                                 os_projects=os_projects)
 
 
-@cache.cached(timeout=10000)
+@cache.cached(timeout=10000, unless=request_force_non_cache)
+def find_tutorial(slug):
+    return Tutorial.query.filter_by(slug=slug).first()
+
 @main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):tutorial>')
 def tutorial(nick, tutorial):
-    slug = "{}/{}".format(nick,tutorial)
-    tutorial_obj = Tutorial.query.filter_by(slug=slug).first()
-
-    return render_base_template("tutorial.html", tutorial=tutorial_obj)
+    return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, tutorial)))
 
 @main_app.route("/authenticate")
 def authenticate():
