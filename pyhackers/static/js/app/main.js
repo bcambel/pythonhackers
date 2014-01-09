@@ -7,8 +7,10 @@
     begin: function() {
       return $(this.load);
     },
-    load: function() {
-      Application.formSubmitter();
+    mixevents: function() {
+      if (window.mixpanel == null) {
+        return;
+      }
       $("#mc_embed_signup").on("show.bs.modal", function() {
         return mixpanel.track("signup-popup");
       });
@@ -28,6 +30,10 @@
           path: document.location.pathname
         });
       });
+    },
+    load: function() {
+      Application.formSubmitter();
+      return Application.mixevents();
     },
     captureSubmit: function($el) {
       var action, id, slug;

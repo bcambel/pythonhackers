@@ -60,7 +60,7 @@ cache_buster = calendar.timegm(time.gmtime())
 
 
 def render_template(*args, **kwargs):
-    kwargs.update(**{'cache_buster': cache_buster})
+    kwargs.update(**{'cache_buster': cache_buster, 'user':{},'user_json':{}})
     return template_render(*args, **kwargs)
 
 
@@ -177,6 +177,29 @@ def os(nick, project):
                                 related_projects=related_projects,
                                 followers=followers, )
 
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
+def load_projects(start):
+    logging.warn(u"Running now with {}".format(start))
+    return  OpenSourceProject.query.filter(
+        and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
+        OpenSourceProject.watchers.desc())[start:start+50]
+
+@main_app.route('/fancy.json')
+def fancy_json():
+    start = int(request.args.get('start', 0))
+    projects = load_projects(start)
+
+    return jsonify({'data': [f.jsonable(index=start+i+1) for i, f in enumerate(projects)]})
+
+@main_app.route('/fancy/')
+def fancy_os_list():
+
+    #projects = OpenSourceProject.query.filter(
+    #    and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
+    #    OpenSourceProject.watchers.desc()).limit(50)
+
+    projects = []
+    return render_template('project_frame.html',projects=projects)
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os')
@@ -285,7 +308,7 @@ def channel(name):
 
 #from itertools import repeat
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/user/<regex(".+"):nick>')
 def user_profile(nick):
     _ = get_profile_by_nick(nick)
@@ -300,7 +323,7 @@ def user_profile(nick):
                                 os_projects=os_projects)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def find_tutorial(slug):
     return Tutorial.query.filter_by(slug=slug).first()
 

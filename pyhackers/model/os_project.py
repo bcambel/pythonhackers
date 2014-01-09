@@ -18,3 +18,17 @@ class OpenSourceProject(db.Model):
     hide = db.Column("hide", db.Boolean, default=False)
     lang = db.Column("lang", db.SmallInteger, default=0)
     __tablename__ = 'os_project'
+
+
+    def jsonable(self, **kwargs):
+        result = {
+            'id' : unicode(self.id),
+            'slug' : unicode(self.slug),
+            'name' : unicode(self.name),
+            'src_url' : unicode(self.src_url),
+            'description' : unicode(self.description),
+            'watchers': self.watchers
+        }
+
+        result.update(**kwargs)
+        return result

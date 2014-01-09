@@ -4,8 +4,9 @@ Application = {
     begin : () ->
         $(@load)
 
-    load: () =>
-        do Application.formSubmitter
+    mixevents: () ->
+        unless !!window.mixpanel?
+            return
         $("#mc_embed_signup").on("show.bs.modal", ->
             mixpanel.track("signup-popup")
         )
@@ -19,6 +20,11 @@ Application = {
                 referrer: document.referrer
         )
         _.defer( -> mixpanel.track("visit", { path: document.location.pathname }))
+
+
+    load: () =>
+        do Application.formSubmitter
+        do Application.mixevents
 
     captureSubmit : ($el) ->
         action = $el.attr("action")
