@@ -1,8 +1,10 @@
 # coding=utf-8
+from datetime import datetime as dt
 import logging
 import random
 from json import dumps
 import time
+import calendar
 from pyhackers.model.tutorial import Tutorial
 import requests
 from pyhackers.model.package import Package
@@ -11,7 +13,7 @@ from pyhackers.service.channel import follow_channel, load_channel, get_channel_
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user, load_user
 from flask.ext.wtf import Form, TextField, PasswordField, Required
-from flask import request, render_template, Blueprint, redirect, jsonify, abort
+from flask import request, render_template as template_render, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
 from datetime import datetime as dt
 from pyhackers.setup import login_manager
@@ -32,6 +34,7 @@ def render_base_template(*args, **kwargs):
     try:
         logging.warn(current_user.is_anonymous())
         is_logged = not current_user.is_anonymous()  #int(request.args.get("logged", "1"))
+
     except Exception as ex:
         logging.exception(ex)
         is_logged = False
@@ -46,10 +49,19 @@ def render_base_template(*args, **kwargs):
                      'channels': get_channel_list(),
                      'PROD': PRODUCTION,
                      'logged_in': bool(is_logged),
-                        'year' : dt.utcnow().year,
-                        })
+                     'year': dt.utcnow().year,
+                     })
 
     return render_template(*args, **kwargs)
+
+
+
+cache_buster = calendar.timegm(time.gmtime())
+
+
+def render_template(*args, **kwargs):
+    kwargs.update(**{'cache_buster': cache_buster})
+    return template_render(*args, **kwargs)
 
 
 @main_app.errorhandler(400)
@@ -257,8 +269,8 @@ def profile():
         user, followers, following, os_projects = user_data
         #print user
         return render_base_template("profile.html", profile=user, followers=followers,
-                                following=following,
-                                os_projects=os_projects)
+                                    following=following,
+                                    os_projects=os_projects)
 
     return abort(404)
 
@@ -271,6 +283,7 @@ def channel(name):
         channel_name = "Lobby"
     return render_base_template("channel.html", channel_name=channel_name)
 
+#from itertools import repeat
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/user/<regex(".+"):nick>')
@@ -291,9 +304,11 @@ def user_profile(nick):
 def find_tutorial(slug):
     return Tutorial.query.filter_by(slug=slug).first()
 
+
 @main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):tutorial>')
 def tutorial(nick, tutorial):
     return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, tutorial)))
+
 
 @main_app.route("/authenticate")
 def authenticate():
