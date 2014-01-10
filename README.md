@@ -22,5 +22,4 @@ Support PythonHackers
         src="https://www.gittip.com/bcambel/widget.html"
         width="48pt" height="22pt"></iframe>
 
-
-![i](http://pythonhackers.com/check.gif)
+[![Analytics](http://pythonhackers.com/githubbeacon)](https://github.com/pythonhackers/pythonhackers)
