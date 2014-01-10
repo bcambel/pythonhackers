@@ -11,6 +11,11 @@
     <meta property="og:title" content="{{ meta_title }}"/>
     <meta property="og:site_name" content="Python Hackers"/>
     <meta property="og:description" content="{{ meta_title }}; {{ meta_description }}"/>
+
+    {% if canonical %}
+    <link rel="canonical" href="{{ canonical }}" />
+    {% endif %}
+
     <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">
 {#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">#}
     <link href="/static/css/buttons.css" rel="stylesheet">
@@ -25,6 +30,7 @@
 
 </head>
 <body>
+<a href="https://github.com/pythonhackers/pythonhackers"><img style="position: absolute; top: 0; left: 0; border: 0;z-index: 10000;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
 <div id="page-wrap">
     <div class="navbar navbar-default">
         <div class="container col-lg-offset-1">
@@ -113,20 +119,7 @@
         {% if PROD %}
             {% include "3rd_party.html" %}
         {% endif %}
-        <script>
-            window.setTimeout(function () {
-        !function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (!d.getElementById(id)) {
-                js = d.createElement(s);
-                js.id = id;
-                js.asyc = true;
-                js.src = "//platform.twitter.com/widgets.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }
-        }(document, "script", "twitter-wjs");
-    }, 1);
-        </script>
+
 
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
         Disqus.</a>
