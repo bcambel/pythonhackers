@@ -1,4 +1,4 @@
-#  [![pythonhackers](http://pythonhackers.com/gitbeacon?_=1)](https://github.com/pythonhackers/pythonhackers)
+#  [![pythonhackers](http://pythonhackers.com/gitbeacon?_=2)](https://github.com/pythonhackers/pythonhackers)
 
 
 ![u](https://travis-ci.org/pythonhackers/pythonhackers.png?branch=master)
