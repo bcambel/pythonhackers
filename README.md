@@ -21,3 +21,6 @@ Support PythonHackers
 <iframe style="border: 0; margin: 0; padding: 0;"
         src="https://www.gittip.com/bcambel/widget.html"
         width="48pt" height="22pt"></iframe>
+
+
+![i](http://pythonhackers.com/check.gif)
