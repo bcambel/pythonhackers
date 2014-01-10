@@ -201,16 +201,23 @@ def fancy_os_list():
     projects = []
     return render_template('project_frame.html',projects=projects)
 
+
 @cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
 def os_list():
+    path = request.path
+    if "open-source" in path:
+        canonical = None
+    else:
+        canonical = "http://pythonhackers.com/open-source/"
+
     projects = OpenSourceProject.query.filter(
         and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
         OpenSourceProject.watchers.desc()).limit(400)
 
-    return render_base_template("os_list.html", projects=projects)
+    return render_base_template("os_list.html", projects=projects, canonical=canonical)
 
 
 from docutils.core import publish_parts
