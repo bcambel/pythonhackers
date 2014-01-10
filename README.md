@@ -1,5 +1,5 @@
-pythonhackers
-=============
+# pythonhackers [![Analytics](http://pythonhackers.com/gitbeacon?_=1)](https://github.com/pythonhackers/pythonhackers)
+
 
 ![u](https://travis-ci.org/pythonhackers/pythonhackers.png?branch=master)
 
@@ -22,4 +22,4 @@ Support PythonHackers
         src="https://www.gittip.com/bcambel/widget.html"
         width="48pt" height="22pt"></iframe>
 
-[![Analytics](http://pythonhackers.com/githubbeacon)](https://github.com/pythonhackers/pythonhackers)
+
