@@ -23,11 +23,13 @@ from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.config import config
 from pyhackers.sentry import sentry_client
 from sqlalchemy import and_
+from docutils.core import publish_parts
 
 purge_key = config.get("app", 'purge_key')
 debug = config.get("app", "debug")
 PRODUCTION = not (debug in ['True', '1', True, 1])
 main_app = Blueprint('main', __name__, template_folder='templates')
+cache_buster = calendar.timegm(time.gmtime())
 
 
 def render_base_template(*args, **kwargs):
@@ -50,18 +52,24 @@ def render_base_template(*args, **kwargs):
                      'PROD': PRODUCTION,
                      'logged_in': bool(is_logged),
                      'year': dt.utcnow().year,
-                     })
+    })
 
     return render_template(*args, **kwargs)
 
 
-
-cache_buster = calendar.timegm(time.gmtime())
-
-
 def render_template(*args, **kwargs):
-    kwargs.update(**{'cache_buster': cache_buster, 'user':{},'user_json':{},'PROD': PRODUCTION})
+    """
+    Render template for anonymous access with cache_buster,PROD settings, used for caching
+    """
+    kwargs.update(**{'cache_buster': cache_buster, 'user': {}, 'user_json': {}, 'PROD': PRODUCTION})
     return template_render(*args, **kwargs)
+
+
+def current_user_logged_in():
+    if hasattr(current_user, "id"):
+        return True
+    else:
+        return False
 
 
 @main_app.errorhandler(400)
@@ -73,7 +81,6 @@ def unauthorized(e):
 def login_load_user(userid):
     logging.warn("Finding user %s" % userid)
     user = User.query.get(userid)
-
     return user
 
 
@@ -162,6 +169,7 @@ def project_categories():
 @main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
 @main_app.route('/open-source/<regex(".+"):nick>/<regex(".+"):project>')
 def os(nick, project):
+    """Display the details of a open source project"""
     project = project[:-1] if project[-1] == "/" else project
     logging.info(u"looking for %s", project)
     slug = u"%s/%s" % (nick, project)
@@ -177,29 +185,26 @@ def os(nick, project):
                                 related_projects=related_projects,
                                 followers=followers, )
 
+
 @cache.memoize(timeout=10000, unless=request_force_non_cache)
 def load_projects(start):
     logging.warn(u"Running now with {}".format(start))
-    return  OpenSourceProject.query.filter(
+    return OpenSourceProject.query.filter(
         and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
-        OpenSourceProject.watchers.desc())[start:start+50]
+        OpenSourceProject.watchers.desc())[start:start + 50]
+
 
 @main_app.route('/fancy.json')
 def fancy_json():
     start = int(request.args.get('start', 0))
     projects = load_projects(start)
 
-    return jsonify({'data': [f.jsonable(index=start+i+1) for i, f in enumerate(projects)]})
+    return jsonify({'data': [f.jsonable(index=start + i + 1) for i, f in enumerate(projects)]})
+
 
 @main_app.route('/fancy/')
 def fancy_os_list():
-
-    #projects = OpenSourceProject.query.filter(
-    #    and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
-    #    OpenSourceProject.watchers.desc()).limit(50)
-
-    projects = []
-    return render_template('project_frame.html',projects=projects)
+    return render_template('project_frame.html', projects=[])
 
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
@@ -214,13 +219,11 @@ def os_list():
         canonical = "http://pythonhackers.com/open-source/"
 
     projects = OpenSourceProject.query.filter(
-        and_(OpenSourceProject.lang == 0, OpenSourceProject.hide is not True)).order_by(
-        OpenSourceProject.watchers.desc()).limit(400)
+        and_(OpenSourceProject.lang == 0,
+             OpenSourceProject.hide is not True)
+    ).order_by(OpenSourceProject.watchers.desc()).limit(400)
 
     return render_base_template("os_list.html", projects=projects, canonical=canonical)
-
-
-from docutils.core import publish_parts
 
 
 @cache.cached(timeout=10000, unless=request_force_non_cache)
@@ -249,8 +252,8 @@ def package_list():
 
 @main_app.route("/user")
 def user():
-    user = current_user
-    return render_base_template("user.html", user=user)
+    """Seems redundant, /profile and /user/<nick takes care of the job"""
+    return render_base_template("user.html", user=current_user)
 
 
 @main_app.route("/new", methods=['GET', 'POST'])
@@ -264,13 +267,6 @@ def new_message():
         return jsonify({'ok': 1})
 
     return render_base_template("new_message.html")
-
-
-def current_user_logged_in():
-    if hasattr(current_user, "id"):
-        return True
-    else:
-        return False
 
 
 @main_app.route("/about")
@@ -292,12 +288,11 @@ def logout():
 @main_app.route("/profile")
 @login_required
 def profile():
-    #get_profile(current_user)
-
+    """Returns profile of the current logged in user"""
     user_data = load_user(current_user.id, current_user)
     if user_data is not None:
         user, followers, following, os_projects = user_data
-        #print user
+
         return render_base_template("profile.html", profile=user, followers=followers,
                                     following=following,
                                     os_projects=os_projects)
