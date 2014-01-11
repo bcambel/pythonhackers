@@ -211,6 +211,7 @@ def fancy_os_list():
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
+@main_app.route('/top-python-projects/')
 def os_list():
     path = request.path
     if "open-source" in path:
@@ -330,9 +331,9 @@ def find_tutorial(slug):
     return Tutorial.query.filter_by(slug=slug).first()
 
 
-@main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):tutorial>')
-def tutorial(nick, tutorial):
-    return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, tutorial)))
+@main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):slug>')
+def tutorial(nick, slug):
+    return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, slug)))
 
 
 @main_app.route("/authenticate")
@@ -342,9 +343,9 @@ def authenticate():
 
 @main_app.route("/ajax/followchannel", methods=("POST",))
 @login_required
-def followchannel():
+def follow_channel():
     user_id = request.form.get("id")
-    nick = request.form.get("slug")
+    slug = request.form.get("slug")
 
     result = follow_channel(user_id, current_user)
 
@@ -353,7 +354,7 @@ def followchannel():
 
 @main_app.route("/ajax/followuser", methods=("POST",))
 @login_required
-def followuser():
+def follow_user():
     user_id = request.form.get("id")
     nick = request.form.get("slug")
 
@@ -368,7 +369,7 @@ def follow():
     project_id = request.form.get("id")
     slug = request.form.get("slug")
 
-    logging.warn("Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
+    logging.warn(u"Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
 
     project_follow(project_id, current_user)
 

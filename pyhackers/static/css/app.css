@@ -35,6 +35,10 @@ div#page-wrap {
     /*padding-left: 20%;*/
 }
 
+.navbar i{
+    font-size:20px;
+}
+
 #footer p {
     letter-spacing: .8px;
     float:right;

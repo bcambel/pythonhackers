@@ -17,16 +17,19 @@
         <link rel="canonical" href="{{ canonical }}"/>
     {% endif %}
 
-    <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">
-    {#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">#}
-    <link href="/static/css/buttons.css" rel="stylesheet">
-    <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">
-    <link href="/static/css/app.css" rel="stylesheet">
-    <link href="/static/css/pygments_tango.css?v=2" rel="stylesheet">
+{#    <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">#}
+{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">#}
+    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/buttons.css" rel="stylesheet">
+{#    <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">#}
+{#    <link href="/static/css/vex.css" rel="stylesheet">#}
+{#    <link href="/static/css/vex-theme-os.css" rel="stylesheet">#}
+    <link href="/static/css/app.css" rel="stylesheet">
+    <link href="/static/css/pygments_tango.css" rel="stylesheet">
+
     {% block head %}{% endblock %}
     {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
-    {#    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">#}
     {#    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">#}
 
 </head>
@@ -42,7 +45,7 @@
             <ul class="nav navbar-nav">
 
                 <li><a href="/links">Links</a></li>
-                <li><a href="/open-source/">Open Source</a></li>
+                <li><a href="/top-python-projects/" style="color:orangered;font-weight:bold;">Top Python Projects</a></li>
                 {#                <li class="dropdown">#}
                 {#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">#}
                 {#                        Channels<b class="caret"></b>#}
@@ -66,7 +69,8 @@
             <ul class='nav navbar-nav pull-right'>
                 {% if logged_in %}
                     <!-- {{ current_user }} -->
-                    <li><a href="#world"><i class="fa fa-globe fa-2x"></i> </a></li>
+                    <li><a href="#world"><i class="fa fa-globe"></i> </a></li>
+                    <li><a href="#" data-trigger="message"><i class="fa fa-envelope-o"></i> </a></li>
                     {#                    <li><a href="#"><i class="fa fa-comments-o fa-2x"></i> </a></li>#}
 
                     <li class="dropdown">
@@ -106,17 +110,21 @@
 
         </p>
     </div>
-
-
     {% include "modals.html" %}
     {% include "js_templates.html" %}
 
-
     <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"
-            type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js" type="text/javascript"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>
+
+{#    <script src="/static/js/libs/vex.combined.min.js" type="text/javascript"></script>#}
+{#    <script>vex.defaultOptions.className = 'vex-theme-os';</script>#}
+{#    <script src="/static/js/libs/tether.min.js" type="text/javascript"></script>#}
+{#    <script src="/static/js/libs/drop.min.js" type="text/javascript"></script>#}
+{#    <script src="/static/js/libs/tooltip.min.js" type="text/javascript"></script>#}
+{#    <script src="/static/js/libs/humanize.min.js" type="text/javascript"></script>#}
     <script src="/static/js/app/main.js?_={{ cache_buster }}"></script>
+    <script src="/static/js/app/message.js?_={{ cache_buster }}"></script>
 
     {% block script_links %}{% endblock %}
 
@@ -124,10 +132,6 @@
         {% include "3rd_party.html" %}
     {% endif %}
 
-
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
-        Disqus.</a>
-    </noscript>
 
     {% include "mailchimp_form.html" %}
 
@@ -139,6 +143,8 @@
         {% endautoescape %}
 
     </script>
+
+
 
 </div>
 </body>
