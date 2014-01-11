@@ -1,8 +1,10 @@
 
-img_quicky = (path,ref,cp) ->
+img_quicky = (path,ref,cp, htag) ->
     ts = (new Date()).getTime()
+    url = "http://pythonhackers.com/gitbeacon?_=#{ts}&r=#{ref}&p=#{path}&cp=#{cp}"
+
     i=document.createElement("img")
-    i.setAttribute('src', "http://pythonhackers.com/gitbeacon?_=#{ts}&r=#{ref}&p=#{path}&cp=#{cp}")
+    i.setAttribute('src', url )
     i.setAttribute('alt', 'a')
     i.setAttribute('height', '1px')
     i.setAttribute('width', '1px')
@@ -15,15 +17,23 @@ Application = {
         $(@load)
 
     mixevents: () ->
-        unless !!window.mixpanel?
-            return
 
         $("#mc_embed_signup").on("show.bs.modal", ->
             mixpanel.track("signup-popup")
         )
-        $(document).on('click','.navbar a', (evt) ->
+
+        $(document).on('click','a', (evt) ->
             href = $(evt.currentTarget).attr('href')
-            img_quicky(encodeURIComponent(href), encodeURIComponent(document.referrer), encodeURIComponent(document.location.pathname))
+
+            hashtag = href[0] == "#"
+
+#            debugger
+
+            img_quicky(encodeURIComponent(href), encodeURIComponent(document.referrer), encodeURIComponent(document.location.pathname),hashtag)
+
+            if hashtag
+                return
+
             evt.stopPropagation()
             evt.preventDefault()
 
@@ -31,7 +41,8 @@ Application = {
                 document.location = href
             , 300)
         )
-        _.defer( -> mixpanel.track("visit", { path: document.location.pathname }))
+
+#        _.defer( -> mixpanel.track("visit", { path: document.location.pathname }))
 
 
     load: () =>

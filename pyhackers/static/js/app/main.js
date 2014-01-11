@@ -3,11 +3,12 @@
   var Application, img_quicky,
     _this = this;
 
-  img_quicky = function(path, ref, cp) {
-    var i, ts;
+  img_quicky = function(path, ref, cp, htag) {
+    var i, ts, url;
     ts = (new Date()).getTime();
+    url = "http://pythonhackers.com/gitbeacon?_=" + ts + "&r=" + ref + "&p=" + path + "&cp=" + cp;
     i = document.createElement("img");
-    i.setAttribute('src', "http://pythonhackers.com/gitbeacon?_=" + ts + "&r=" + ref + "&p=" + path + "&cp=" + cp);
+    i.setAttribute('src', url);
     i.setAttribute('alt', 'a');
     i.setAttribute('height', '1px');
     i.setAttribute('width', '1px');
@@ -19,27 +20,23 @@
       return $(this.load);
     },
     mixevents: function() {
-      if (window.mixpanel == null) {
-        return;
-      }
       $("#mc_embed_signup").on("show.bs.modal", function() {
         return mixpanel.track("signup-popup");
       });
-      $(document).on('click', '.navbar a', function(evt) {
-        var href,
+      return $(document).on('click', 'a', function(evt) {
+        var hashtag, href,
           _this = this;
         href = $(evt.currentTarget).attr('href');
-        img_quicky(encodeURIComponent(href), encodeURIComponent(document.referrer), encodeURIComponent(document.location.pathname));
+        hashtag = href[0] === "#";
+        img_quicky(encodeURIComponent(href), encodeURIComponent(document.referrer), encodeURIComponent(document.location.pathname), hashtag);
+        if (hashtag) {
+          return;
+        }
         evt.stopPropagation();
         evt.preventDefault();
         return window.setTimeout(function() {
           return document.location = href;
         }, 300);
-      });
-      return _.defer(function() {
-        return mixpanel.track("visit", {
-          path: document.location.pathname
-        });
       });
     },
     load: function() {
