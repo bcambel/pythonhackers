@@ -60,7 +60,7 @@ cache_buster = calendar.timegm(time.gmtime())
 
 
 def render_template(*args, **kwargs):
-    kwargs.update(**{'cache_buster': cache_buster, 'user':{},'user_json':{}})
+    kwargs.update(**{'cache_buster': cache_buster, 'user':{},'user_json':{},'PROD': PRODUCTION})
     return template_render(*args, **kwargs)
 
 
