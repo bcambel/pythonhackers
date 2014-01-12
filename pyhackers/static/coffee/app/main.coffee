@@ -1,35 +1,83 @@
 
-img_quicky = (path,ref,cp, htag) ->
-    ts = (new Date()).getTime()
-    url = "http://pythonhackers.com/gitbeacon?_=#{ts}&r=#{ref}&p=#{path}&cp=#{cp}"
+class @Beacon
+    constructor: () ->
+        @url = "http://pythonhackers.com/gitbeacon?"
 
-    i=document.createElement("img")
-    i.setAttribute('src', url )
-    i.setAttribute('alt', 'a')
-    i.setAttribute('height', '1px')
-    i.setAttribute('width', '1px')
-    document.body.appendChild(i)
+    view: () =>
+        p =
+            t: "v"
 
+        @notify(@getQs(p))
+
+    notify: (params) =>
+        reqUrl = @url + params
+        if PythonHackers.opts.prod == 0
+            @addImage(reqUrl)
+        else
+            $.get(reqUrl)
+
+    getQs: (dict) ->
+        params = []
+
+        _.extend dict,
+            env: PythonHackers.opts.prod
+            start: PythonHackers.opts.startTime
+            ts: do @_ts
+            r: document.referrer
+            cp: document.location.href
+            ua: navigator.userAgent
+            scr: screen.width+'x'+screen.height
+
+        for key of dict
+            val = encodeURIComponent(dict[key])
+            params.push("#{key}=#{val}")
+
+        params.join('&')
+
+    _ts : () ->
+        (new Date()).getTime()
+
+    addImage: (src) ->
+        i=document.createElement("img")
+        i.setAttribute('src', src )
+        i.setAttribute('alt', 'a')
+        i.setAttribute('height', '1px')
+        i.setAttribute('width', '1px')
+        document.body.appendChild(i)
+
+    click: (path, htag) ->
+        qs = @getQs
+            t: "c"
+            p: path
+
+        url = @url + qs
+
+        if htag or PythonHackers.opts.prod == 0
+            @notify(qs)
+            return
+
+        @addImage(url)
 
 Application = {
 
     begin : () ->
+        @dog = new Beacon()
+
         $(@load)
 
     mixevents: () ->
 
-        $("#mc_embed_signup").on("show.bs.modal", ->
-            mixpanel.track("signup-popup")
-        )
+#        $("#mc_embed_signup").on("show.bs.modal", =>
+#            @dog.click("#signup","#mc_embed_signup")
+##            mixpanel.track("signup-popup")
+#        )
 
-        $(document).on('click','a', (evt) ->
+        $(document).on('click','a', (evt) =>
             href = $(evt.currentTarget).attr('href')
 
             hashtag = href[0] == "#"
 
-#            debugger
-
-            img_quicky(encodeURIComponent(href), encodeURIComponent(document.referrer), encodeURIComponent(document.location.pathname),hashtag)
+            @dog.click(href, hashtag)
 
             if hashtag
                 return
@@ -39,9 +87,11 @@ Application = {
 
             window.setTimeout( =>
                 document.location = href
-            , 300)
+            , 200)
         )
 
+
+        _.defer( =>  do @dog.view )
 #        _.defer( -> mixpanel.track("visit", { path: document.location.pathname }))
 
 
@@ -60,7 +110,6 @@ Application = {
             referrer: document.referrer
             id: id
             slug: slug
-
 
     formSubmitter : () ->
 

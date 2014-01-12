@@ -5,7 +5,27 @@
 
 {% block content %}
 <div class="container">
-        <div class="frame col-lg-6 col-lg-offset-3">
+<div class=' col-lg-2 bs-callout bs-callout-warning' style="margin-right:20px;position:fixed;">
+
+            <a href="#mc_embed_signup" data-toggle='modal' class="btn btn-success"
+               data-track='newsletter'
+               >Subscribe</a>
+
+            <hr/>
+            <p>No spamming, I promise!</p>
+
+            <p>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-text="Top 400 #Python Projects"
+                   data-via="pythonhackers" data-url="pythonhackers.com/top-python-projects/" data-size="large" data-related="pythonhackers"
+                   data-hashtags="python,hackers,github">Tell your friends</a>
+            </p>
+
+		<p><a href="https://twitter.com/pythonhackers" class="twitter-follow-button" data-show-count="true" data-lang="en" >Follow</a>
+</p>
+        </div>
+
+        <div class="frame col-lg-8 col-lg-offset-3">
+        <h4>Top 400 Python Projects in Github</h4>
             <div id="frame" >
 
                     {% for project in projects %}
@@ -37,6 +57,7 @@
 
                 </div>
             {% endfor %}
+
             </div>
 
             <a href="#" class='btn btn-default btn-block' id="next">More</a>

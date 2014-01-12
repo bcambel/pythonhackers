@@ -10,14 +10,16 @@ jQuery ($) ->
 
     renderItems = (response) ->
         $items.append(template({projects:response.data, start:start}))
+        window.scrollBy(0, 100)
 
     next = () ->
         $.getJSON("/fancy.json?start=#{start}", newItems)
 
     $(document).on("click", "#next", (evt) ->
-        next()
-        evt.stopPropagation()
         evt.preventDefault()
+        next()
+#        evt.stopPropagation()
+
     )
 
     next()

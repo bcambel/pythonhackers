@@ -10,18 +10,18 @@
       return renderItems(response);
     };
     renderItems = function(response) {
-      return $items.append(template({
+      $items.append(template({
         projects: response.data,
         start: start
       }));
+      return window.scrollBy(0, 100);
     };
     next = function() {
       return $.getJSON("/fancy.json?start=" + start, newItems);
     };
     $(document).on("click", "#next", function(evt) {
-      next();
-      evt.stopPropagation();
-      return evt.preventDefault();
+      evt.preventDefault();
+      return next();
     });
     return next();
   });

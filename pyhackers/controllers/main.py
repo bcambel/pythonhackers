@@ -32,6 +32,12 @@ main_app = Blueprint('main', __name__, template_folder='templates')
 cache_buster = calendar.timegm(time.gmtime())
 
 
+@main_app.after_request
+def add_cors(response):
+    response.headers['Access-Control-Allow-Origin'] = "pythonhackers.com"
+    return response
+
+
 def render_base_template(*args, **kwargs):
     try:
         logging.warn(current_user.is_anonymous())

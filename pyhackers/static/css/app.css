@@ -83,6 +83,10 @@ a:hover {
     text-align: left;
 }
 
+#frame .link-box{
+    margin-left:6px;
+}
+
 .link-box {
     margin-bottom: 10px;
     padding-bottom: 7px;
