@@ -35,6 +35,24 @@ class User(MBase):
     extended = columns.Map(columns.Text, columns.Text)
 
 
+class Discussion(MBase):
+    id = columns.BigInt(primary_key=True)
+    title = columns.Text(required=True)
+    slug = columns.Text(required=True, index=True)
+    message_count = columns.Counter
+    user_id = columns.Integer()
+    user_count = columns.Counter
+    users = columns.Set(value_type=columns.Integer)
+    post_id = columns.BigInt()
+
+
+class DiscussionPost(MBase):
+    disc_id = columns.BigInt(primary_key=True)
+    post_id = columns.BigInt(primary_key=True)
+    user_id = columns.Integer(primary_key=True)
+
+
+
 class UserTimeLine(MBase):
     """
     POSTs that user will see in their timeline

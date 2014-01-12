@@ -37,6 +37,9 @@ def create(cassa_keyspace='pyhackers'):
     sync_table(ProjectFollower)
     sync_table(ProjectTimeLine)
 
+    sync_table(Discussion)
+    sync_table(DiscussionPost)
+
 
 def test_insert():
     from datetime import datetime as dt

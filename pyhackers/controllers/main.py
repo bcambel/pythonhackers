@@ -2,9 +2,8 @@
 from datetime import datetime as dt
 import logging
 import random
-from json import dumps
 import time
-import calendar
+
 from pyhackers.model.tutorial import Tutorial
 import requests
 from pyhackers.model.package import Package
@@ -13,7 +12,7 @@ from pyhackers.service.channel import follow_channel, load_channel, get_channel_
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user, load_user
 from flask.ext.wtf import Form, TextField, PasswordField, Required
-from flask import request, render_template as template_render, Blueprint, redirect, jsonify, abort
+from flask import request, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
 from datetime import datetime as dt
 from pyhackers.setup import login_manager
@@ -24,51 +23,20 @@ from pyhackers.config import config
 from pyhackers.sentry import sentry_client
 from sqlalchemy import and_
 from docutils.core import publish_parts
+from pyhackers.helpers import render_template, render_base_template, current_user_id
+
 
 purge_key = config.get("app", 'purge_key')
 debug = config.get("app", "debug")
 PRODUCTION = not (debug in ['True', '1', True, 1])
 main_app = Blueprint('main', __name__, template_folder='templates')
-cache_buster = calendar.timegm(time.gmtime())
+
 
 
 @main_app.after_request
 def add_cors(response):
     response.headers['Access-Control-Allow-Origin'] = "pythonhackers.com"
     return response
-
-
-def render_base_template(*args, **kwargs):
-    try:
-        logging.warn(current_user.is_anonymous())
-        is_logged = not current_user.is_anonymous()  #int(request.args.get("logged", "1"))
-
-    except Exception as ex:
-        logging.exception(ex)
-        is_logged = False
-
-    active_user = current_user.jsonable() if not current_user.is_anonymous() else {}
-    user_data = dumps(active_user)
-    logging.warn(user_data)
-
-    kwargs.update(**{'__v__': int(time.time()),
-                     'user': active_user,
-                     'user_json': user_data,
-                     'channels': get_channel_list(),
-                     'PROD': PRODUCTION,
-                     'logged_in': bool(is_logged),
-                     'year': dt.utcnow().year,
-    })
-
-    return render_template(*args, **kwargs)
-
-
-def render_template(*args, **kwargs):
-    """
-    Render template for anonymous access with cache_buster,PROD settings, used for caching
-    """
-    kwargs.update(**{'cache_buster': cache_buster, 'user': {}, 'user_json': {}, 'PROD': PRODUCTION})
-    return template_render(*args, **kwargs)
 
 
 def current_user_logged_in():
@@ -270,7 +238,7 @@ def new_message():
         message = request.form.get('message')
         code = request.form.get("code")
 
-        new_post(message, code, current_user)
+        new_post(message, code, current_user_id())
         return jsonify({'ok': 1})
 
     return render_base_template("new_message.html")
@@ -315,7 +283,6 @@ def channel(name):
         channel_name = "Lobby"
     return render_base_template("channel.html", channel_name=channel_name)
 
-#from itertools import repeat
 
 @cache.memoize(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/user/<regex(".+"):nick>')
@@ -347,36 +314,3 @@ def authenticate():
     return render_base_template('authenticate.html')
 
 
-@main_app.route("/ajax/followchannel", methods=("POST",))
-@login_required
-def follow_channel():
-    user_id = request.form.get("id")
-    slug = request.form.get("slug")
-
-    result = follow_channel(user_id, current_user)
-
-    return jsonify({'ok': result})
-
-
-@main_app.route("/ajax/followuser", methods=("POST",))
-@login_required
-def follow_user():
-    user_id = request.form.get("id")
-    nick = request.form.get("slug")
-
-    result = follow_user(user_id, current_user)
-
-    return jsonify({'ok': result})
-
-
-@main_app.route("/ajax/follow", methods=("POST",))
-@login_required
-def follow():
-    project_id = request.form.get("id")
-    slug = request.form.get("slug")
-
-    logging.warn(u"Liked %s %s [%s-%s]", project_id, slug, current_user.id, current_user.nick)
-
-    project_follow(project_id, current_user)
-
-    return jsonify({'ok': 1})

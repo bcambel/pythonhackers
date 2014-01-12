@@ -85,8 +85,11 @@ def start_app(soft=False):
 
     from pyhackers.controllers.main import main_app
     from pyhackers.controllers.oauth.ghub import github_bp
+    from pyhackers.controllers.discuss import discuss_app
+
     app.register_blueprint(github_bp)
     app.register_blueprint(main_app)
+    app.register_blueprint(discuss_app)
 
     # from controllers.oauth.twitter import twitter_bp
     # app.register_blueprint(twitter_bp)

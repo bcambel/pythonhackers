@@ -10,6 +10,9 @@ class @Beacon
         @notify(@getQs(p))
 
     notify: (params) =>
+        if PythonHackers.opts.prod == 0
+            return
+
         reqUrl = @url + params
         if PythonHackers.opts.prod == 0
             @addImage(reqUrl)
@@ -38,6 +41,9 @@ class @Beacon
         (new Date()).getTime()
 
     addImage: (src) ->
+        if PythonHackers.opts.prod == 0
+            return
+
         i=document.createElement("img")
         i.setAttribute('src', src )
         i.setAttribute('alt', 'a')
@@ -100,12 +106,18 @@ Application = {
         do Application.mixevents
 
     captureSubmit : ($el) ->
+        if PythonHackers.opts.prod == 0
+            return
+
         action = $el.attr("action")
         if !!action?
             action = action.replace("/ajax/","")
 
         id = $('[name="id"]',$el).val()
         slug = $('[name="slug"]',$el).val()
+
+
+
         mixpanel.track action,
             referrer: document.referrer
             id: id
@@ -118,13 +130,14 @@ Application = {
             evt.stopPropagation()
             Application.captureSubmit($(evt.currentTarget))
 
-            unless window.session.hasOwnProperty("id")
+            unless PythonHackers.session.hasOwnProperty("id")
                 document.location = '/authenticate'
                 return
 
             $this = $(this)
             action = $this.attr("action")
             postData = $this.serializeArray()
+            debugger
             $.post(action, postData)
 
 

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Discussions</h1>
+        <div class="col-lg-8 col-lg-offset-2">
+        <form class="form-horizontal" action="/discuss/new" data-remote="true">
+            <div class="form-group">
+                <label>Title</label>
+                <input type='text' class="form-control input-lg" name="title"/>
+            </div>
+            <div class="form-group">
+                <textarea rows="5" class="form-control" name="text"></textarea>
+            </div>
+            <button type="submit" class="form-control btn-primary">Start Discussion</button>
+        </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script_links %}
+    <script src="/static/js/app/discuss.js?ts={{ cache_buster }}"
+{% endblock %}
+
+{% block head %}
+    <link href="{{ static_route }}/css/bootstrap-wysihtml5.css" rel="stylesheet">
+{% endblock %}

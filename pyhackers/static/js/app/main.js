@@ -21,6 +21,9 @@
 
     Beacon.prototype.notify = function(params) {
       var reqUrl;
+      if (PythonHackers.opts.prod === 0) {
+        return;
+      }
       reqUrl = this.url + params;
       if (PythonHackers.opts.prod === 0) {
         return this.addImage(reqUrl);
@@ -54,6 +57,9 @@
 
     Beacon.prototype.addImage = function(src) {
       var i;
+      if (PythonHackers.opts.prod === 0) {
+        return;
+      }
       i = document.createElement("img");
       i.setAttribute('src', src);
       i.setAttribute('alt', 'a');
@@ -111,6 +117,9 @@
     },
     captureSubmit: function($el) {
       var action, id, slug;
+      if (PythonHackers.opts.prod === 0) {
+        return;
+      }
       action = $el.attr("action");
       if (!(action == null)) {
         action = action.replace("/ajax/", "");
@@ -129,13 +138,14 @@
         evt.preventDefault();
         evt.stopPropagation();
         Application.captureSubmit($(evt.currentTarget));
-        if (!window.session.hasOwnProperty("id")) {
+        if (!PythonHackers.session.hasOwnProperty("id")) {
           document.location = '/authenticate';
           return;
         }
         $this = $(this);
         action = $this.attr("action");
         postData = $this.serializeArray();
+        debugger;
         return $.post(action, postData);
       });
       return $('[data-toggle="tooltip"]').tooltip();

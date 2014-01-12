@@ -2,7 +2,12 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <script>var PythonHackers = { opts: { prod: {{ 1 if PROD == True else 0  }}, beacon:{}, startTime: (new Date().getTime())}};</script>
+    <script>var PythonHackers = { opts: { prod: {{ 1 if PROD == True else 0  }}, beacon:{}, startTime: (new Date().getTime()) },
+    {% autoescape off %}
+        session : {{ user_json }}
+        {% endautoescape %}
+    };
+    </script>
     <title>{{ meta_title or "Python Hackers Community" }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,26 +22,19 @@
         <link rel="canonical" href="{{ canonical }}"/>
     {% endif %}
 
-{#    <link href="/static/css/bootstrap-cerulean.min.css" rel="stylesheet">#}
-{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">#}
-    <link href="/static/css/bootstrap-flatly.min.css" rel="stylesheet">
+    <link href="{{ static_route }}/css/bootstrap-flatly.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/css/buttons.css" rel="stylesheet">
-{#    <link href="/static/css/bootstrap-wysihtml5.css" rel="stylesheet">#}
-{#    <link href="/static/css/vex.css" rel="stylesheet">#}
-{#    <link href="/static/css/vex-theme-os.css" rel="stylesheet">#}
+    <link href="{{ static_route }}/css/buttons.css" rel="stylesheet">
     <link href="/static/css/app.css" rel="stylesheet">
-    <link href="/static/css/pygments_tango.css" rel="stylesheet">
+    <link href="{{ static_route }}/css/pygments_tango.css" rel="stylesheet">
 
     {% block head %}{% endblock %}
-    {#    <link href="/static/css/bootstrap-journal.min.css" rel="stylesheet">#}
-    {#    <link href="/static/css/bootstrap-yeti.min.css" rel="stylesheet">#}
 
 </head>
 <body>
 <a href="https://github.com/pythonhackers/pythonhackers"><img
         style="position: absolute; top: 0; left: 0; border: 0;z-index: 10000;"
-        src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
+        src="{{ static_route }}/img/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
 
 <div id="page-wrap">
     <div class="navbar navbar-default">
@@ -115,8 +113,8 @@
 
     <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
 {#    <script src="//cdn.ravenjs.com/1.1.7/jquery,native/raven.min.js"></script>#}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js" type="text/javascript"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ static_route }}/js/underscore-min.js" type="text/javascript"></script>
+    <script src="{{ static_route }}/js/bootstrap.min.js" type="text/javascript"></script>
 
 {#    <script src="/static/js/libs/vex.combined.min.js" type="text/javascript"></script>#}
 {#    <script>vex.defaultOptions.className = 'vex-theme-os';</script>#}
@@ -137,14 +135,7 @@
     {% include "mailchimp_form.html" %}
 
     <script>
-
         {% block scripts %}{% endblock %}
-        {% autoescape off %}
-
-        var session = {{ user_json }};
-        {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
-        {% endautoescape %}
-
     </script>
 
 
