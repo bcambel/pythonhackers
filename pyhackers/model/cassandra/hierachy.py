@@ -12,8 +12,32 @@ class MBase(Model):
 class Post(MBase):
     id = columns.BigInt(index=True, primary_key=True)
     user_id = columns.Integer(required=True, index=True)
+    user_nick = columns.Text()
     text = columns.Text(required=True)
-    likes = columns.Counter
+
+    reply_to_id = columns.BigInt()
+    reply_to_uid = columns.Integer()
+    reply_to_nick = columns.Text()
+
+    ext_id = columns.Text()
+
+    has_url = columns.Boolean
+    has_channel = columns.Boolean
+
+    # this post is either linked to a
+    # DISCUSSION or
+    discussion_id = columns.BigInt()
+    # CHANNEL or None
+    channel_id = columns.Integer()
+
+    up_votes = columns.Counter()
+    down_votes = columns.Counter()
+
+    spam = columns.Boolean()
+    flagged = columns.Boolean()
+    deleted = columns.Boolean()
+
+    published_at = columns.DateTime(default=dt.utcnow())
 
 
 class Project(MBase):
@@ -50,7 +74,6 @@ class DiscussionPost(MBase):
     disc_id = columns.BigInt(primary_key=True)
     post_id = columns.BigInt(primary_key=True)
     user_id = columns.Integer(primary_key=True)
-
 
 
 class UserTimeLine(MBase):
@@ -118,9 +141,11 @@ class ProjectTimeLine(MBase):
     post_id = columns.BigInt(primary_key=True)
 
 
-class PostLike(MBase):
+class PostVote(MBase):
     post_id = columns.BigInt(primary_key=True)
     user_id = columns.Integer(primary_key=True)
+    positive = columns.Boolean(default=True)
+    at = columns.DateTime(default=dt.utcnow())
 
 
 class PostComment(MBase):

@@ -25,6 +25,7 @@ app = Flask(__name__, template_folder=templates_folder, static_folder=statics_fo
 app.secret_key = config.get("app", "flask_secret")
 app.debug = bool(config.get("app", "debug"))
 app.config['SQLALCHEMY_DATABASE_URI'] = db_conf
+app.config['SQLALCHEMY_RECORD_QUERIES'] = True
 
 
 class RegexConverter(BaseConverter):

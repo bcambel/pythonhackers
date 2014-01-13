@@ -1,14 +1,12 @@
 import logging
-from pyhackers.model.message import Message
-from pyhackers.model.user import User
 from pyhackers.model.cassandra.hierachy import (
     User as CsUser, Post as CsPost, UserPost as CsUserPost, UserFollower as CsUserFollower,
-    UserTimeLine
-    )
+    UserTimeLine)
 
 from pyhackers.util.textractor import Parser
 
 parser = Parser()
+
 
 class MessageWorker():
     def __init__(self, user, message, context):
@@ -20,14 +18,16 @@ class MessageWorker():
         self.message_text = ''
 
     def resolve(self):
-        self.user = User.query.get(self.user_id)
-        self.message = Message.query.get(self.message_id)
+        self.user = CsUser.objects.get(id=self.user_id)
+        self.message = CsPost.objects.get(id=self.message_id)
         self.message_text = parser.parse(self.message.content)
 
         logging.warn("Process {}".format(self.message))
 
     def create_cassa(self):
-        CsPost.create(id=self.message.id, text=self.message.content, user_id=self.user_id)
+        logging.warn("Process: Message=>{}".format(self.message.id))
+
+
         post_id = self.message_id
 
         CsUserPost.create(user_id=self.user_id, post_id=post_id)

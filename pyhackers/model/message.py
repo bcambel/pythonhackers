@@ -42,7 +42,7 @@ class Message(db.Model):
 
     published_at = db.Column(db.DateTime, default=dt.utcnow())
 
-    channel_id = db.Column(db.Integer,db.ForeignKey('channel.id'), index=True,)
+    channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'), index=True,)
     channel = db.relationship(Channel)
     channels = db.Column(postgresql.ARRAY(String))
 
@@ -74,4 +74,6 @@ from pyhackers.idgen import idgen_client
 
 @event.listens_for(Message, 'before_insert')
 def before_inventory_source_insert(mapper, connection, target):
-    target.id = idgen_client.get()
+    pass
+    #if target.id is None:
+    #    target.id = idgen_client.get()

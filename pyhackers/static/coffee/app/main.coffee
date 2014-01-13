@@ -137,7 +137,7 @@ Application = {
             $this = $(this)
             action = $this.attr("action")
             postData = $this.serializeArray()
-            debugger
+
             $.post(action, postData)
 
 

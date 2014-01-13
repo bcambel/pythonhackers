@@ -32,7 +32,6 @@ PRODUCTION = not (debug in ['True', '1', True, 1])
 main_app = Blueprint('main', __name__, template_folder='templates')
 
 
-
 @main_app.after_request
 def add_cors(response):
     response.headers['Access-Control-Allow-Origin'] = "pythonhackers.com"
@@ -68,9 +67,16 @@ def rand_int(maximum=60):
 
 
 def request_force_non_cache():
+    purg_arg = request.args.get(purge_key, False)
+    logging.warn(u"Purge key:{}".format(purg_arg))
+
+    force_cache = purg_arg in ["True", "1", "ok", True]
+    logging.warn(u"Forcing non-cache:{}".format(force_cache))
+
     if not PRODUCTION:
-        return False
-    return request.args.get(purge_key, False) in ["True", "1", "ok", True]
+        return True
+
+    return force_cache
 
 
 @cache.memoize(timeout=10000, unless=request_force_non_cache)
@@ -139,9 +145,10 @@ def project_categories():
     return render_base_template("os_list.html", projects=projects)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
 @main_app.route('/open-source/<regex(".+"):nick>/<regex(".+"):project>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def os(nick, project):
     """Display the details of a open source project"""
     project = project[:-1] if project[-1] == "/" else project
@@ -181,12 +188,13 @@ def fancy_os_list():
     return render_template('project_frame.html', projects=[])
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
 @main_app.route('/top-python-projects/')
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 def os_list():
+    logging.warn("Running OS LIST")
     path = request.path
     if "open-source" in path:
         canonical = None
@@ -201,8 +209,9 @@ def os_list():
     return render_base_template("os_list.html", projects=projects, canonical=canonical)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/python-packages/<regex(".+"):package>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def package_details(package):
     package_obj = Package.query.get(package)
     if package_obj is None:

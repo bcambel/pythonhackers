@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h3>{{ discussion.title }}</h3>
+        <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
+        <p>
+            {{ discussion.post_id }}
+        </p>
+
+        <p>
+            {{ message.text }}
+        </p>
+
+    </div>
+
+{% endblock %}
+

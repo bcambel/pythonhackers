@@ -145,7 +145,6 @@
         $this = $(this);
         action = $this.attr("action");
         postData = $this.serializeArray();
-        debugger;
         return $.post(action, postData);
       });
       return $('[data-toggle="tooltip"]').tooltip();
