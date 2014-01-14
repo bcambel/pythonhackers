@@ -5,12 +5,12 @@ import argparse
 import textwrap
 
 
-def create(cassa_keyspace='pyhackers'):
-    assert cassa_keyspace != '' or cassa_keyspace is not None
+def create(cassa_key_space='pyhackers'):
+    assert cassa_key_space != '' or cassa_key_space is not None
 
-    logging.warn("Creating/Sync'ing {}".format(cassa_keyspace))
+    logging.warn("Creating/Synchronizing {}".format(cassa_key_space))
 
-    create_keyspace(cassa_keyspace)
+    create_keyspace(cassa_key_space)
 
     sync_table(User)
     sync_table(Post)
@@ -23,11 +23,13 @@ def create(cassa_keyspace='pyhackers'):
     sync_table(UserFollowing)
     sync_table(UserPost)
     sync_table(UserProject)
+    sync_table(UserCounter)
 
     # Post related Tables
-    sync_table(PostComment)
+    sync_table(PostReply)
     sync_table(PostFollower)
-    sync_table(PostLike)
+    sync_table(PostCounter)
+    sync_table(PostVote)
 
     # Channel Related Tables
     sync_table(ChannelFollower)
@@ -37,8 +39,10 @@ def create(cassa_keyspace='pyhackers'):
     sync_table(ProjectFollower)
     sync_table(ProjectTimeLine)
 
+    # Discussions yoo
     sync_table(Discussion)
     sync_table(DiscussionPost)
+    sync_table(DiscussionCounter)
 
 
 def test_insert():
@@ -47,7 +51,7 @@ def test_insert():
     User.create(id=1, nick='bcambel', created_at=dt.utcnow(),
                 extended={'test': "test"})
 
-    Post.create(orig_id=1, text="Testing")
+    Post.create(id=1, text="Testing")
 
 
 def parse_args():
@@ -91,7 +95,6 @@ def query_yes_no(question, default="yes"):
         else:
             sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
 
-# Usage example
 
 if __name__ == '__main__':
 

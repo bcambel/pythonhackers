@@ -9,9 +9,18 @@ class MBase(Model):
     #__keyspace__ = model_keyspace
 
 
+class PostCounter(MBase):
+    id = columns.BigInt(index=True, primary_key=True)
+    up_votes = columns.Counter()
+    down_votes = columns.Counter()
+    views = columns.Counter()
+    karma = columns.Counter()
+    replies = columns.Counter()
+
+
 class Post(MBase):
     id = columns.BigInt(index=True, primary_key=True)
-    user_id = columns.Integer(required=True, index=True)
+    user_id = columns.Integer(required=True, index=True, partition_key=True)
     user_nick = columns.Text()
     text = columns.Text(required=True)
 
@@ -21,17 +30,14 @@ class Post(MBase):
 
     ext_id = columns.Text()
 
-    has_url = columns.Boolean
-    has_channel = columns.Boolean
+    has_url = columns.Boolean()
+    has_channel = columns.Boolean()
 
     # this post is either linked to a
     # DISCUSSION or
     discussion_id = columns.BigInt()
     # CHANNEL or None
     channel_id = columns.Integer()
-
-    up_votes = columns.Counter()
-    down_votes = columns.Counter()
 
     spam = columns.Boolean()
     flagged = columns.Boolean()
@@ -42,7 +48,9 @@ class Post(MBase):
 
 class Project(MBase):
     id = columns.Integer(primary_key=True)
-    follower_count = columns.Counter
+    name = columns.Text()
+
+    #follower_count = columns.Counter
 
 
 class Channel(MBase):
@@ -51,21 +59,38 @@ class Channel(MBase):
     name = columns.Text(required=True)
 
 
+class UserCounter(MBase):
+    id = columns.Integer(primary_key=True)
+    follower_count = columns.Counter()
+    following_count = columns.Counter()
+    karma = columns.Counter()
+    up_vote_given = columns.Counter()
+    up_vote_received = columns.Counter()
+    down_vote_given = columns.Counter()
+    down_vote_taken = columns.Counter()
+
+
 class User(MBase):
     id = columns.Integer(primary_key=True)
     nick = columns.Text(required=True, index=True)
-    follower_count = columns.Counter
-    following_count = columns.Counter
+
     extended = columns.Map(columns.Text, columns.Text)
+    registered_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.DateTime(default=dt.utcnow())
+
+
+class DiscussionCounter(MBase):
+    id = columns.BigInt(primary_key=True)
+    message_count = columns.Counter()
+    user_count = columns.Counter()
+    view_count = columns.Counter()
 
 
 class Discussion(MBase):
     id = columns.BigInt(primary_key=True)
     title = columns.Text(required=True)
     slug = columns.Text(required=True, index=True)
-    message_count = columns.Counter
     user_id = columns.Integer()
-    user_count = columns.Counter
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
 
@@ -106,6 +131,7 @@ class UserFollower(MBase):
     """
     user_id = columns.Integer(primary_key=True)
     follower_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class UserFollowing(MBase):
@@ -114,21 +140,25 @@ class UserFollowing(MBase):
     """
     user_id = columns.Integer(primary_key=True)
     following_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class ProjectFollower(MBase):
     project_id = columns.Integer(primary_key=True)
     user_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class PostFollower(MBase):
     post_id = columns.TimeUUID(primary_key=True)
     user_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class ChannelFollower(MBase):
     channel_id = columns.Integer(primary_key=True)
     user_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class ChannelTimeLine(MBase):
@@ -142,12 +172,13 @@ class ProjectTimeLine(MBase):
 
 
 class PostVote(MBase):
-    post_id = columns.BigInt(primary_key=True)
+    post_id = columns.BigInt(primary_key=True, partition_key=True)
     user_id = columns.Integer(primary_key=True)
     positive = columns.Boolean(default=True)
-    at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
-class PostComment(MBase):
+class PostReply(MBase):
     post_id = columns.BigInt(primary_key=True)
-    comment_id = columns.BigInt(primary_key=True)
+    reply_post_id = columns.BigInt(primary_key=True)
+
