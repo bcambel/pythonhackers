@@ -3,6 +3,7 @@ from datetime import datetime as dt
 import markdown2
 from pyhackers.db import DB as db
 from pyhackers.common import format_date
+from pyhackers.utils import markdown_to_html
 
 
 class Tutorial(db.Model):
@@ -59,8 +60,7 @@ class Tutorial(db.Model):
 @db.event.listens_for(Tutorial, 'before_update')
 def before_insert(mapper, connection, target):
     logging.warn("Running for before insert")
-    target.content_html = markdown2.markdown(target.content, extras=['fenced-code-blocks'])
-    target.content_html = target.content_html.encode('ascii', 'xmlcharrefreplace').replace("codehilite","syntax")
+    target.content_html = markdown_to_html(target.content)
     target.generated_at = dt.utcnow()
 
 

@@ -1,3 +1,4 @@
+import markdown2
 from os import listdir
 from os.path import join, isfile
 
@@ -14,7 +15,7 @@ def nice_number(n):
             ident = (n * 10 / number) / 10.0
             break
 
-    ident_int = int(numeric)
+    ident_int = int(ident)
     if numeric - ident_int == 0:
         numeric = ident_int
 
@@ -26,6 +27,14 @@ def files_in(directory):
         if isfile(join(directory, f)):
             yield join(directory, f)
     return
+
+
+def markdown_to_html(txt):
+    try:
+        html_text = markdown2.markdown(txt, extras=['fenced-code-blocks'])
+        return html_text.encode('ascii', 'xmlcharrefreplace').replace("codehilite", "syntax")
+    except:
+        return txt
 
 if __name__ == "__main__":
 

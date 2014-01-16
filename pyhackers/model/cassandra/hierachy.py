@@ -23,6 +23,7 @@ class Post(MBase):
     user_id = columns.Integer(required=True, index=True, partition_key=True)
     user_nick = columns.Text()
     text = columns.Text(required=True)
+    html = columns.Text(required=False)
 
     reply_to_id = columns.BigInt()
     reply_to_uid = columns.Integer()

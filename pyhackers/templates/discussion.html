@@ -3,16 +3,47 @@
 {% block content %}
 
     <div class="container">
+        <div class="row-fluid">
+            <div class="discussion col-lg-8">
+                <div class="header">
+                    <h3>{{ discussion.title }}</h3>
+                    <hr/>
+                    <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
 
-        <h3>{{ discussion.title }}</h3>
-        <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
-        <p>
-            Post Id=> {{ discussion.post_id }}
-        </p>
+                    <p>
+                        Post Id => {{ discussion.post_id }}
+                    </p>
+                    <hr />
+                    <div class="">
+                        {% autoescape off %}
+                        {{ message.html }}
+                        {%  endautoescape %}
+                    </div>
+                </div>
+                <div class="messages clearfix">
 
-        <p class="well">
-            Message text => {{ message.text }}
-        </p>
+                    <div class="row">
+                        <form  action="/ajax/discuss/{{ discussion.id }}/message">
+                        <div class="input-group">
+                                <textarea class="form-control input-lg" rows="1" placeholder="An awesome reply is waiting here"></textarea>
+                            <span class="input-group-btn">
+                            <button class="pull-right btn btn-primary btn-lg">Post</button>
+                                </span>
+                        </div>
+                        </form>
+                    </div>
+
+
+                </div>
+                <div class="footer">
+
+                </div>
+            </div>
+            <div class="related col-lg-4">
+
+            </div>
+        </div>
+
 
     </div>
 
