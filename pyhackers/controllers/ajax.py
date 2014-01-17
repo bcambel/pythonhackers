@@ -7,7 +7,7 @@ from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user
 
 
-ajax_app = Blueprint('ajax', __name__, template_folder='templates', url_prefix='/ajax/')
+ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
 
 @ajax_app.route("followchannel", methods=("POST",))
 @login_required
@@ -43,11 +43,12 @@ def follow():
 
     return jsonify({'ok': 1})
 
-@ajax_app.route('/discuss/<regex(".+"):id>/message', methods=('POST',))
+@ajax_app.route('discuss/message/new', methods=('POST',))
 @login_required
-def new_discussion_message_ctrl(id):
+def new_discussion_message_ctrl():
     text = request.form.get("text")
+    id = request.form.get("id")
     discussion_id = id
-    message_id = new_discussion_message(text, current_user_id())
+    message_id = new_discussion_message(discussion_id, text, current_user_id())
 
     return jsonify({'id': message_id})

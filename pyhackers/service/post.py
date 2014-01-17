@@ -7,6 +7,20 @@ from pyhackers.events import Event
 from pyhackers.utils import markdown_to_html
 
 
+def load_posts(post_ids):
+    """
+    Select multiple posts from the service.
+    We will definitely need to memcache these records to do a fast lookup batch query.
+    Of course also cache invalidation needs to be considered.
+    """
+
+    # If list is not used, or any call that trigger __iter__ will end up with the query syntax
+    # rather than the data itself.
+    posts = list(Post.objects.filter(id__in=post_ids).limit(100).allow_filtering())
+
+    return posts
+
+
 def new_post(text, code=None, current_user_id=None, post_id=None, user_nick=None):
     logging.warn("Post is=>{}".format(post_id))
 

@@ -3,7 +3,7 @@ import sys
 import logging
 from werkzeug.routing import BaseConverter
 from flaskext.kvsession import KVSessionExtension
-from flask import Flask, request, abort, render_template, redirect, jsonify, session
+from flask import Flask, request, abort, render_template, redirect, jsonify, session, url_for
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -87,10 +87,23 @@ def start_app(soft=False):
     from pyhackers.controllers.main import main_app
     from pyhackers.controllers.oauth.ghub import github_bp
     from pyhackers.controllers.discuss import discuss_app
+    from pyhackers.controllers.ajax import ajax_app
 
     app.register_blueprint(github_bp)
     app.register_blueprint(main_app)
     app.register_blueprint(discuss_app)
+    app.register_blueprint(ajax_app)
+
+    @app.route("/site-map")
+    def site_map():
+        links = []
+        for rule in app.url_map.iter_rules():
+            # Filter out rules we can't navigate to in a browser
+            # and rules that require parameters
+            if ("GET" in rule.methods or "POST" in rule.methods) and rule is not None and len(rule.defaults or []) >= len(rule.arguments or []):
+                url = url_for(rule.endpoint)
+                links.append((url, rule.endpoint))
+        return jsonify({'links': links})
 
     # from controllers.oauth.twitter import twitter_bp
     # app.register_blueprint(twitter_bp)

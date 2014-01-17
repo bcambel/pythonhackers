@@ -22,7 +22,7 @@ def discussion_ctrl(slug, id):
     discussion_data = load_discussion(slug, id)
     discussion, disc_posts, message = discussion_data
 
-    return render_template("discussion.html", discussion=discussion,message=message)
+    return render_base_template("discussion.html", discussion=discussion,message=message, posts=disc_posts)
 
 
 @discuss_app.route('new', methods=('GET', 'POST'))

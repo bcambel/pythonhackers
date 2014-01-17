@@ -45,20 +45,6 @@
                 <li><a href="/links">Links</a></li>
                 <li><a href="/top-python-projects/" style="color:orangered;font-weight:bold;">Top Python Projects</a></li>
                 <li><a href="/discuss/home" style="">Discussion</a></li>
-                {#                <li class="dropdown">#}
-                {#                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">#}
-                {#                        Channels<b class="caret"></b>#}
-                {#                    </a>#}
-                {#                    <ul class="dropdown-menu">#}
-                {#                        {% for channel in channels %}#}
-                {#                            <li><a href="/channels/{{ channel.slug }}">{{ channel.name }}</a></li>#}
-                {#                        {% endfor %}#}
-                {##}
-                {#                        <li class="divider"></li>#}
-                {#                        <li><a href="/channels/lobby">Lobby</a></li>#}
-                {#                    </ul>#}
-
-                {#                <li><a href="#mc_embed_signup" id='join-us' data-toggle='modal' data-track='newsletter'>Join Beta&nbsp;(200+)</a></li>#}
                 <li><a href='/about'>About</a></li>
                 <li><a href="http://github.com/pythonhackers/pythonhackers" target="_blank"><i class='fa fa-github'></i>&nbsp;28</a>
                 </li>
@@ -112,32 +98,26 @@
     {% include "modals.html" %}
     {% include "js_templates.html" %}
 
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
-{#    <script src="//cdn.ravenjs.com/1.1.7/jquery,native/raven.min.js"></script>#}
-    <script src="{{ static_route }}/js/underscore-min.js" type="text/javascript"></script>
-    <script src="{{ static_route }}/js/bootstrap.min.js" type="text/javascript"></script>
 
-{#    <script src="/static/js/libs/vex.combined.min.js" type="text/javascript"></script>#}
-{#    <script>vex.defaultOptions.className = 'vex-theme-os';</script>#}
-{#    <script src="/static/js/libs/tether.min.js" type="text/javascript"></script>#}
-{#    <script src="/static/js/libs/drop.min.js" type="text/javascript"></script>#}
-{#    <script src="/static/js/libs/tooltip.min.js" type="text/javascript"></script>#}
-{#    <script src="/static/js/libs/humanize.min.js" type="text/javascript"></script>#}
-    <script src="/static/js/app/main.js?_={{ cache_buster }}"></script>
-{#    <script src="/static/js/app/message.js?_={{ cache_buster }}"></script>#}
 
-    {% block script_links %}{% endblock %}
-
-    {% if PROD %}
-        {% include "3rd_party.html" %}
-    {% endif %}
 
 
     {% include "mailchimp_form.html" %}
 
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
+
     <script>
         {% block scripts %}{% endblock %}
     </script>
+
+    <script src="{{ static_route }}/js/underscore-min.js" type="text/javascript"></script>
+    <script src="{{ static_route }}/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/static/js/app/main.js?_={{ cache_buster }}"></script>
+{% block script_links %}{% endblock %}
+
+    {% if PROD %}
+        {% include "3rd_party.html" %}
+    {% endif %}
 
 
 

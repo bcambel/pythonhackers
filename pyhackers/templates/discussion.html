@@ -2,50 +2,63 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="row-fluid">
-            <div class="discussion col-lg-8">
-                <div class="header">
-                    <h3>{{ discussion.title }}</h3>
-                    <hr/>
-                    <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
+<div class="container">
+    <div class="row-fluid">
+        <div class="discussion col-lg-8">
+            <div class="header">
+                <h3>{{ discussion.title }}</h3>
+                <hr/>
+                <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
 
-                    <p>
-                        Post Id => {{ discussion.post_id }}
-                    </p>
-                    <hr />
-                    <div class="">
-                        {% autoescape off %}
-                        {{ message.html }}
-                        {%  endautoescape %}
-                    </div>
+                <p>
+                    Post Id => {{ discussion.post_id }}
+                </p>
+                <hr/>
+                <div class="">
+                    {% autoescape off %}
+                    {{ message.html }}
+                     {% for p in posts %}
+                        <div class="well">
+                            <h5>{{ p.id }}</h5>
+                            <p>
+                                {{ p.html }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                    {% endautoescape %}
+
+
+
                 </div>
-                <div class="messages clearfix">
+            </div>
+            <div class="messages clearfix">
 
-                    <div class="row">
-                        <form  action="/ajax/discuss/{{ discussion.id }}/message" data-remote="true" method="post">
+                <div class="row">
+                    <form action="/ajax/discuss/message/new" data-remote="true" method="post">
                         <div class="input-group">
-                                <textarea name='text' class="form-control input-lg" rows="1" placeholder="An awesome reply is waiting here"></textarea>
+                            <textarea name='text' class="form-control input-lg" rows="1"
+                                      placeholder="An awesome reply is waiting here"></textarea>
+                            <input type="hidden" name="id" value="{{ discussion.id }}"/>
                             <span class="input-group-btn">
                             <button class="pull-right btn btn-primary btn-lg">Post</button>
                                 </span>
                         </div>
-                        </form>
-                    </div>
-
-
+                    </form>
                 </div>
-                <div class="footer">
 
-                </div>
+
             </div>
-            <div class="related col-lg-4">
+            <div class="footer">
 
             </div>
         </div>
+        <div class="related col-lg-4">
 
-
+        </div>
     </div>
+
+
+</div>
 
 {% endblock %}
 
