@@ -23,9 +23,9 @@
                 <div class="messages clearfix">
 
                     <div class="row">
-                        <form  action="/ajax/discuss/{{ discussion.id }}/message">
+                        <form  action="/ajax/discuss/{{ discussion.id }}/message" data-remote="true" method="post">
                         <div class="input-group">
-                                <textarea class="form-control input-lg" rows="1" placeholder="An awesome reply is waiting here"></textarea>
+                                <textarea name='text' class="form-control input-lg" rows="1" placeholder="An awesome reply is waiting here"></textarea>
                             <span class="input-group-btn">
                             <button class="pull-right btn btn-primary btn-lg">Post</button>
                                 </span>

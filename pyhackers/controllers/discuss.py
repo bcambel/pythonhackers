@@ -3,7 +3,7 @@ from flask import request, jsonify, Blueprint, redirect
 from flask.ext.login import login_required, current_user
 from pyhackers.cache import cache
 from pyhackers.helpers import render_template, render_base_template, current_user_id
-from pyhackers.service.discuss import new_discussion, load_discussion
+from pyhackers.service.discuss import new_discussion, load_discussion, new_discussion_message
 
 discuss_app = Blueprint('discuss', __name__, template_folder='templates', url_prefix='/discuss/')
 
@@ -40,3 +40,7 @@ def new():
         #return jsonify({'id': str(discuss_id), 'slug': slug})
 
     return jsonify({'ok': 1})
+
+
+
+

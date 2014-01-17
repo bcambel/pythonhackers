@@ -40,9 +40,9 @@ class Post(MBase):
     # CHANNEL or None
     channel_id = columns.Integer()
 
-    spam = columns.Boolean()
-    flagged = columns.Boolean()
-    deleted = columns.Boolean()
+    spam = columns.Boolean(default=False)
+    flagged = columns.Boolean(default=False)
+    deleted = columns.Boolean(default=False)
 
     published_at = columns.DateTime(default=dt.utcnow())
 

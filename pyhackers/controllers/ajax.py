@@ -1,6 +1,8 @@
 from flask import request, jsonify, Blueprint, logging
 from flask.ext.login import login_required, current_user
+from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
+from pyhackers.service.discuss import new_discussion_message
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user
 
@@ -40,3 +42,12 @@ def follow():
     project_follow(project_id, current_user)
 
     return jsonify({'ok': 1})
+
+@ajax_app.route('/discuss/<regex(".+"):id>/message', methods=('POST',))
+@login_required
+def new_discussion_message_ctrl(id):
+    text = request.form.get("text")
+    discussion_id = id
+    message_id = new_discussion_message(text, current_user_id())
+
+    return jsonify({'id': message_id})
