@@ -9,9 +9,9 @@ from slugify import slugify
 
 
 def load_discussion(slug, discussion_id):
-    discussion, disc_posts, users = discussion_messages(discussion_id)
+    discussion, disc_posts, users, counters = discussion_messages(discussion_id)
     message = Post.objects.get(id=discussion.post_id)
-    counters = DiscussionCounter.get(id=discussion_id)
+
 
     return discussion, disc_posts, message, counters
 
@@ -36,8 +36,10 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100):
         u = filter(lambda x: x.id == post.user_id, users)
 
         post.user = u[0] if u is not None else None
+    counters = DiscussionCounter.get(id=discussion_id)
 
-    return discussion, disc_posts, users
+    return discussion, disc_posts, users, counters
+
 
 def new_discussion(title, text, current_user_id=None):
     disc_id = idgen_client.get()
@@ -70,7 +72,7 @@ def new_discussion(title, text, current_user_id=None):
 def new_discussion_message(discussion_id, text, current_user_id):
     logging.warn("DSCSS:[{}]USER:[{}]".format(discussion_id, current_user_id))
     discussion = Discussion.objects.get(id=discussion_id)
-    discussion.users.union({current_user_id})
+
 
 
     p = Post()
@@ -85,6 +87,10 @@ def new_discussion_message(discussion_id, text, current_user_id):
     # Event.new_post_message
 
     p.save()
+
+    discussion.last_message = p.id
+    discussion.users.union({current_user_id})
+    discussion.save()
 
     DiscussionPost.create(disc_id=discussion_id, post_id=p.id, user_id=current_user_id)
     disc_counter = DiscussionCounter.create(id=discussion_id )

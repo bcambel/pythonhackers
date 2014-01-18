@@ -7,6 +7,7 @@
       this.discussion_id = discussion_id;
       this.reload = __bind(this.reload, this);
       this.init = __bind(this.init, this);
+      this.lastMessage = null;
       console.log("Discussion started " + this.discussion_id);
     }
 
@@ -15,11 +16,14 @@
     };
 
     Discuss.prototype.reload = function() {
+      var _this = this;
       this.discussion_id;
       return $.getJSON('/ajax/discuss/' + this.discussion_id + '/messages', {
-        _: new Date().getTime()
+        _: new Date().getTime(),
+        after_id: this.lastMessage || -1
       }, function(data) {
-        return console.log(data);
+        console.log(data);
+        return _this.lastMessage = data.discussion.last_message;
       });
     };
 

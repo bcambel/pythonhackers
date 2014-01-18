@@ -2,6 +2,7 @@
 class @Discuss
 
     constructor: (@discussion_id) ->
+        @lastMessage = null
         console.log "Discussion started #{@discussion_id}"
 
     init: () =>
@@ -10,9 +11,11 @@ class @Discuss
     reload: () =>
         @discussion_id
         $.getJSON('/ajax/discuss/'+@discussion_id+'/messages',
-            {_: new Date().getTime()},
-            (data)->
+            {_: new Date().getTime(), after_id: @lastMessage or -1},
+            (data) =>
                 console.log(data)
+
+                @lastMessage = data.discussion.last_message
         )
 
 

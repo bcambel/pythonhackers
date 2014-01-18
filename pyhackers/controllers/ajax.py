@@ -56,5 +56,8 @@ def new_discussion_message_ctrl():
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
 def discussion_messages_ctrl(discussion_id):
     _ = discussion_messages(discussion_id, after_message_id=277294772324926460)
-    discussion, disc_posts, users = _
-    return jsonify({'discussion': discussion.to_dict(), 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})
+    discussion, disc_posts, users, counters = _
+    discussion_dict = discussion.to_dict()
+    discussion_dict.update(**counters.to_dict())
+
+    return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})

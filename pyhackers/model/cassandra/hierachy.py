@@ -104,6 +104,15 @@ class DiscussionCounter(MBase):
     view_count = columns.Counter()
 
 
+    def to_dict(self):
+        return {
+            'message_count': self.message_count,
+            'user_count': self.user_count,
+            'view_count': self.view_count,
+
+        }
+
+
 class Discussion(MBase):
     id = columns.BigInt(primary_key=True)
     title = columns.Text(required=True)
@@ -111,12 +120,15 @@ class Discussion(MBase):
     user_id = columns.Integer()
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
+    last_message = columns.BigInt()
 
     def to_dict(self):
         return {'id': self.id,
                 'title': self.title,
                 'user_id': self.user_id,
-                'post_id': self.post_id}
+                'post_id': self.post_id,
+                'last_message': self.last_message
+                }
 
 
 class DiscussionPost(MBase):
