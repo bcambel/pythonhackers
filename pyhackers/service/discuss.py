@@ -2,6 +2,7 @@ import logging
 from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter
 from pyhackers.service.post import new_post, load_posts
+from pyhackers.service.user import load_user, load_user_profiles
 from pyhackers.utils import markdown_to_html
 
 from slugify import slugify
@@ -13,13 +14,19 @@ def load_discussion(slug, id):
     # FIXME: Here we only get 100 records right now. No Sorting, paging, nothing. Too bad!
     disc_post_lists = [(p.post_id, p.user_id) for p in DiscussionPost.objects.filter(disc_id=id).limit(100)]
     message = Post.objects.get(id=discussion.post_id)
-
-    post_ids = [x[0] for x in disc_post_lists]
-    user_ids = [x[1] for x in disc_post_lists]
+    counters = DiscussionCounter.get(id=id)
+    post_ids = list(set([x[0] for x in disc_post_lists]))
+    user_ids = list(set([x[1] for x in disc_post_lists]))
+    users = load_user_profiles(user_ids)
 
     disc_posts = load_posts(post_ids)
 
-    return discussion, disc_posts, message
+    for post in disc_posts:
+        u = filter(lambda x: x.id == post.user_id, users)
+
+        post.user = u[0] if u is not None else None
+
+    return discussion, disc_posts, message, counters
 
 
 def new_discussion(title, text, current_user_id=None):

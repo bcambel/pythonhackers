@@ -52,3 +52,8 @@ def new_discussion_message_ctrl():
     message_id = new_discussion_message(discussion_id, text, current_user_id())
 
     return jsonify({'id': message_id})
+
+@ajax_app.route('discuss/<regex(".+"):id>/messages', methods=('GET',))
+def discussion_messages(id):
+
+    return jsonify({'id': id})

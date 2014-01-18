@@ -244,6 +244,23 @@ body{
     height: 100%;
 }
 
+.message{
+    display: inline-block;
+}
+.message p{
+    display: inline-block;
+}
+
+.discussion .header{
+
+}
+
+.related{
+    height:100%;
+    min-height: 100%;
+    display: block;
+    border-left: 1px solid #EEEEEE;
+}
 
 /*body, html { height: 100%; }*/
 

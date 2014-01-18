@@ -6,33 +6,27 @@
     <div class="row-fluid">
         <div class="discussion col-lg-8">
             <div class="header">
-                <h3>{{ discussion.title }}</h3>
-                <hr/>
-                <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">{{ discussion.id }}</a>
 
-                <p>
-                    Post Id => {{ discussion.post_id }}
-                </p>
+                <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}"><h3>{{ discussion.title }}</h3></a>
+                <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
                 <hr/>
+
                 <div class="">
                     {% autoescape off %}
                     {{ message.html }}
-                     {% for p in posts %}
-                        <div class="well">
-                            <h5>{{ p.id }}</h5>
-                            <p>
-                                {{ p.html }}
-                            </p>
+                    {% for p in posts %}
+                        <div class="row">
+                            <div>
+                                <a href="/user/{{ p.user.nick }}">{{ p.user.nick }}</a>:
+                                <div class="message">{{ p.html }}</div>
+                            </div>
                         </div>
                     {% endfor %}
                     {% endautoescape %}
-
-
-
                 </div>
             </div>
-            <div class="messages clearfix">
 
+            <div class="messages clearfix">
                 <div class="row">
                     <form action="/ajax/discuss/message/new" data-remote="true" method="post">
                         <div class="input-group">
@@ -53,12 +47,41 @@
             </div>
         </div>
         <div class="related col-lg-4">
-
+            <form class="form-inline" action="/ajax/discussion/follow" method="post">
+                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"
+                <button class="btn btn-info  ">Follow discussion</button>
+            </form>
+            <h5><code>{{ counters.message_count }}</code> messages </h5>
+            <h5><code>{{ counters.user_count }}</code> users</h5>
+            <h5><code>{{ counters.view_count }}</code> views</h5>
+            <hr />
+            <h4>Related discussions</h4>
+            <ul>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+                <li>Discussion are an important part of the whole process</li>
+            </ul>
         </div>
+        <div class="clearfix"></div>
     </div>
+<div class="clearfix"></div>
 
 
 </div>
 
 {% endblock %}
+
+{% block script_links %}
+<script src="/static/js/app/discuss.js?ts={{ cache_buster }}" ></script>
+{% endblock %}
+
 

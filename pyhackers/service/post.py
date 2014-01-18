@@ -35,26 +35,4 @@ def new_post(text, code=None, current_user_id=None, post_id=None, user_nick=None
     message.save()
     Event.message(current_user_id, message.id, None)
 
-    #m = Message()
-    #m.id = post_id  #or idgen_client.get()
-    #m.user_id = current_user_id
-    #m.user_nick = user_nick
-    #m.content = message
-    #m.content_html = code
-    #
-    #db.session.add(m)
-    #success = False
-    #
-    #try:
-    #    db.session.commit()
-    #    success = True
-    #except Exception, ex:
-    #    logging.error(ex)
-
-    #if success:
-
-
-    #else:
     #    logging.warn("Misery sinks in...")
-
-        # Push the post to all of the User's Followers

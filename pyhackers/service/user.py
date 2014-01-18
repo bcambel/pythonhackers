@@ -132,7 +132,14 @@ def user_list_from_ids(ids, dict=True):
         return temp_user
 
 
+def load_user_profiles(user_ids):
+    return list(CsUser.objects.filter(id__in=user_ids).allow_filtering())
+
+
 def load_user(user_id, current_user=None):
+    """
+    Loads all the details about the user including Followers/Following/OpenSource projects list.
+    """
     logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
 

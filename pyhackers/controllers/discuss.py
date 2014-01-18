@@ -20,9 +20,9 @@ def top():
 @discuss_app.route('<regex(".+"):slug>/<regex(".+"):id>')
 def discussion_ctrl(slug, id):
     discussion_data = load_discussion(slug, id)
-    discussion, disc_posts, message = discussion_data
+    discussion, disc_posts, message, counters = discussion_data
 
-    return render_base_template("discussion.html", discussion=discussion,message=message, posts=disc_posts)
+    return render_base_template("discussion.html", discussion=discussion, message=message, posts=disc_posts, counters=counters)
 
 
 @discuss_app.route('new', methods=('GET', 'POST'))
