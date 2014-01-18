@@ -8,26 +8,36 @@ from pyhackers.utils import markdown_to_html
 from slugify import slugify
 
 
-def load_discussion(slug, id):
-    discussion = Discussion.objects.get(id=id)
-
-    # FIXME: Here we only get 100 records right now. No Sorting, paging, nothing. Too bad!
-    disc_post_lists = [(p.post_id, p.user_id) for p in DiscussionPost.objects.filter(disc_id=id).limit(100)]
+def load_discussion(slug, discussion_id):
+    discussion, disc_posts, users = discussion_messages(discussion_id)
     message = Post.objects.get(id=discussion.post_id)
-    counters = DiscussionCounter.get(id=id)
+    counters = DiscussionCounter.get(id=discussion_id)
+
+    return discussion, disc_posts, message, counters
+
+
+def discussion_messages(discussion_id, after_message_id=None, limit=100):
+
+    discussion = Discussion.objects.get(id=discussion_id)
+    if after_message_id:
+        post_filter = DiscussionPost.objects.filter(disc_id=discussion_id,
+                                                    post_id__gt=after_message_id)
+    else:
+        post_filter = DiscussionPost.objects.filter(disc_id=discussion_id)
+
+    #FIXME: Here we only get 100 records right now. No Sorting, paging, nothing. Too bad!
+    disc_post_lists = [(p.post_id, p.user_id) for p in post_filter.limit(limit)]
     post_ids = list(set([x[0] for x in disc_post_lists]))
     user_ids = list(set([x[1] for x in disc_post_lists]))
     users = load_user_profiles(user_ids)
 
     disc_posts = load_posts(post_ids)
-
     for post in disc_posts:
         u = filter(lambda x: x.id == post.user_id, users)
 
         post.user = u[0] if u is not None else None
 
-    return discussion, disc_posts, message, counters
-
+    return discussion, disc_posts, users
 
 def new_discussion(title, text, current_user_id=None):
     disc_id = idgen_client.get()

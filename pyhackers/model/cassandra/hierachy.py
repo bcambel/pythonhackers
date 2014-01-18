@@ -46,6 +46,23 @@ class Post(MBase):
 
     published_at = columns.DateTime(default=dt.utcnow())
 
+    def to_dict(self):
+        return {'id': self.id,
+                'text': self.text,
+                'html': self.html,
+                'user_id': self.user_id,
+                'user_nick': self.user_nick,
+                'reply_to_id': self.reply_to_id,
+                'reply_to_uid': self.reply_to_uid,
+                'reply_to_nick': self.reply_to_nick,
+                'discussion_id': self.discussion_id,
+                'channel_id' : self.channel_id,
+                'spam' : self.spam,
+                'flagged': self.flagged,
+                'deleted': self.deleted,
+                'published_at': self.published_at
+        }
+
 
 class Project(MBase):
     id = columns.Integer(primary_key=True)
@@ -94,6 +111,12 @@ class Discussion(MBase):
     user_id = columns.Integer()
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
+
+    def to_dict(self):
+        return {'id': self.id,
+                'title': self.title,
+                'user_id': self.user_id,
+                'post_id': self.post_id}
 
 
 class DiscussionPost(MBase):

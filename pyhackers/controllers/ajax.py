@@ -2,7 +2,7 @@ from flask import request, jsonify, Blueprint, logging
 from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
-from pyhackers.service.discuss import new_discussion_message
+from pyhackers.service.discuss import new_discussion_message, discussion_messages
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user
 
@@ -53,7 +53,8 @@ def new_discussion_message_ctrl():
 
     return jsonify({'id': message_id})
 
-@ajax_app.route('discuss/<regex(".+"):id>/messages', methods=('GET',))
-def discussion_messages(id):
-
-    return jsonify({'id': id})
+@ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
+def discussion_messages_ctrl(discussion_id):
+    _ = discussion_messages(discussion_id, after_message_id=277294772324926460)
+    discussion, disc_posts, users = _
+    return jsonify({'discussion': discussion.to_dict(), 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})
