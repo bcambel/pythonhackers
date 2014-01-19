@@ -9,82 +9,110 @@
 
                 <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}"><h3>{{ discussion.title }}</h3></a>
 
-                <form class="form-inline " action="/ajax/discussion/delete" method="post">
-                    <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}" />
-                    <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
-                </form>
-                {{ discussion.published_at }}
                 <hr/>
 
-                <div class="clearfix">
+                <div class="linklist links clearfix">
                     {% autoescape off %}
                     {{ message.html }}
-                    <hr />
-                    {% for p in posts %}
+                    <hr/>
+                    <div class="messages clearfix">
                         <div class="clearfix">
-                            <div>
-                                <a href="/user/{{ p.user.nick }}">{{ p.user.nick }}</a>:
-                                <div class="message">{{ p.html }}</div>
+                            <form class="form-inline" action="/ajax/discuss/message/new" data-remote="true" method="post">
+                                <div class="input-group">
+                                    <textarea name='text' class="form-control input" rows="1"
+                                              placeholder="An awesome reply is waiting here"></textarea>
+                                    <input type="hidden" name="id" value="{{ discussion.id }}"/>
+
+                                    <span class="input-group-btn">
+                                        <button class="pull-right btn btn-default">Post</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr/>
+                    {% for p in posts %}
+                        <div class='row message-container'>
+                            <div class='front-action col-lg-2'>
+                                <i class='fa fa-arrow-up fa-2x'></i>
+                                <span class="label"> 1 </span>
+                            </div>
+                            <div class='col-lg-10 link-box' style="padding-left:0;">
+                                <div class='clear link-container row'>
+                                    <div class='col-lg-11'>
+                                        <div class="message">
+                                            {{ p.html }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row' style="padding-top:5px;">
+                                    <div class='col-lg-5'>
+                                        <a href="#post" class="link-discuss">{{ p.ago }}m</a>
+                                        {#<a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>#}
+                                        <a href="/user/{{ p.user.nick }}">@{{ p.user.nick }}</a>
+                                    </div>
+
+                                    <div class="col-6" style="text-align: right">
+                                        <a href="#/tag/flask" class='tag' style="">
+                                            <span class="">#Flask</span>
+                                        </a>
+                                        <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
-                        <hr />
                     {% endfor %}
                     {% endautoescape %}
                 </div>
             </div>
 
-            <div class="messages clearfix">
-                <div class="row">
-                    <form action="/ajax/discuss/message/new" data-remote="true" method="post">
-                        <div class="input-group">
-                            <textarea name='text' class="form-control input-lg" rows="1"
-                                      placeholder="An awesome reply is waiting here"></textarea>
-                            <input type="hidden" name="id" value="{{ discussion.id }}"/>
-                            <span class="input-group-btn">
-                            <button class="pull-right btn btn-primary btn-lg">Post</button>
-                                </span>
-                        </div>
-                    </form>
-                </div>
 
-
-            </div>
             <div class="footer">
 
             </div>
         </div>
         <div class="related col-lg-4">
-        <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
-            <hr />
-        <div class="clearfix">
+            <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
 
-            <form class="form-inline pull-left" action="/ajax/discussion/follow" method="post" style="margin-right:10px;">
-                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}" />
-                <button class="btn btn-info  ">Follow discussion</button>
-                <button class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Following</button>
+            <form class="form-inline " action="/ajax/discussion/delete" method="post">
+                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
+                <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
             </form>
+            {{ discussion.published_at }}
+            <hr/>
+
+            <div class="clearfix">
+
+                <form class="form-inline pull-left" action="/ajax/discussion/follow" method="post"
+                      style="margin-right:10px;">
+                    <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
+                    <button class="btn btn-info  ">Follow discussion</button>
+                    <button class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Following</button>
+                </form>
 
             </div>
 
-            <hr />
+            <hr/>
             <h5><code>{{ counters.message_count }}</code> messages </h5>
             <h5><code>{{ counters.user_count }}</code> users</h5>
             <h5><code>{{ counters.view_count }}</code> views</h5>
-            <hr />
+            <hr/>
             <h4>Related discussions</h4>
             <ul>
                 {% for rel in related_discussions %}
                     <li>
-                    <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
-                        {{ rel.title }}
-                    </a>
+                        <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
+                            {{ rel.title }}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="clearfix"></div>
     </div>
-<div class="clearfix"></div>
+    <div class="clearfix"></div>
 
 
 </div>
@@ -92,7 +120,7 @@
 {% endblock %}
 
 {% block script_links %}
-<script src="/static/js/app/discuss.js?ts={{ cache_buster }}" ></script>
+    <script src="/static/js/app/discuss.js?ts={{ cache_buster }}"></script>
 {% endblock %}
 
 

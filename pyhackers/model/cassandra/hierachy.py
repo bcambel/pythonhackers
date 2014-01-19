@@ -60,8 +60,7 @@ class Post(MBase):
                 'spam' : self.spam,
                 'flagged': self.flagged,
                 'deleted': self.deleted,
-                'published_at': self.published_at
-        }
+                'published_at': self.published_at}
 
 
 class Project(MBase):

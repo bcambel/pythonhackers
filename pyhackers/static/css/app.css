@@ -9,7 +9,24 @@ div#page-wrap {
     min-height: 100%;
     position: relative;
 }
+.navbar {
+    min-height:30px;
+}
+.message{
+    max-height: 69px;
+    overflow-y:hidden;
+}
+.message-container{
+    border-bottom: 1px solid #d3d3d3;
+}
+.footer ul li {
+    margin-right:20px;
+}
 
+.navbar .navbar-brand,.navbar ul li a{
+    padding-top:10px;
+    padding-bottom: 10px;
+}
 #body {
     padding-bottom: 85px; /* height of footer */
 }
@@ -72,7 +89,7 @@ a:hover {
 }
 
 .links {
-    padding-left:50px;
+    /*padding-left:50px;*/
 }
 
 .bs-masthead .lead {
@@ -93,7 +110,6 @@ a:hover {
 .link-box {
     margin-bottom: 10px;
     padding-bottom: 7px;
-    border-bottom: 1px solid #d3d3d3;
     padding-right: 0;
     margin-left: 65px;
 }

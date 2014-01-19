@@ -8,6 +8,7 @@ from pyhackers.utils import markdown_to_html
 
 from slugify import slugify
 
+from datetime import datetime as dt
 
 def load_discussions():
     discussions = Discussion.objects.all().limit(50)
@@ -65,6 +66,7 @@ def new_discussion(title, text, current_user_id=None):
     d.post_id = post_id
     d.message_count = 1
     d.title = title
+    d.published_at = dt.utcnow()
     d.user_count = 1
     d.users = {current_user_id}
     d.slug = slug
