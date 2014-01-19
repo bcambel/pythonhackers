@@ -1,4 +1,5 @@
 import logging
+from cqlengine.query import DoesNotExist
 from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter
 from pyhackers.service.post import new_post, load_posts
@@ -8,10 +9,19 @@ from pyhackers.utils import markdown_to_html
 from slugify import slugify
 
 
+def load_discussions():
+    discussions = Discussion.objects.all().limit(50)
+
+    return discussions
+
+
 def load_discussion(slug, discussion_id):
     discussion, disc_posts, users, counters = discussion_messages(discussion_id)
-    message = Post.objects.get(id=discussion.post_id)
 
+    try:
+        message = Post.objects.get(id=discussion.post_id)
+    except DoesNotExist:
+        message = {}
 
     return discussion, disc_posts, message, counters
 
@@ -36,7 +46,10 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100):
         u = filter(lambda x: x.id == post.user_id, users)
 
         post.user = u[0] if u is not None else None
-    counters = DiscussionCounter.get(id=discussion_id)
+    try:
+        counters = DiscussionCounter.get(id=discussion_id)
+    except DoesNotExist:
+        counters = { 'message_count': 1, 'user_count': 1, 'view_count': 0 }
 
     return discussion, disc_posts, users, counters
 

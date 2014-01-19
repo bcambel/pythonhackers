@@ -6,6 +6,12 @@
         <h1>Discussions</h1>
 
         <div class="col-lg-8 col-lg-offset-2">
+            {% for dis in discussions %}
+                <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
+                    {{ dis.title }}
+                </a>
+            {% endfor %}
+
         <form class="form-horizontal" method="post" action="/discuss/new" >
             <div class="form-group">
                 <label>Title</label>

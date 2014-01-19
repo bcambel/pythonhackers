@@ -103,7 +103,6 @@ class DiscussionCounter(MBase):
     user_count = columns.Counter()
     view_count = columns.Counter()
 
-
     def to_dict(self):
         return {
             'message_count': self.message_count,
@@ -121,13 +120,15 @@ class Discussion(MBase):
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
     last_message = columns.BigInt()
+    published_at = columns.DateTime(default=dt.utcnow())
 
     def to_dict(self):
         return {'id': self.id,
                 'title': self.title,
                 'user_id': self.user_id,
                 'post_id': self.post_id,
-                'last_message': self.last_message
+                'last_message': self.last_message,
+                'published_at' : self.published_at
                 }
 
 

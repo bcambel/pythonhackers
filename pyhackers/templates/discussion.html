@@ -8,19 +8,26 @@
             <div class="header">
 
                 <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}"><h3>{{ discussion.title }}</h3></a>
-                <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
+
+                <form class="form-inline " action="/ajax/discussion/delete" method="post">
+                    <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}" />
+                    <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
+                </form>
+                {{ discussion.published_at }}
                 <hr/>
 
-                <div class="">
+                <div class="clearfix">
                     {% autoescape off %}
                     {{ message.html }}
+                    <hr />
                     {% for p in posts %}
-                        <div class="row">
+                        <div class="clearfix">
                             <div>
                                 <a href="/user/{{ p.user.nick }}">{{ p.user.nick }}</a>:
                                 <div class="message">{{ p.html }}</div>
                             </div>
                         </div>
+                        <hr />
                     {% endfor %}
                     {% endautoescape %}
                 </div>
@@ -47,28 +54,32 @@
             </div>
         </div>
         <div class="related col-lg-4">
-            <form class="form-inline" action="/ajax/discussion/follow" method="post">
-                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"
+        <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
+            <hr />
+        <div class="clearfix">
+
+            <form class="form-inline pull-left" action="/ajax/discussion/follow" method="post" style="margin-right:10px;">
+                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}" />
                 <button class="btn btn-info  ">Follow discussion</button>
+                <button class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Following</button>
             </form>
+
+            </div>
+
+            <hr />
             <h5><code>{{ counters.message_count }}</code> messages </h5>
             <h5><code>{{ counters.user_count }}</code> users</h5>
             <h5><code>{{ counters.view_count }}</code> views</h5>
             <hr />
             <h4>Related discussions</h4>
             <ul>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
-                <li>Discussion are an important part of the whole process</li>
+                {% for rel in related_discussions %}
+                    <li>
+                    <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
+                        {{ rel.title }}
+                    </a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div class="clearfix"></div>

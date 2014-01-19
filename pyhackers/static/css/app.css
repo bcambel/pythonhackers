@@ -1,7 +1,10 @@
 html, body {
     height: 100%
 }
-
+ul{
+    list-style-type: none;
+    padding-left:0;
+}
 div#page-wrap {
     min-height: 100%;
     position: relative;
