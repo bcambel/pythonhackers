@@ -12,7 +12,7 @@
     }
 
     Discuss.prototype.init = function() {
-      return window.setInterval(this.reload, 3000);
+      return window.setInterval(this.reload, 10000);
     };
 
     Discuss.prototype.reload = function() {

@@ -56,8 +56,8 @@ class Post(MBase):
                 'reply_to_uid': self.reply_to_uid,
                 'reply_to_nick': self.reply_to_nick,
                 'discussion_id': self.discussion_id,
-                'channel_id' : self.channel_id,
-                'spam' : self.spam,
+                'channel_id': self.channel_id,
+                'spam': self.spam,
                 'flagged': self.flagged,
                 'deleted': self.deleted,
                 'published_at': self.published_at}
@@ -68,6 +68,30 @@ class Project(MBase):
     name = columns.Text()
 
     #follower_count = columns.Counter
+
+
+class TopicCounter(MBase):
+    id = columns.Integer(primary_key=True)
+    views = columns.Counter()
+    discussions = columns.Counter()
+    messages = columns.Counter()
+
+
+class Topic(MBase):
+    id = columns.Integer(primary_key=True)
+    slug = columns.Text()
+    name = columns.Text()
+    description = columns.Text()
+    last_message_id = columns.BigInt(required=False)
+    last_message_time = columns.DateTime(default=dt.utcnow())
+    main_topic = columns.Boolean(default=False)
+    parent_topic = columns.Integer(required=False)
+    subtopics = columns.Set(value_type=columns.Integer)
+
+
+class TopicDiscussion(MBase):
+    topic_id = columns.Integer(primary_key=True, required=False)
+    discussion_id = columns.BigInt(primary_key=True, required=False)
 
 
 class Channel(MBase):
@@ -120,6 +144,7 @@ class Discussion(MBase):
     post_id = columns.BigInt()
     last_message = columns.BigInt()
     published_at = columns.DateTime(default=dt.utcnow())
+    topic_id = columns.Integer(required=False)
 
     def to_dict(self):
         return {'id': self.id,
@@ -127,8 +152,9 @@ class Discussion(MBase):
                 'user_id': self.user_id,
                 'post_id': self.post_id,
                 'last_message': self.last_message,
-                'published_at' : self.published_at
-                }
+                'published_at': self.published_at,
+                'topic_id': self.topic_id,
+        }
 
 
 class DiscussionPost(MBase):

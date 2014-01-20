@@ -3,26 +3,111 @@
 {% block content %}
 
     <div class="container">
-        <h1>Discussions</h1>
+    <h1>Discussions</h1>
+    <div class="row-fluid">
 
-        <div class="col-lg-8 col-lg-offset-2">
+        <div class="col-lg-8">
+
+
+            <div class=" discussions">
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>General</h3>
+                        <a href="/discuss/topic/python">See all</a>
+                    </div>
+
+                    <p>General discussions about Python</p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Flask </h3>
+                        <a href="/discuss/topic/flask">See all</a>
+                    </div>
+
+
+                    <p>Talk about awesome Flask</p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Django</h3>
+                        <a href="/discuss/topic/flask">See all</a>
+                    </div>
+                    <p>Talk about awesome Django</p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>SQLAlchemy</h3>
+                        <a href="/discuss/topic/flask">See all</a>
+                    </div>
+                    <p>All your database operation</p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Tornado</h3>
+                        <a href="/discuss/topic/tornado">See all</a>
+                    </div>
+                    <p>Lighting Python Web Server and Framework</p>
+                </div>
+
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Celery</h3>
+                        <a href="/discuss/topic/celery">See all</a>
+                    </div>
+                    <p>
+                        Your tasks in Celery's hand
+                    </p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Plone</h3>
+                        <a href="/discuss/topic/plone">See all</a>
+                    </div>
+                    <p>
+                        Best CMS for Python
+                    </p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>Pandas</h3>
+                        <a href="/discuss/topic/pandas">See all</a>
+                    </div>
+                    <p>
+                        Data science
+                    </p>
+                </div>
+                <div class="col-lg-6 topic row-fluid">
+                    <div class="col-lg-12 header">
+                        <h3>NumPy & SciPy</h3>
+                        <a href="/discuss/topic/numpy-scipy">See all</a>
+                    </div>
+                    <p>
+                        Master of numbers, mathematics, data
+                    </p>
+                </div>
+            </div>
+        </div>
+         <div class="col-lg-4">
             {% for dis in discussions %}
                 <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
                     {{ dis.title }}
                 </a>
             {% endfor %}
 
-        <form class="form-horizontal" method="post" action="/discuss/new" >
-            <div class="form-group">
-                <label>Title</label>
-                <input type='text' class="form-control input-lg" name="title"/>
-            </div>
-            <div class="form-group">
-                <textarea rows="5" class="form-control" name="text"></textarea>
-            </div>
-            <button type="submit" class="form-control btn-primary">Start Discussion</button>
-        </form>
+            <form class="form-horizontal" method="post" action="/discuss/new">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type='text' class="form-control input-lg" name="title"/>
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" class="form-control" name="text"></textarea>
+                </div>
+                <button type="submit" class="form-control btn-primary">Start Discussion</button>
+            </form>
         </div>
+        {#        <div class="col-lg-8 col-lg-offset-2">#}
+        {#            #}
+        {#        </div>#}
     </div>
 
 {% endblock %}

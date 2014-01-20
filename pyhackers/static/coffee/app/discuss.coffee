@@ -6,7 +6,7 @@ class @Discuss
         console.log "Discussion started #{@discussion_id}"
 
     init: () =>
-        window.setInterval(@reload, 3000)
+        window.setInterval(@reload, 10000)
 
     reload: () =>
         @discussion_id

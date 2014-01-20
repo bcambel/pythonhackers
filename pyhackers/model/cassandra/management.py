@@ -35,6 +35,11 @@ def create(cassa_key_space='pyhackers'):
     sync_table(ChannelFollower)
     sync_table(ChannelTimeLine)
 
+    # Topic Related Topics
+    sync_table(Topic)
+    sync_table(TopicCounter)
+    sync_table(TopicDiscussion)
+
     # Project Related
     sync_table(ProjectFollower)
     sync_table(ProjectTimeLine)
