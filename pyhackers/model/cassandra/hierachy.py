@@ -2,6 +2,8 @@ import uuid
 from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
+import time
+from pyhackers.common import unix_time
 
 
 class MBase(Model):
@@ -47,7 +49,7 @@ class Post(MBase):
     published_at = columns.DateTime(default=dt.utcnow())
 
     def to_dict(self):
-        return {'id': self.id,
+        return {'id': unicode(self.id),
                 'text': self.text,
                 'html': self.html,
                 'user_id': self.user_id,
@@ -60,7 +62,24 @@ class Post(MBase):
                 'spam': self.spam,
                 'flagged': self.flagged,
                 'deleted': self.deleted,
-                'published_at': self.published_at}
+                'published_at': self.published_at,
+                'ago': self.ago,
+                }
+
+    @property
+    def ago(self):
+        result = int(int(int(time.time() - unix_time(self.published_at, float=True))) / 60.0)
+        abb = "m"
+
+        if result > (60*24):
+            result /= (60*24)
+            abb = "d"
+
+        if result > 60:
+            result /= 60
+            abb = "h"
+
+        return "{}{} ago".format(result, abb)
 
 
 class Project(MBase):
@@ -151,7 +170,7 @@ class Discussion(MBase):
                 'title': self.title,
                 'user_id': self.user_id,
                 'post_id': self.post_id,
-                'last_message': self.last_message,
+                'last_message': unicode(self.last_message),
                 'published_at': self.published_at,
                 'topic_id': self.topic_id,
         }

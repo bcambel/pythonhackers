@@ -8,11 +8,13 @@
       this.reload = __bind(this.reload, this);
       this.init = __bind(this.init, this);
       this.lastMessage = null;
+      this.template = window.Handlebars.compile($.trim($("#message-template").html()));
       console.log("Discussion started " + this.discussion_id);
     }
 
     Discuss.prototype.init = function() {
-      return window.setInterval(this.reload, 10000);
+      window.setInterval(this.reload, 10000);
+      return this.reload();
     };
 
     Discuss.prototype.reload = function() {
@@ -23,7 +25,10 @@
         after_id: this.lastMessage || -1
       }, function(data) {
         console.log(data);
-        return _this.lastMessage = data.discussion.last_message;
+        _this.lastMessage = data.discussion.last_message;
+        return $(".posts").append(_this.template({
+          message: data.posts
+        }));
       });
     };
 

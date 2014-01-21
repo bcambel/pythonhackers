@@ -32,4 +32,36 @@
     {{/each }}
 </script>
 
+<script type="text/x-handlebars-template" id="message-template">
+    {{#each message }}
+     <div class='row message-container'>
+        <div class='front-action col-lg-2'>
+            <i class='fa fa-arrow-up fa-2x'></i>
+            <span class="label"> 1 </span>
+        </div>
+        <div class='col-lg-10 link-box' style="padding-left:0;">
+            <div class='clear link-container row'>
+                <div class='col-lg-11'>
+                    <div class="message">
+                        {{{ html }}}
+                    </div>
+                </div>
+            </div>
+            <div class='row' style="padding-top:5px;">
+                <div class='col-lg-5'>
+                    <a href="#post" class="link-discuss">{{ ago }}</a>
+                    <a href="/user/{{ user.nick }}">@{{ user.nick }}</a>
+                </div>
+
+                <div class="col-6" style="text-align: right">
+                    <a href="#/tag/flask" class='tag' style="">
+                        <span class="">#Flask</span>
+                    </a>
+                    <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
 {% endraw %}

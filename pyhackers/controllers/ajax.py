@@ -55,7 +55,12 @@ def new_discussion_message_ctrl():
 
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
 def discussion_messages_ctrl(discussion_id):
-    _ = discussion_messages(discussion_id, after_message_id=277294772324926460)
+    after_id = request.args.get("after_id", -1)
+    try:
+        after_id = int(after_id)
+    except:
+        after_id = -1
+    _ = discussion_messages(discussion_id, after_message_id=after_id)
     discussion, disc_posts, users, counters = _
     discussion_dict = discussion.to_dict()
     discussion_dict.update(**counters.to_dict())

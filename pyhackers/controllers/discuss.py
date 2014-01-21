@@ -27,7 +27,7 @@ def discussion_ctrl(slug, id):
     related_discussions = load_discussions()
     return render_base_template("discussion.html", discussion=discussion,
                                 message=message,
-                                posts=disc_posts,
+                                posts=[],
                                 counters=counters,
                                 related_discussions=related_discussions,
                                 )
