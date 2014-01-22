@@ -127,27 +127,15 @@
     <script src="/static/js/app/main.js?_={{ cache_buster }}"></script>
 {#    <script src="/static/js/app/message.js?_={{ cache_buster }}"></script>#}
 
-    {% block script_links %}{% endblock %}
-
-   
-        {% include "3rd_party.html" %}
-
 
     {% include "mailchimp_form.html" %}
+    {% block script_links %}{% endblock %}
 
+    {% include "3rd_party.html" %}
     <script>
-
-        {% block scripts %}{% endblock %}
-        {% autoescape off %}
-
-        var session = {{ user_json }};
-        {#    document.getElementById("profile_link").innerHTML = "Welcome, " + session.user.nick;#}
-        {% endautoescape %}
-
+{% block scripts %}{% endblock %}
+{% autoescape off %}var session = {{ user_json }};{% endautoescape %}
     </script>
-
-
-
 </div>
 </body>
 </html>

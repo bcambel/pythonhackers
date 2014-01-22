@@ -215,7 +215,7 @@ def fancy_os_list():
 
 
 @main_app.route('/top-python-contributors-developers')
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+#@cache.cached(timeout=10000, unless=request_force_non_cache)
 def top_python_dudes():
     return render_template("top-python-developers.html")
 
