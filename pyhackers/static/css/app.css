@@ -11,7 +11,7 @@ div#page-wrap {
     padding-bottom: 85px; /* height of footer */
 }
 
-#body #main .container{
+#body #main .container, #body #main .container-fluid{
     background-color:white;
     border-radius: 5px;
     /*padding-left:50px;*/

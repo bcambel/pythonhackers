@@ -214,6 +214,11 @@ def fancy_os_list():
     return render_template('project_frame.html', projects=[])
 
 
+@main_app.route('/top-python-developers')
+#@cache.cached(timeout=10000, unless=request_force_non_cache)
+def top_python_dudes():
+    return render_template("top-python-developers.html")
+
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
