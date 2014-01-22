@@ -171,9 +171,10 @@ def project_categories():
     return render_base_template("os_list.html", projects=projects)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
 @main_app.route('/open-source/<regex(".+"):nick>/<regex(".+"):project>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def os(nick, project):
     """Display the details of a open source project"""
     project = project[:-1] if project[-1] == "/" else project
@@ -213,11 +214,11 @@ def fancy_os_list():
     return render_template('project_frame.html', projects=[])
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
 @main_app.route('/top-python-projects/')
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 def os_list():
     path = request.path
     if "open-source" in path:
@@ -233,8 +234,9 @@ def os_list():
     return render_base_template("os_list.html", projects=projects, canonical=canonical)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/python-packages/<regex(".+"):package>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def package_details(package):
     package_obj = Package.query.get(package)
     if package_obj is None:
@@ -249,8 +251,9 @@ def package_details(package):
     return render_base_template("package.html", package=package_obj, description=description)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/python-packages/')
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 def package_list():
     packages = Package.query.order_by(Package.mdown.desc()).limit(1000)
 
@@ -317,8 +320,9 @@ def channel(name):
 
 #from itertools import repeat
 
-@cache.memoize(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/user/<regex(".+"):nick>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def user_profile(nick):
     _ = get_profile_by_nick(nick)
     if _ is not None:
@@ -338,6 +342,7 @@ def find_tutorial(slug):
 
 
 @main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):slug>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def tutorial(nick, slug):
     return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, slug)))
 
