@@ -22,6 +22,7 @@ PyGithub==1.17.0
 Pygments==1.6
 SQLAlchemy==0.8.2
 Twisted==13.2.0
+Unidecode==0.04.14
 WTForms==1.0.4
 Werkzeug==0.9.3
 alembic==0.6.0
@@ -54,6 +55,7 @@ psycopg2==2.5.1
 pycrypto==2.6
 python-dateutil==2.1
 python-memcached==1.53
+python-slugify==0.0.7
 pytz==2013b
 rauth==0.6.1
 raven==3.4.1
