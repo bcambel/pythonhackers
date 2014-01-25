@@ -5,6 +5,7 @@
   this.Discuss = (function() {
     function Discuss(discussion_id) {
       this.discussion_id = discussion_id;
+      this.discussDialog = __bind(this.discussDialog, this);
       this.reload = __bind(this.reload, this);
       this.init = __bind(this.init, this);
       this.lastMessage = null;
@@ -13,14 +14,16 @@
     }
 
     Discuss.prototype.init = function() {
+      if (this.discussion_id == null) {
+        return;
+      }
       window.setInterval(this.reload, 10000);
       return this.reload();
     };
 
     Discuss.prototype.reload = function() {
       var _this = this;
-      this.discussion_id;
-      return $.getJSON('/ajax/discuss/' + this.discussion_id + '/messages', {
+      return $.getJSON('/ajax/discuss/#{@discussion_id}/messages', {
         _: new Date().getTime(),
         after_id: this.lastMessage || -1
       }, function(data) {
@@ -32,6 +35,13 @@
       });
     };
 
+    Discuss.prototype.discussDialog = function() {
+      var $template;
+      $template = $($("#discuss-template").html());
+      $(body).append($template);
+      return $template.modal();
+    };
+
     return Discuss;
 
   })();
@@ -39,7 +49,8 @@
   $(function() {
     var discuss;
     discuss = new Discuss($("#discussion_id").val());
-    return discuss.init();
+    discuss.init();
+    return $(document).on('click', '[href="#discuss-dialog"]', discuss.discussDialog);
   });
 
 }).call(this);

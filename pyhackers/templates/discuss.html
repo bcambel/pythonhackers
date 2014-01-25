@@ -88,22 +88,13 @@
             </div>
         </div>
          <div class="col-lg-4">
+            <a href="#discuss-dialog" class="btn btn-primary">Start a discussion</a>
             {% for dis in discussions %}
                 <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
                     {{ dis.title }}
                 </a>
             {% endfor %}
 
-            <form class="form-horizontal" method="post" action="/discuss/new">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type='text' class="form-control input-lg" name="title"/>
-                </div>
-                <div class="form-group">
-                    <textarea rows="5" class="form-control" name="text"></textarea>
-                </div>
-                <button type="submit" class="form-control btn-primary">Start Discussion</button>
-            </form>
         </div>
         {#        <div class="col-lg-8 col-lg-offset-2">#}
         {#            #}

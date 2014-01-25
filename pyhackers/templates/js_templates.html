@@ -32,6 +32,51 @@
     {{/each }}
 </script>
 
+<script type="text/x-handlebars-template" id="discuss-template">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <form class="form-horizontal" method="post" action="/discuss/new">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">What you want to talk about?</h4>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+                <label>Title</label>
+                <input type='text' class="form-control" name="title"/>
+            </div>
+            <div class="form-group">
+                <textarea rows="5" class="form-control" name="text"></textarea>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="form-control btn-primary">Start Discussion</button>
+      </div>
+    </div></form>
+  </div>
+</div>
+
+</script>
+<script type="text/x-handlebars-template" id="modal-template">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
 <script type="text/x-handlebars-template" id="message-template">
     {{#each message }}
      <div class='row message-container'>
@@ -61,4 +106,5 @@
     </div>
     {{/each}}
 </script>
+
 {% endraw %}
