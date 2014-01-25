@@ -93,20 +93,6 @@
     },
     mixevents: function() {
       var _this = this;
-      $(document).on('click', 'a', function(evt) {
-        var hashtag, href;
-        href = $(evt.currentTarget).attr('href');
-        hashtag = href[0] === "#";
-        _this.dog.click(href, hashtag);
-        if (hashtag) {
-          return;
-        }
-        evt.stopPropagation();
-        evt.preventDefault();
-        return window.setTimeout(function() {
-          return document.location = href;
-        }, 200);
-      });
       return _.defer(function() {
         return _this.dog.view();
       });

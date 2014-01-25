@@ -1,5 +1,5 @@
 import logging
-from flask import request, jsonify, Blueprint, redirect
+from flask import request, jsonify, Blueprint, redirect, abort, make_response
 from flask.ext.login import login_required, current_user
 from pyhackers.cache import cache
 from pyhackers.helpers import render_template, render_base_template, current_user_id
@@ -32,6 +32,10 @@ def discussion_ctrl(slug, id):
                                 related_discussions=related_discussions,
                                 )
 
+@discuss_app.route('topic/<regex(".+"):slug>')
+def discuss_topic_ctrl(slug):
+    response = make_response("ok")
+    return response
 
 @discuss_app.route('new', methods=('GET', 'POST'))
 @login_required

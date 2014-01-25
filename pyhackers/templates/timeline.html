@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="links container">
+        <div id='timeline' class="col-lg-10 linklist row">
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    $(function(){
+    var $template = window.Handlebars.compile($("#message-template").html());
+    var msgs = [
+        {
+        user: {nick: 'bcambel'},
+        ago:'34m ago',
+        html: '<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Daniel Greenfield</a> wrote a blog post&nbsp;'+
+            '<a class="link" href="http://pydanny.com/awesome-slugify-human-readable-url-slugs-from-any-string.html">awesome-slugify: Human-readable URL slugs from any string</a>',
+        },{
+        user: {nick: 'bcambel'},
+        ago:'34m ago',
+        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;<a class="link" href="">Django</a> has a new release&nbsp;' +
+            '<a class="link" href="https://github.com/django/django/releases/tag/1.7a1">1.7a1: Tag 1.7a1</a>'
+        },
+        {
+        user: {nick: 'progrium'},
+        ago:'19h ago',
+        html: '<i class="fa fa-twitter"></i>&nbsp;<a class="link" href="">Jeff Lindsay</a> SystemsLive podcast with @TimothyFitz talking about Flynn and any other topic you bring up <a href="http://mixlr.com/systemslive/chat" class="link">http://mixlr.com/systemslive/chat</a> '
+        },
+    {
+        user: {nick: 'progrium'},
+        ago:'19h ago',
+        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-plus"></i>&nbsp;<a class="link" href="">Jeff Lindsay</a> created a new repository. <a href="https://github.com/ipython/sloan-2013-reports" class="link">Sloan 2013 Reports</a> '
+        },
+        {
+        user: {nick: 'bcambel'},
+        ago:'34m ago',
+        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<a class="link" href="">jezdez</a> starred&nbsp;' +
+            '<a class="link" href="https://github.com/mailgun/flanker">Mailgun / Flanker</a>'
+        },
+        {
+        user: {nick: 'bcambel'},
+        ago:'34m ago',
+        html:'<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Jesse Noller</a> wrote a blog post&nbsp;'+
+            '<a class="link" href="http://jessenoller.com/blog/2013/4/15/joining-rackspace"> Joining Rackspace</a>'}]
+    $('#timeline').append($template({message: msgs}));
+    });
+{% endblock %}

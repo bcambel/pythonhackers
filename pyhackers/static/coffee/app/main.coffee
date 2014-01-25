@@ -78,23 +78,23 @@ Application = {
 ##            mixpanel.track("signup-popup")
 #        )
 
-        $(document).on('click','a', (evt) =>
-            href = $(evt.currentTarget).attr('href')
-
-            hashtag = href[0] == "#"
-
-            @dog.click(href, hashtag)
-
-            if hashtag
-                return
-
-            evt.stopPropagation()
-            evt.preventDefault()
-
-            window.setTimeout( =>
-                document.location = href
-            , 200)
-        )
+#        $(document).on('click','a', (evt) =>
+#            href = $(evt.currentTarget).attr('href')
+#
+#            hashtag = href[0] == "#"
+#
+#            @dog.click(href, hashtag)
+#
+#            if hashtag
+#                return
+#
+#            evt.stopPropagation()
+#            evt.preventDefault()
+#
+#            window.setTimeout( =>
+#                document.location = href
+#            , 200)
+#        )
 
 
         _.defer( =>  do @dog.view )

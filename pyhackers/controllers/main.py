@@ -257,6 +257,9 @@ def new_message():
 def about():
     return render_base_template("about.html")
 
+@main_app.route("/timeline")
+def timeline():
+    return render_base_template("timeline.html")
 
 @main_app.route("/coding")
 def coding():
