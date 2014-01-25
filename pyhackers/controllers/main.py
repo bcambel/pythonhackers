@@ -188,6 +188,11 @@ def fancy_os_list():
     return render_template('project_frame.html', projects=[])
 
 
+@main_app.route('/top-python-contributors-developers')
+def top_python_dudes():
+    return render_template("top-python-developers.html")
+
+
 @main_app.route('/os')
 @main_app.route('/os/')
 @main_app.route('/open-source/')
@@ -226,8 +231,9 @@ def package_details(package):
     return render_base_template("package.html", package=package_obj, description=description)
 
 
-@cache.cached(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/python-packages/')
+@cache.cached(timeout=10000, unless=request_force_non_cache)
 def package_list():
     packages = Package.query.order_by(Package.mdown.desc()).limit(1000)
 
@@ -296,8 +302,9 @@ def channel(name):
     return render_base_template("channel.html", channel_name=channel_name)
 
 
-@cache.memoize(timeout=10000, unless=request_force_non_cache)
+
 @main_app.route('/user/<regex(".+"):nick>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def user_profile(nick):
     _ = get_profile_by_nick(nick)
     if _ is not None:
@@ -317,6 +324,7 @@ def find_tutorial(slug):
 
 
 @main_app.route('/tutorial/<regex(".+"):nick>/<regex(".+"):slug>')
+@cache.memoize(timeout=10000, unless=request_force_non_cache)
 def tutorial(nick, slug):
     return render_template("tutorial.html", tutorial=find_tutorial("{}/{}".format(nick, slug)))
 
