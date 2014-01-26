@@ -4,6 +4,8 @@
 
 {% block content %}
     <input type="hidden" id="user_nick" value="{{ profile.nick }}" />
+    <input type="hidden" id="active_module" value="{{ module }}" />
+
     <div class='container'>
         <div class='col-lg-3 right-border fullheight'>
             <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
@@ -46,41 +48,11 @@
                 </div>
             </div>
           </div>
-          <div class="tab-pane" id="projects"></div>
+          <div class="tab-pane frame" id="projects">
+
+          </div>
           <div class="tab-pane" id="discussions"></div>
         </div>
-
-            <h4>Following projects</h4>
-            {% for project in os_projects %}
-                <div class='row link-box ositem'>
-                    <div class='row'>
-                        <div class='col-lg-1 number'>
-                            <span class='index'>{{ loop.index }}.</span>
-
-                        </div>
-                        <div class='col-lg-9 info'>
-                            <a class='project' href='/open-source/{{ project.slug }}'>{{ project.name }}</a>
-                            <a href='{{ project.src_url }}' target="_blank">(git)</a>
-                        </div>
-                        <div class="col-lg-1">
-                            {% include "widgets/follow_btn.html" %}
-                        </div>
-                    </div>
-                    <div class='row description'>
-                        <div class='col-lg-1 number'>
-                            <a href="/open-source/{{ project.slug }}" data-toggle="tooltip"
-                               title='{{ project.name }} has <br />{{ project.watchers }} watchers on Github'
-                               data-html='true' data-placement='auto left'>{{ project.watchers }}</a>
-
-                        </div>
-                        <div class='col-lg-11'>
-                            <p>{{ project.description }}</p>
-                        </div>
-                    </div>
-
-                </div>
-            {% endfor %}
-
         </div>
     </div>
 {% endblock %}

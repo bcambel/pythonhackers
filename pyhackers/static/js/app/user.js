@@ -3,29 +3,77 @@
   var User;
 
   User = (function() {
-    User.prototype.template = window.Handlebars.compile($.trim($("#message-template").html()));
+    User.prototype.postTemplate = window.Handlebars.compile($.trim($("#message-template").html()));
 
-    function User(user_nick) {
+    User.prototype.projectTemplate = window.Handlebars.compile($.trim($("#project-template").html()));
+
+    function User(user_nick, activeModule) {
       this.user_nick = user_nick;
+      this.activeModule = activeModule;
       console.log("Initialized");
     }
 
     User.prototype.init = function() {
+      var _this = this;
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        var targetTab;
+        targetTab = $(e.target).attr("href");
+        return _this.loadModule(targetTab, e);
+      });
       console.log("Initialized");
-      return this.loadTimeline();
+      return this.loadModule(this.activeModule);
+    };
+
+    User.prototype.loadModule = function(target, evt) {
+      switch (target) {
+        case "#projects":
+        case "projects":
+          if (evt == null) {
+            $('#projects').addClass("active").siblings().removeClass("active");
+          }
+          return this.loadProjects();
+        case "#timeline-container":
+        case "timeline":
+          return this.loadTimeline();
+        case "#discussions":
+        case "discussions":
+          return this.loadDiscussions();
+        default:
+          return console.log("" + target + " not found");
+      }
+    };
+
+    User.prototype.loadProjects = function() {
+      var $projects,
+        _this = this;
+      $projects = $("#projects");
+      return $.getJSON("/ajax/user/" + this.user_nick + "/projects", {
+        _: new Date().getTime()
+      }, function(data) {
+        console.log(data);
+        return $projects.html(_this.projectTemplate({
+          projects: data.projects
+        }));
+      });
     };
 
     User.prototype.loadTimeline = function() {
-      var _this = this;
+      var $timeline,
+        _this = this;
+      $timeline = $("#timeline");
       return $.getJSON("/ajax/user/" + this.user_nick + "/timeline", {
         _: new Date().getTime(),
         after_id: this.lastMessage || -1
       }, function(data) {
         console.log(data);
-        return $("#timeline").append(_this.template({
+        return $timeline.html(_this.postTemplate({
           message: data.timeline
         }));
       });
+    };
+
+    User.prototype.loadDiscussions = function() {
+      return console.log("Load discussions");
     };
 
     return User;
@@ -33,9 +81,10 @@
   })();
 
   $(function() {
-    var user, user_nick;
+    var activeModule, user, user_nick;
     user_nick = $("#user_nick").val();
-    user = new User(user_nick);
+    activeModule = $("#active_module").val();
+    user = new User(user_nick, activeModule);
     return user.init();
   });
 

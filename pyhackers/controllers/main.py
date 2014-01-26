@@ -128,6 +128,7 @@ def main():
 def timeline():
     return render_base_template("timeline.html")
 
+
 @main_app.route("/links", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
@@ -147,7 +148,6 @@ def project_categories():
         .order_by(OpenSourceProject.watchers.desc()).limit(400)
 
     return render_base_template("os_list.html", projects=projects)
-
 
 
 @main_app.route('/os/<regex(".+"):nick>/<regex(".+"):project>')
@@ -184,7 +184,7 @@ def fancy_json():
     start = int(request.args.get('start', 0))
     projects = load_projects(start)
 
-    return jsonify({'data': [f.jsonable(index=start + i + 1) for i, f in enumerate(projects)]})
+    return jsonify({'data': [f.to_dict(index=start + i + 1) for i, f in enumerate(projects)]})
 
 
 @main_app.route('/fancy/')
@@ -218,7 +218,6 @@ def os_list():
     return render_base_template("os_list.html", projects=projects, canonical=canonical)
 
 
-
 @main_app.route('/python-packages/<regex(".+"):package>')
 @cache.memoize(timeout=10000, unless=request_force_non_cache)
 def package_details(package):
@@ -233,7 +232,6 @@ def package_details(package):
         #description = markdown( package.description, autolink=True)
 
     return render_base_template("package.html", package=package_obj, description=description)
-
 
 
 @main_app.route('/python-packages/')
@@ -303,19 +301,26 @@ def channel(name):
     return render_base_template("channel.html", channel_name=channel_name)
 
 
+@main_app.route('/user/<regex(".+"):nick>/<regex(".+"):module>')
 @main_app.route('/user/<regex(".+"):nick>')
 @cache.memoize(timeout=10000, unless=request_force_non_cache)
-def user_profile(nick):
+def user_profile(nick, module=None):
+    active_module = 'timeline'
+
+    if module is not None:
+        active_module = module if module in ['timeline', 'projects', 'discussions'] else active_module
+
     _ = get_profile_by_nick(nick)
+
     if _ is not None:
-        user, followers, following, os_projects = _
+        user, followers, following = _
     else:
         return abort(404)
 
     return render_base_template("user_profile.html",
                                 profile=user, followers=followers,
                                 following=following,
-                                os_projects=os_projects)
+                                module=active_module)
 
 
 @cache.memoize(timeout=10000, unless=request_force_non_cache)

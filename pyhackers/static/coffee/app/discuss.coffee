@@ -9,6 +9,8 @@ class @Discuss
     init: () =>
         if !@discussion_id?
             return
+
+
         window.setInterval(@reload, 10000)
         do @reload
 

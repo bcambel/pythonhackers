@@ -20,7 +20,7 @@ class OpenSourceProject(db.Model):
     __tablename__ = 'os_project'
 
 
-    def jsonable(self, **kwargs):
+    def to_dict(self, **kwargs):
         result = {
             'id' : unicode(self.id),
             'slug' : unicode(self.slug),

@@ -137,16 +137,13 @@ def load_user(user_id, current_user=None):
     logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
 
-    user_followers, user_following, os_projects = [], [], []
+    user_followers, user_following = [], []
 
     # FIXME: This try/except block is ugly as hell. Refactor please!
     try:
         followers = [f.follower_id for f in UserFollower.filter(user_id=user_id).limit(20)]
         following = [f.following_id for f in UserFollowing.filter(user_id=user_id).limit(20)]
 
-        projects = [p.project_id for p in UserProject.filter(user_id=user_id)]
-        os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).order_by(
-            OpenSourceProject.stars.desc()).all()
         cassa_users = user_list_from_ids(set(followers + following), dict=True)
 
         def expand(o):
@@ -162,7 +159,7 @@ def load_user(user_id, current_user=None):
         logging.warn(ex)
         sentry_client.captureException()
 
-    return user, user_followers, user_following, os_projects
+    return user, user_followers, user_following
 
 
 def get_profile(current_user):
@@ -195,7 +192,22 @@ def get_profile_by_nick(nick):
     return load_user(user.id)
 
 
-def get_user_by_nick(nick):
+def get_user_projects_by_nick(nick):
+    try:
+        user = CsUser.filter(nick=nick).first()
+    except DoesNotExist, dne:
+        user = None
+
+    if user is None:
+        return
+
+    projects = [p.project_id for p in UserProject.filter(user_id=user.id)]
+    os_projects = OpenSourceProject.query.filter(OpenSourceProject.id.in_(projects)).order_by(
+            OpenSourceProject.stars.desc()).all()
+
+    return user, os_projects
+
+def get_user_timeline_by_nick(nick):
     try:
         user = CsUser.filter(nick=nick).first()
     except DoesNotExist, dne:
@@ -207,7 +219,6 @@ def get_user_by_nick(nick):
     posts = [p.post_id for p in UserPost.objects.filter(user_id=user.id).order_by('-post_id').limit(5)]
 
     return user, reversed(load_posts(posts)or [])
-
 
 
 def load_github_data():

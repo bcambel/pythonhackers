@@ -1,10 +1,11 @@
-from flask import request, jsonify, Blueprint, logging
+from flask import request, jsonify, Blueprint
+import logging
 from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
 from pyhackers.service.discuss import new_discussion_message, discussion_messages
 from pyhackers.service.project import project_follow
-from pyhackers.service.user import follow_user, get_user_by_nick
+from pyhackers.service.user import follow_user, get_user_timeline_by_nick, get_user_projects_by_nick
 
 
 ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
@@ -70,10 +71,22 @@ def discussion_messages_ctrl(discussion_id):
     return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})
 
 
+@ajax_app.route('user/<regex(".+"):nick>/projects')
+def user_projects(nick):
+    _ = get_user_projects_by_nick(nick)
+    if _ is None:
+        return jsonify({'user': None})
+
+    user, projects = _
+    start = 0
+
+    return jsonify({'user': user.to_dict(), 'projects': [f.to_dict(index=start + i + 1) for i, f in enumerate(projects)]})
+
+
 @ajax_app.route('user/<regex(".+"):nick>/timeline')
 def user_timeline(nick):
     after_id = request.args.get("after_id", -1)
-    _ = get_user_by_nick(nick)
+    _ = get_user_timeline_by_nick(nick)
     if _ is None:
         return jsonify({'user': None})
 
