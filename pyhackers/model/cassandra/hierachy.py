@@ -138,6 +138,13 @@ class User(MBase):
     registered_at = columns.DateTime(default=dt.utcnow())
     created_at = columns.DateTime(default=dt.utcnow())
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nick': self.nick,
+            'properties': self.extended,
+        }
+
 
 class DiscussionCounter(MBase):
     id = columns.BigInt(primary_key=True)

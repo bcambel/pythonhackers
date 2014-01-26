@@ -3,6 +3,7 @@
 {% from "widgets/user_image_list.html" import image_list_macro %}
 
 {% block content %}
+    <input type="hidden" id="user_nick" value="{{ profile.nick }}" />
     <div class='container'>
         <div class='col-lg-3 right-border fullheight'>
             <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
@@ -31,6 +32,24 @@
 
         </div>
         <div class='col-lg-8 left-border'>
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#timeline-container" data-toggle="tab">Timeline</a></li>
+              <li><a href="#projects" data-toggle="tab">Projects</a></li>
+              <li><a href="#discussions" data-toggle="tab">Discussions</a></li>
+            </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade in active link-container" id="timeline-container">
+              <div class="links container">
+                <div id='timeline' class="linklist row">
+
+                </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="projects"></div>
+          <div class="tab-pane" id="discussions"></div>
+        </div>
+
             <h4>Following projects</h4>
             {% for project in os_projects %}
                 <div class='row link-box ositem'>
@@ -64,4 +83,9 @@
 
         </div>
     </div>
+{% endblock %}
+
+
+{% block script_links %}
+    <script src="/static/js/app/user.js?ts={{ cache_buster }}"
 {% endblock %}

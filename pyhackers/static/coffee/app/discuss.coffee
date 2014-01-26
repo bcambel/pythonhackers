@@ -9,13 +9,12 @@ class @Discuss
     init: () =>
         if !@discussion_id?
             return
-
         window.setInterval(@reload, 10000)
         do @reload
 
     reload: () =>
 
-        $.getJSON('/ajax/discuss/#{@discussion_id}/messages',
+        $.getJSON("/ajax/discuss/#{@discussion_id}/messages",
             {_: new Date().getTime(), after_id: @lastMessage or -1},
             (data) =>
                 console.log(data)
@@ -32,19 +31,10 @@ class @Discuss
         $(body).append($template)
         $template.modal()
 
-#        vex.dialog.open
-#            message: "Start a new discussion"
-#            input:
-#            buttons: [
-#                $.extend({}, vex.dialog.buttons.YES, text: 'Start Discussion')
-#                $.extend({}, vex.dialog.buttons.NO, text: 'Cancel')
-#            ]
-#            callback: (data) ->
-#                return console.log('Cancelled') if data is false
-#                console.log 'Username', data.username, 'Password', data.password
-
 
 $ ->
-    discuss = new Discuss($("#discussion_id").val())
+    discus_id = $("#discussion_id").val()
+
+    discuss = new Discuss(discus_id)
     discuss.init()
     $(document).on 'click', '[href="#discuss-dialog"]', discuss.discussDialog

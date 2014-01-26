@@ -23,7 +23,7 @@
 
     Discuss.prototype.reload = function() {
       var _this = this;
-      return $.getJSON('/ajax/discuss/#{@discussion_id}/messages', {
+      return $.getJSON("/ajax/discuss/" + this.discussion_id + "/messages", {
         _: new Date().getTime(),
         after_id: this.lastMessage || -1
       }, function(data) {
@@ -47,8 +47,9 @@
   })();
 
   $(function() {
-    var discuss;
-    discuss = new Discuss($("#discussion_id").val());
+    var discus_id, discuss;
+    discus_id = $("#discussion_id").val();
+    discuss = new Discuss(discus_id);
     discuss.init();
     return $(document).on('click', '[href="#discuss-dialog"]', discuss.discussDialog);
   });

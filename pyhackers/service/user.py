@@ -1,10 +1,12 @@
 import logging
+from cqlengine.query import DoesNotExist
+from pyhackers.service.post import load_posts
 from pyhackers.worker.hipchat import notify_registration
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost
 from pyhackers.apps.idgen import idgen_client
 from pyhackers.sentry import sentry_client
 import simplejson as json
@@ -12,6 +14,9 @@ from pyhackers.job_scheduler import worker_queue
 
 
 def create_user_from_github_user(access_token, github_user):
+    # FIXME: Unacceptable method. Too long, doing a lot of stuff, error prone, etc..
+    # FIXME: Refactor me please. Destruct me
+
     logging.warn("[USER][GITHUB] {}".format(github_user))
 
     user_login = github_user.get("login")
@@ -79,17 +84,6 @@ def create_user_from_github_user(access_token, github_user):
             sentry_client.captureException()
 
     return u
-
-    # TODO: Create a task to fetch all the other information..
-
-    # starred = user.get_starred()
-    # for s in starred:
-    #     print s.full_name, s.watchers
-
-    # pub_events = user.get_public_events()
-
-    # for e in pub_events:
-    #     print e.id, e.type, e.repo.full_name
 
 
 def follow_user(user_id, current_user):
@@ -188,15 +182,50 @@ def get_profile_by_nick(nick):
 
     if user is None and exception:
         # FIXME: backoff to our Postgres. Field Names are different!
-        user = User.query.filter_by(nick=nick)
-        return user, [], [], []
+        try:
+            user = User.query.filter_by(nick=nick)
+
+            return user, [], [], []
+        except:
+            return None
+
+    if user is None:
+        return None
 
     return load_user(user.id)
 
 
-#from github import Github
-#g = Github(access_token,
-#           client_id=config.get("github", 'client_id'),
-#           client_secret=config.get("github", 'client_secret'), per_page=100)
+def get_user_by_nick(nick):
+    try:
+        user = CsUser.filter(nick=nick).first()
+    except DoesNotExist, dne:
+        user = None
 
-# user = g.get_user("mitsuhiko")
+    if user is None:
+        return
+
+    posts = [p.post_id for p in UserPost.objects.filter(user_id=user.id).order_by('-post_id').limit(5)]
+
+    return user, reversed(load_posts(posts)or [])
+
+
+
+def load_github_data():
+    return
+    access_token, config = None
+    from github import Github
+    g = Github(access_token,
+               client_id=config.get("github", 'client_id'),
+               client_secret=config.get("github", 'client_secret'), per_page=100)
+
+    user = g.get_user("mitsuhiko")
+    #TODO: Create a task to fetch all the other information..
+
+    starred = user.get_starred()
+    for s in starred:
+         print s.full_name, s.watchers
+
+    pub_events = user.get_public_events()
+
+    for e in pub_events:
+         print e.id, e.type, e.repo.full_name

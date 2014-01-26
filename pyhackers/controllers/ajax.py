@@ -4,7 +4,7 @@ from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
 from pyhackers.service.discuss import new_discussion_message, discussion_messages
 from pyhackers.service.project import project_follow
-from pyhackers.service.user import follow_user
+from pyhackers.service.user import follow_user, get_user_by_nick
 
 
 ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
@@ -43,6 +43,7 @@ def follow():
 
     return jsonify({'ok': 1})
 
+
 @ajax_app.route('discuss/message/new', methods=('POST',))
 @login_required
 def new_discussion_message_ctrl():
@@ -52,6 +53,7 @@ def new_discussion_message_ctrl():
     message_id = new_discussion_message(discussion_id, text, current_user_id())
 
     return jsonify({'id': message_id})
+
 
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
 def discussion_messages_ctrl(discussion_id):
@@ -66,3 +68,15 @@ def discussion_messages_ctrl(discussion_id):
     discussion_dict.update(**counters.to_dict())
 
     return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})
+
+
+@ajax_app.route('user/<regex(".+"):nick>/timeline')
+def user_timeline(nick):
+    after_id = request.args.get("after_id", -1)
+    _ = get_user_by_nick(nick)
+    if _ is None:
+        return jsonify({'user': None})
+
+    user, timeline = _
+
+    return jsonify({'user': user.to_dict(), 'timeline': [t.to_dict() for t in timeline]})

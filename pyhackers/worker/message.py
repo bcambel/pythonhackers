@@ -20,7 +20,7 @@ class MessageWorker():
     def resolve(self):
         self.user = CsUser.objects.get(id=self.user_id)
         self.message = CsPost.objects.get(id=self.message_id)
-        self.message_text = parser.parse(self.message.content)
+        self.message_text = parser.parse(self.message.text)
 
         logging.warn("Process {}".format(self.message))
 

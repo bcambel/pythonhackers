@@ -1,5 +1,6 @@
 import logging
 from cqlengine.query import DoesNotExist
+from pyhackers.events import Event
 from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter
 from pyhackers.service.post import new_post, load_posts
@@ -103,6 +104,8 @@ def new_discussion_message(discussion_id, text, current_user_id):
 
     p.save()
 
+    Event.message(current_user_id, p.id, None)
+
     discussion.last_message = p.id
     discussion.users.union({current_user_id})
     discussion.save()
@@ -111,5 +114,7 @@ def new_discussion_message(discussion_id, text, current_user_id):
     disc_counter = DiscussionCounter.create(id=discussion_id )
     disc_counter.message_count += 1
     disc_counter.save()
+
+
 
     return p.id

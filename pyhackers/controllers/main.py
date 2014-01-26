@@ -124,6 +124,10 @@ def main():
 
 @main_app.route("/home", methods=("GET",))
 @main_app.route("/index", methods=("GET",))
+@main_app.route("/timeline")
+def timeline():
+    return render_base_template("timeline.html")
+
 @main_app.route("/links", methods=("GET",))
 def index():
     list_type = request.args.get("list", 'top')
@@ -263,9 +267,6 @@ def new_message():
 def about():
     return render_base_template("about.html")
 
-@main_app.route("/timeline")
-def timeline():
-    return render_base_template("timeline.html")
 
 @main_app.route("/coding")
 def coding():
@@ -300,7 +301,6 @@ def channel(name):
     if name == 'lobby':
         channel_name = "Lobby"
     return render_base_template("channel.html", channel_name=channel_name)
-
 
 
 @main_app.route('/user/<regex(".+"):nick>')
