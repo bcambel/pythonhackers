@@ -2,6 +2,7 @@
 class User
     postTemplate : window.Handlebars.compile($.trim($("#message-template").html()))
     projectTemplate: window.Handlebars.compile($.trim($("#project-template").html()))
+    discussionTemplate: window.Handlebars.compile($.trim($("#discussion-template").html()))
 
     constructor : (@user_nick, @activeModule) ->
         console.log "Initialized"
@@ -26,12 +27,11 @@ class User
                   $tab.find('a[href="#projects"]').parent().addClass("active").siblings().removeClass("active")
                 do @loadProjects
             when "#timeline-container", "timeline"
-
                 do @loadTimeline
-            when "#discussions", "discussions"
+            when "#discussions-container", "discussions"
                 if !evt?
-                  $('#discussions').addClass("active").siblings().removeClass("active")
-                  $tab.find('a[href="#discussions"]').parent().addClass("active").siblings().removeClass("active")
+                  $('#discussions-container').addClass("active").siblings().removeClass("active")
+                  $tab.find('a[href="#discussions-container"]').parent().addClass("active").siblings().removeClass("active")
                 do @loadDiscussions
             else
                 console.log "#{target} not found"
@@ -60,9 +60,18 @@ class User
                 ))
         )
     loadDiscussions: () ->
-        console.log("Load discussions")
-
-
+        $discussions= $("#discussions")
+        $.getJSON("/ajax/user/#{@user_nick}/discussions",
+            {_: new Date().getTime(), after_id: @lastMessage or -1},
+            (data) =>
+                console.log(data)
+                _.each(data.discussions, (dd) ->
+                    dd.user = data.user
+                )
+                $discussions.html(@discussionTemplate(
+                    discussions: data.discussions
+                ))
+        )
 $ ->
     user_nick = $("#user_nick").val()
     activeModule = $("#active_module").val()

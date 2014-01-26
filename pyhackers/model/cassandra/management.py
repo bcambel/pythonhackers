@@ -23,6 +23,7 @@ def create(cassa_key_space='pyhackers'):
     sync_table(UserFollowing)
     sync_table(UserPost)
     sync_table(UserProject)
+    sync_table(UserDiscussion)
     sync_table(UserCounter)
 
     # Post related Tables

@@ -3,7 +3,7 @@ import logging
 from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
-from pyhackers.service.discuss import new_discussion_message, discussion_messages
+from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user, get_user_timeline_by_nick, get_user_projects_by_nick
 
@@ -75,7 +75,7 @@ def discussion_messages_ctrl(discussion_id):
 def user_projects(nick):
     _ = get_user_projects_by_nick(nick)
     if _ is None:
-        return jsonify({'user': None})
+        return jsonify({'user': None, 'projects': None})
 
     user, projects = _
     start = 0
@@ -93,3 +93,16 @@ def user_timeline(nick):
     user, timeline = _
 
     return jsonify({'user': user.to_dict(), 'timeline': [t.to_dict() for t in timeline]})
+
+
+@ajax_app.route('user/<regex(".+"):nick>/discussions')
+def user_discussion(nick):
+    after_id = request.args.get("after_id", -1)
+
+    _ = get_user_discussion_by_nick(nick)
+    if _ is None:
+        return jsonify({'user': None})
+
+    user, discussions = _
+
+    return jsonify({'user': user.to_dict(), 'discussions': [t.to_dict() for t in discussions]})

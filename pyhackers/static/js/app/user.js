@@ -7,6 +7,8 @@
 
     User.prototype.projectTemplate = window.Handlebars.compile($.trim($("#project-template").html()));
 
+    User.prototype.discussionTemplate = window.Handlebars.compile($.trim($("#discussion-template").html()));
+
     function User(user_nick, activeModule) {
       this.user_nick = user_nick;
       this.activeModule = activeModule;
@@ -38,11 +40,11 @@
         case "#timeline-container":
         case "timeline":
           return this.loadTimeline();
-        case "#discussions":
+        case "#discussions-container":
         case "discussions":
           if (evt == null) {
-            $('#discussions').addClass("active").siblings().removeClass("active");
-            $tab.find('a[href="#discussions"]').parent().addClass("active").siblings().removeClass("active");
+            $('#discussions-container').addClass("active").siblings().removeClass("active");
+            $tab.find('a[href="#discussions-container"]').parent().addClass("active").siblings().removeClass("active");
           }
           return this.loadDiscussions();
         default:
@@ -80,7 +82,21 @@
     };
 
     User.prototype.loadDiscussions = function() {
-      return console.log("Load discussions");
+      var $discussions,
+        _this = this;
+      $discussions = $("#discussions");
+      return $.getJSON("/ajax/user/" + this.user_nick + "/discussions", {
+        _: new Date().getTime(),
+        after_id: this.lastMessage || -1
+      }, function(data) {
+        console.log(data);
+        _.each(data.discussions, function(dd) {
+          return dd.user = data.user;
+        });
+        return $discussions.html(_this.discussionTemplate({
+          discussions: data.discussions
+        }));
+      });
     };
 
     return User;

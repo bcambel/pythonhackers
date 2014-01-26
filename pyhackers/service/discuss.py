@@ -2,19 +2,25 @@ import logging
 from cqlengine.query import DoesNotExist
 from pyhackers.events import Event
 from pyhackers.idgen import idgen_client
-from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter
+from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter, UserDiscussion, \
+    User as CsUser
 from pyhackers.service.post import new_post, load_posts
-from pyhackers.service.user import load_user, load_user_profiles
+from pyhackers.service.user import load_user_profiles
 from pyhackers.utils import markdown_to_html
 
 from slugify import slugify
 
 from datetime import datetime as dt
 
+
 def load_discussions():
     discussions = Discussion.objects.all().limit(50)
 
     return discussions
+
+
+def load_discussions_by_id(ids):
+    return Discussion.objects.filter(id__in=ids).limit(50)
 
 
 def load_discussion(slug, discussion_id):
@@ -29,7 +35,6 @@ def load_discussion(slug, discussion_id):
 
 
 def discussion_messages(discussion_id, after_message_id=None, limit=100):
-
     discussion = Discussion.objects.get(id=discussion_id)
     if after_message_id:
         post_filter = DiscussionPost.objects.filter(disc_id=discussion_id,
@@ -48,10 +53,11 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100):
         u = filter(lambda x: x.id == post.user_id, users)
 
         post.user = u[0] if u is not None else None
+
     try:
         counters = DiscussionCounter.get(id=discussion_id)
     except DoesNotExist:
-        counters = { 'message_count': 1, 'user_count': 1, 'view_count': 0 }
+        counters = {'message_count': 1, 'user_count': 1, 'view_count': 0}
 
     return discussion, disc_posts, users, counters
 
@@ -74,11 +80,13 @@ def new_discussion(title, text, current_user_id=None):
 
     d.save()
 
-    disc_counter = DiscussionCounter.create(id=disc_id)
+    disc_counter = DiscussionCounter(id=disc_id)
     disc_counter.message_count = 1
     disc_counter.user_count = 1
     disc_counter.view_count = 1
     disc_counter.save()
+
+    UserDiscussion.create(user_id=current_user_id, discussion_id=d.id)
 
     new_post(text, code='', current_user_id=current_user_id, post_id=post_id)
 
@@ -88,8 +96,6 @@ def new_discussion(title, text, current_user_id=None):
 def new_discussion_message(discussion_id, text, current_user_id):
     logging.warn("DSCSS:[{}]USER:[{}]".format(discussion_id, current_user_id))
     discussion = Discussion.objects.get(id=discussion_id)
-
-
 
     p = Post()
     p.id = idgen_client.get()
@@ -110,11 +116,26 @@ def new_discussion_message(discussion_id, text, current_user_id):
     discussion.users.union({current_user_id})
     discussion.save()
 
+    UserDiscussion.create(user_id=current_user_id, discussion_id=discussion_id)
+
     DiscussionPost.create(disc_id=discussion_id, post_id=p.id, user_id=current_user_id)
-    disc_counter = DiscussionCounter.create(id=discussion_id )
+
+    disc_counter = DiscussionCounter(id=discussion_id)
     disc_counter.message_count += 1
     disc_counter.save()
 
-
-
     return p.id
+
+
+def get_user_discussion_by_nick(nick):
+    try:
+        user = CsUser.filter(nick=nick).first()
+    except DoesNotExist, dne:
+        user = None
+
+    if user is None:
+        return
+
+    discussions = list([d.discussion_id for d in UserDiscussion.objects.filter(user_id=user.id)])
+
+    return user, load_discussions_by_id(discussions)

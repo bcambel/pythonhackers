@@ -146,6 +146,11 @@ class User(MBase):
         }
 
 
+class UserDiscussion(MBase):
+    user_id = columns.Integer(primary_key=True)
+    discussion_id = columns.BigInt(primary_key=True)
+
+
 class DiscussionCounter(MBase):
     id = columns.BigInt(primary_key=True)
     message_count = columns.Counter()
@@ -157,7 +162,6 @@ class DiscussionCounter(MBase):
             'message_count': self.message_count,
             'user_count': self.user_count,
             'view_count': self.view_count,
-
         }
 
 
@@ -165,7 +169,7 @@ class Discussion(MBase):
     id = columns.BigInt(primary_key=True)
     title = columns.Text(required=True)
     slug = columns.Text(required=True, index=True)
-    user_id = columns.Integer()
+    user_id = columns.Integer(index=True)
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
     last_message = columns.BigInt()
@@ -173,14 +177,15 @@ class Discussion(MBase):
     topic_id = columns.Integer(required=False)
 
     def to_dict(self):
-        return {'id': self.id,
+        return {'id': unicode(self.id),
                 'title': self.title,
+                'slug': self.slug,
                 'user_id': self.user_id,
-                'post_id': self.post_id,
+                'post_id': unicode(self.post_id),
                 'last_message': unicode(self.last_message),
                 'published_at': self.published_at,
-                'topic_id': self.topic_id,
-        }
+                'topic_id': unicode(self.topic_id) if self.topic_id is not None else None,
+                }
 
 
 class DiscussionPost(MBase):

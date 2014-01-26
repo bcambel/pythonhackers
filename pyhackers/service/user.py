@@ -6,7 +6,7 @@ from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost, UserDiscussion
 from pyhackers.apps.idgen import idgen_client
 from pyhackers.sentry import sentry_client
 import simplejson as json
@@ -206,6 +206,8 @@ def get_user_projects_by_nick(nick):
             OpenSourceProject.stars.desc()).all()
 
     return user, os_projects
+
+
 
 def get_user_timeline_by_nick(nick):
     try:

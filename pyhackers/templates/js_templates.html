@@ -107,4 +107,37 @@
     {{/each}}
 </script>
 
+<script type="text/x-handlebars-template" id="discussion-template">
+    {{#each discussions }}
+     <div class='row message-container'>
+        <div class='front-action col-lg-2'>
+            <i class='fa fa-arrow-up fa-2x'></i>
+            <span class="label"> 1 </span>
+        </div>
+        <div class='col-lg-10 link-box' style="padding-left:0;">
+            <div class='clear link-container row'>
+                <div class='col-lg-12'>
+                    <div class="message">
+                    <a class='link' href='/user/{{ user.nick }}'>{{ user.nick }}</a>
+                    wrote a message&nbsp;
+                    <a class="link" href="/discuss/{{ slug }}/{{ id }}">
+                        {{{ title }}}
+                    </a>
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-lg-5'>
+                    <a href="#post" class="link-discuss">{{ ago }}</a>
+                    <a href="/user/{{ user.nick }}"> by @{{ user.nick }}</a>
+                </div>
+
+                <div class="col-6" style="text-align: right">
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
 {% endraw %}

@@ -283,11 +283,11 @@ def profile():
     """Returns profile of the current logged in user"""
     user_data = load_user(current_user.id, current_user)
     if user_data is not None:
-        user, followers, following, os_projects = user_data
+        user, followers, following = user_data
 
         return render_base_template("profile.html", profile=user, followers=followers,
                                     following=following,
-                                    os_projects=os_projects)
+                                    os_projects=[])
 
     return abort(404)
 
