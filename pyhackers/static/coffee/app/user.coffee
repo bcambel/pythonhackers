@@ -18,15 +18,20 @@ class User
         @loadModule(@activeModule)
 
     loadModule: (target, evt) ->
-
+        $tab = $('#user-tab')
         switch target
             when "#projects", "projects"
                 if !evt?
                   $('#projects').addClass("active").siblings().removeClass("active")
+                  $tab.find('a[href="#projects"]').parent().addClass("active").siblings().removeClass("active")
                 do @loadProjects
             when "#timeline-container", "timeline"
+
                 do @loadTimeline
             when "#discussions", "discussions"
+                if !evt?
+                  $('#discussions').addClass("active").siblings().removeClass("active")
+                  $tab.find('a[href="#discussions"]').parent().addClass("active").siblings().removeClass("active")
                 do @loadDiscussions
             else
                 console.log "#{target} not found"

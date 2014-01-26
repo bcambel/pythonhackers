@@ -25,11 +25,14 @@
     };
 
     User.prototype.loadModule = function(target, evt) {
+      var $tab;
+      $tab = $('#user-tab');
       switch (target) {
         case "#projects":
         case "projects":
           if (evt == null) {
             $('#projects').addClass("active").siblings().removeClass("active");
+            $tab.find('a[href="#projects"]').parent().addClass("active").siblings().removeClass("active");
           }
           return this.loadProjects();
         case "#timeline-container":
@@ -37,6 +40,10 @@
           return this.loadTimeline();
         case "#discussions":
         case "discussions":
+          if (evt == null) {
+            $('#discussions').addClass("active").siblings().removeClass("active");
+            $tab.find('a[href="#discussions"]').parent().addClass("active").siblings().removeClass("active");
+          }
           return this.loadDiscussions();
         default:
           return console.log("" + target + " not found");
