@@ -3,7 +3,7 @@ from cqlengine.query import DoesNotExist
 from pyhackers.events import Event
 from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter, UserDiscussion, \
-    User as CsUser
+    User as CsUser, DiscussionFollower
 from pyhackers.service.post import new_post, load_posts
 from pyhackers.service.user import load_user_profiles
 from pyhackers.utils import markdown_to_html
@@ -30,6 +30,11 @@ def load_discussion(slug, discussion_id):
         message = Post.objects.get(id=discussion.post_id)
     except DoesNotExist:
         message = {}
+
+    # TODO: Utterly we will place this into a background job (more like log processed counter)
+    dc = DiscussionCounter.get(id=discussion_id)
+    dc.view_count += 1
+    dc.save()
 
     return discussion, disc_posts, message, counters
 
@@ -93,7 +98,7 @@ def new_discussion(title, text, current_user_id=None):
     return disc_id, slug
 
 
-def new_discussion_message(discussion_id, text, current_user_id):
+def new_discussion_message(discussion_id, text, current_user_id, nick=''):
     logging.warn("DSCSS:[{}]USER:[{}]".format(discussion_id, current_user_id))
     discussion = Discussion.objects.get(id=discussion_id)
 
@@ -103,7 +108,7 @@ def new_discussion_message(discussion_id, text, current_user_id):
     p.text = text
     p.html = markdown_to_html(text)
     p.user_id = current_user_id
-
+    p.user_nick = nick
     ## Create an entry in the timeline to say that this user
     # has created a post in the given discussion
     # Event.new_post_message
@@ -111,6 +116,8 @@ def new_discussion_message(discussion_id, text, current_user_id):
     p.save()
 
     Event.message(current_user_id, p.id, None)
+
+    # FIXME: Move all this part to the JOB WORKER! Speed my friend.
 
     discussion.last_message = p.id
     discussion.users.union({current_user_id})
@@ -139,3 +146,12 @@ def get_user_discussion_by_nick(nick):
     discussions = list([d.discussion_id for d in UserDiscussion.objects.filter(user_id=user.id)])
 
     return user, load_discussions_by_id(discussions)
+
+
+def new_discussion_follower(discussion_id, current_user_id, nick=None):
+
+    dc = DiscussionCounter.get(id=discussion_id)
+    dc.follower_count += 1
+    dc.save()
+
+    DiscussionFollower.create(disc_id=discussion_id, user_id=current_user_id)

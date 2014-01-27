@@ -80,7 +80,7 @@
         <div class="related col-lg-4">
             <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
 
-            <form class="form-inline " action="/ajax/discussion/delete" method="post">
+            <form class="form-inline " action="/ajax/discuss/{{ discussion.id }}/delete" method="post">
                 <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
                 <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
             </form>
@@ -89,7 +89,7 @@
 
             <div class="clearfix">
 
-                <form class="form-inline pull-left" action="/ajax/discussion/follow" method="post"
+                <form class="form-inline pull-left" action="/ajax/discuss/{{ discussion.id }}/follow" method="post" data-remote="true"
                       style="margin-right:10px;">
                     <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
                     <button class="btn btn-info  ">Follow discussion</button>
@@ -102,6 +102,7 @@
             <h5><code>{{ counters.message_count }}</code> messages </h5>
             <h5><code>{{ counters.user_count }}</code> users</h5>
             <h5><code>{{ counters.view_count }}</code> views</h5>
+            <h5><code>{{ counters.follower_count }}</code> followers</h5>
             <hr/>
             <h4>Related discussions</h4>
             <ul>

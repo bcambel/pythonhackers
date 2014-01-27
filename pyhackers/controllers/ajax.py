@@ -3,7 +3,7 @@ import logging
 from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
-from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick
+from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick, new_discussion_follower
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user, get_user_timeline_by_nick, get_user_projects_by_nick
 
@@ -51,12 +51,21 @@ def new_discussion_message_ctrl():
     text = request.form.get("text")
     id = request.form.get("id")
     discussion_id = id
-    message_id = new_discussion_message(discussion_id, text, current_user_id())
+    message_id = new_discussion_message(discussion_id, text, current_user_id(), nick=current_user.nick)
 
     return jsonify({'id': message_id})
 
 
+@ajax_app.route('discuss/<regex(".+"):discussion_id>/follow', methods=('POST',))
+@login_required
+def follow_discussion(discussion_id):
+
+    new_discussion_follower(discussion_id, current_user_id(), nick=current_user.nick)
+
+    return jsonify({'ok': True})
+
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
+@login_required
 def discussion_messages_ctrl(discussion_id):
     after_id = request.args.get("after_id", -1)
     try:

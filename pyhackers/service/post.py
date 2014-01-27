@@ -21,7 +21,7 @@ def load_posts(post_ids):
     return posts
 
 
-def new_post(text, code=None, current_user_id=None, post_id=None, user_nick=None):
+def new_post(text, code=None, current_user_id=None, post_id=None, nick=None):
     logging.warn("Post is=>{}".format(post_id))
 
     html = markdown_to_html(text)
@@ -32,7 +32,6 @@ def new_post(text, code=None, current_user_id=None, post_id=None, user_nick=None
     message.text = text
     message.html = html
     message.user_id = current_user_id
+    message.user_nick = nick
     message.save()
     Event.message(current_user_id, message.id, None)
-
-    #    logging.warn("Misery sinks in...")

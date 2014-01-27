@@ -23,6 +23,7 @@ class PostCounter(MBase):
 class Post(MBase):
     id = columns.BigInt(index=True, primary_key=True)
     user_id = columns.Integer(required=True, index=True, partition_key=True)
+    # TODO: would be a terrible update if the nick is changed ever.
     user_nick = columns.Text()
     text = columns.Text(required=True)
     html = columns.Text(required=False)
@@ -36,8 +37,7 @@ class Post(MBase):
     has_url = columns.Boolean()
     has_channel = columns.Boolean()
 
-    # this post is either linked to a
-    # DISCUSSION or
+    # this post is either linked to a DISCUSSION or
     discussion_id = columns.BigInt()
     # CHANNEL or None
     channel_id = columns.Integer()
@@ -53,7 +53,6 @@ class Post(MBase):
                 'text': self.text,
                 'html': self.html,
                 'user_id': self.user_id,
-                'user_nick': self.user_nick,
                 'reply_to_id': self.reply_to_id,
                 'reply_to_uid': self.reply_to_uid,
                 'reply_to_nick': self.reply_to_nick,
@@ -64,15 +63,16 @@ class Post(MBase):
                 'deleted': self.deleted,
                 'published_at': self.published_at,
                 'ago': self.ago,
-                }
+                'user': {'id': self.user_id, 'nick': self.user_nick}
+        }
 
     @property
     def ago(self):
         result = int(int(int(time.time() - unix_time(self.published_at, float=True))) / 60.0)
         abb = "m"
 
-        if result > (60*24):
-            result /= (60*24)
+        if result > (60 * 24):
+            result /= (60 * 24)
             abb = "d"
 
         if result > 60:
@@ -156,12 +156,14 @@ class DiscussionCounter(MBase):
     message_count = columns.Counter()
     user_count = columns.Counter()
     view_count = columns.Counter()
+    follower_count = columns.Counter()
 
     def to_dict(self):
         return {
             'message_count': self.message_count,
             'user_count': self.user_count,
             'view_count': self.view_count,
+            'follower_count': self.follower_count,
         }
 
 
@@ -177,21 +179,31 @@ class Discussion(MBase):
     topic_id = columns.Integer(required=False)
 
     def to_dict(self):
-        return {'id': unicode(self.id),
-                'title': self.title,
-                'slug': self.slug,
-                'user_id': self.user_id,
-                'post_id': unicode(self.post_id),
-                'last_message': unicode(self.last_message),
-                'published_at': self.published_at,
-                'topic_id': unicode(self.topic_id) if self.topic_id is not None else None,
-                }
+        return {
+            'id': unicode(self.id),
+            'title': self.title,
+            'slug': self.slug,
+            'user_id': self.user_id,
+            'post_id': unicode(self.post_id),
+            'last_message': unicode(self.last_message),
+            'published_at': self.published_at,
+            'topic_id': unicode(self.topic_id) if self.topic_id is not None else None,
+        }
 
 
 class DiscussionPost(MBase):
     disc_id = columns.BigInt(primary_key=True)
     post_id = columns.BigInt(primary_key=True)
     user_id = columns.Integer(primary_key=True)
+
+
+class DiscussionFollower(MBase):
+    """
+    Users who follows a discussion
+    """
+    disc_id = columns.BigInt(primary_key=True)
+    user_id = columns.Integer(primary_key=True)
+    created_at = columns.DateTime(default=dt.utcnow())
 
 
 class UserTimeLine(MBase):

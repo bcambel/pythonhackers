@@ -49,6 +49,7 @@ def create(cassa_key_space='pyhackers'):
     sync_table(Discussion)
     sync_table(DiscussionPost)
     sync_table(DiscussionCounter)
+    sync_table(DiscussionFollower)
 
 
 def test_insert():
