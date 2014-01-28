@@ -33,6 +33,14 @@ class @Discuss
         $(body).append($template)
         $template.modal()
 
+    discussionFollowAction: () ->
+        return
+        # Take care of the Discussion Follow/UnFollow events
+
+        # turn the buttons follow/unfollow
+        # input[type='hidden'] fix
+        # Change the button appearance
+
 
 $ ->
     discus_id = $("#discussion_id").val()

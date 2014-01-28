@@ -42,6 +42,8 @@
       return $template.modal();
     };
 
+    Discuss.prototype.discussionFollowAction = function() {};
+
     return Discuss;
 
   })();

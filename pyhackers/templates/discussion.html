@@ -92,8 +92,13 @@
                 <form class="form-inline pull-left" action="/ajax/discuss/{{ discussion.id }}/follow" method="post" data-remote="true"
                       style="margin-right:10px;">
                     <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
-                    <button class="btn btn-info  ">Follow discussion</button>
-                    <button class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Following</button>
+                    {% if discussion_user and discussion_user.following %}
+                        <input type="hidden" id="status" name="status" value="unfollow" />
+                    <button type='submit' class="btn btn-success" ><i class="fa fa-check"></i>&nbsp;Following</button>
+                    {% else %}
+                        <input type="hidden" id="status" name="status" value="follow" />
+                        <button type='submit' class="btn btn-info">Follow discussion</button>
+                    {% endif %}
                 </form>
 
             </div>

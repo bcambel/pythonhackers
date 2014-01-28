@@ -23,7 +23,7 @@ def load_discussions_by_id(ids):
     return Discussion.objects.filter(id__in=ids).limit(50)
 
 
-def load_discussion(slug, discussion_id):
+def load_discussion(slug, discussion_id, current_user_id=None):
     discussion, disc_posts, users, counters = discussion_messages(discussion_id)
 
     try:
@@ -31,12 +31,18 @@ def load_discussion(slug, discussion_id):
     except DoesNotExist:
         message = {}
 
+    followers = [d.user_id for d in DiscussionFollower.objects.filter(disc_id=discussion_id)]
+    user = {}
+
+    if current_user_id in followers:
+        user = {'id': current_user_id, 'following': True}
+
     # TODO: Utterly we will place this into a background job (more like log processed counter)
     dc = DiscussionCounter.get(id=discussion_id)
     dc.view_count += 1
     dc.save()
 
-    return discussion, disc_posts, message, counters
+    return discussion, disc_posts, message, counters, user
 
 
 def discussion_messages(discussion_id, after_message_id=None, limit=100):
@@ -149,9 +155,19 @@ def get_user_discussion_by_nick(nick):
 
 
 def new_discussion_follower(discussion_id, current_user_id, nick=None):
-
     dc = DiscussionCounter.get(id=discussion_id)
     dc.follower_count += 1
     dc.save()
 
     DiscussionFollower.create(disc_id=discussion_id, user_id=current_user_id)
+
+
+def remove_discussion_follower(discussion_id, current_user_id):
+    try:
+        follower = DiscussionFollower.objects.filter(disc_id=discussion_id, user_id=current_user_id).first()
+        follower.delete()
+        dc = DiscussionCounter.get(id=discussion_id)
+        dc.follower_count -= 1
+        dc.save()
+    except DoesNotExist:
+        pass
