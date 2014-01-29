@@ -3,7 +3,7 @@ from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
 import time
-from pyhackers.common import unix_time
+from pyhackers.common import unix_time, format_date
 
 
 class MBase(Model):
@@ -186,10 +186,13 @@ class Discussion(MBase):
             'user_id': self.user_id,
             'post_id': unicode(self.post_id),
             'last_message': unicode(self.last_message),
-            'published_at': self.published_at,
+            'published_at': format_date(self.published_at),
             'topic_id': unicode(self.topic_id) if self.topic_id is not None else None,
         }
 
+    @property
+    def published_date(self):
+        return format_date(self.published_at)
 
 class DiscussionPost(MBase):
     disc_id = columns.BigInt(primary_key=True)

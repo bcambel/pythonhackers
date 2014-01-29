@@ -21,7 +21,8 @@
                     <hr/>
                     <div class="messages clearfix">
                         <div class="clearfix">
-                            <form class="form-inline" action="/ajax/discuss/message/new" data-remote="true" method="post">
+                            <form class="form-inline" action="/ajax/discuss/message/new" data-remote="true"
+                                  method="post">
                                 <div class="input-group">
                                     <textarea name='text' class="form-control input" rows="1"
                                               placeholder="An awesome reply is waiting here"></textarea>
@@ -36,37 +37,37 @@
                     </div>
                     <hr/>
                     <div class="posts">
-                    {% for p in posts %}
-                        <div class='row message-container'>
-                            <div class='front-action col-lg-2'>
-                                <i class='fa fa-arrow-up fa-2x'></i>
-                                <span class="label"> 1 </span>
-                            </div>
-                            <div class='col-lg-10 link-box' style="padding-left:0;">
-                                <div class='clear link-container row'>
-                                    <div class='col-lg-11'>
-                                        <div class="message">
-                                            {{ p.html }}
+                        {% for p in posts %}
+                            <div class='row message-container'>
+                                <div class='front-action col-lg-2'>
+                                    <i class='fa fa-arrow-up fa-2x'></i>
+                                    <span class="label"> 1 </span>
+                                </div>
+                                <div class='col-lg-10 link-box' style="padding-left:0;">
+                                    <div class='clear link-container row'>
+                                        <div class='col-lg-11'>
+                                            <div class="message">
+                                                {{ p.html }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row' style="padding-top:5px;">
+                                        <div class='col-lg-5'>
+                                            <a href="#post" class="link-discuss">{{ p.ago }}m</a>
+                                            {#<a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>#}
+                                            <a href="/user/{{ p.user.nick }}">@{{ p.user.nick }}</a>
+                                        </div>
+
+                                        <div class="col-6" style="text-align: right">
+                                            <a href="#/tag/flask" class='tag' style="">
+                                                <span class="">#Flask</span>
+                                            </a>
+                                            <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class='row' style="padding-top:5px;">
-                                    <div class='col-lg-5'>
-                                        <a href="#post" class="link-discuss">{{ p.ago }}m</a>
-                                        {#<a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>#}
-                                        <a href="/user/{{ p.user.nick }}">@{{ p.user.nick }}</a>
-                                    </div>
-
-                                    <div class="col-6" style="text-align: right">
-                                        <a href="#/tag/flask" class='tag' style="">
-                                            <span class="">#Flask</span>
-                                        </a>
-                                        <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
                     </div>
                     {% endautoescape %}
                 </div>
@@ -78,25 +79,37 @@
             </div>
         </div>
         <div class="related col-lg-4">
-            <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>
-
-            <form class="form-inline " action="/ajax/discuss/{{ discussion.id }}/delete" method="post">
-                <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
-                <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
-            </form>
-            {{ discussion.published_at }}
+            {#            <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>#}
+            <!-- {{ user }} -->
+        <h4 class="inline">
+            <a href="/user/{{ user.nick }}">
+                <img src="{{ user.picture }}" style="width:40px;height:40px;margin-right:10px;"/>
+                <span class="gray" style="font-size:12px;">by</span>
+                <span class="link">{{ user.nick }}</span>
+                </a>
+        </h4>
+                <span data-date="{{ discussion.published_date }}">{{ discussion.published_date }}</span>
+            {% if discussion.user_id == current_user.id %}
+                <hr/>
+                <form class="form-inline " action="/ajax/discuss/{{ discussion.id }}/delete" method="post">
+                    <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
+                    <button class="btn btn-danger btn-xs" title="Delete this discussion">Delete</button>
+                </form>
+            {% endif %}
             <hr/>
 
             <div class="clearfix">
 
-                <form class="form-inline pull-left" action="/ajax/discuss/{{ discussion.id }}/follow" method="post" data-remote="true"
+                <form class="form-inline pull-left" action="/ajax/discuss/{{ discussion.id }}/follow" method="post"
+                      data-remote="true"
                       style="margin-right:10px;">
                     <input type="hidden" id="discussion_id" name="id" value="{{ discussion.id }}"/>
                     {% if discussion_user and discussion_user.following %}
-                        <input type="hidden" id="status" name="status" value="unfollow" />
-                    <button type='submit' class="btn btn-success" ><i class="fa fa-check"></i>&nbsp;Following</button>
+                        <input type="hidden" id="status" name="status" value="unfollow"/>
+                        <button type='submit' class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Following
+                        </button>
                     {% else %}
-                        <input type="hidden" id="status" name="status" value="follow" />
+                        <input type="hidden" id="status" name="status" value="follow"/>
                         <button type='submit' class="btn btn-info">Follow discussion</button>
                     {% endif %}
                 </form>
@@ -110,7 +123,7 @@
             <h5><code>{{ counters.follower_count }}</code> followers</h5>
             <hr/>
             <h4>Related discussions</h4>
-            <ul>
+            <ul class="related-discussions">
                 {% for rel in related_discussions %}
                     <li>
                         <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
@@ -132,8 +145,9 @@
 
 {% block script_links %}
 
-{#    <script src="{{ static_route }}/js/handlebars.js" type="text/javascript"></script>#}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js" type="text/javascript"></script>
+    {#    <script src="{{ static_route }}/js/handlebars.js" type="text/javascript"></script>#}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"
+            type="text/javascript"></script>
     <script src="//cdn1.pythonhackers.com/js/vex.combined.min.js" type="text/javascript"></script>
     <script src="/static/js/app/discuss.js?ts={{ cache_buster }}"></script>
 {% endblock %}

@@ -239,8 +239,31 @@ h4 a {
 .message{
 
 }
+.related-discussions li a:hover{
 
-.links a.link {
+}
+.related-discussions li{
+    margin-bottom:5px;
+    padding: 5px 5px 5px 10px;
+    opacity: 0.5;
+}
+.related-discussions li:hover{
+    border-radius: 5px;
+    background-color: #EEEEEE;
+    font-weight: bold;
+
+    opacity: 1;
+}
+.related-discussions li a{
+    color:#336699;
+
+    margin-bottom:10px;
+}
+
+.gray{
+    color:gray;
+}
+.links a.link, .link{
     font-size: 16px;
     color: #336699;
 }

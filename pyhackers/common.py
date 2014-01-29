@@ -22,7 +22,7 @@ def unix_time_millisecond(date):
 
 
 def format_date(date):
-    return date.strftime('%Y-%m-%dT%H:%M:%S') if date is not None else ""
+    return date.strftime('%Y-%m-%d %H:%M:%S') if date is not None else ""
 
 
 def time_with_ms(date):

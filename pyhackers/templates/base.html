@@ -106,10 +106,7 @@
     {% include "mailchimp_form.html" %}
 
     <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
-
-
-
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/underscore-min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/vex.combined.min.js" type="text/javascript"></script>
@@ -125,8 +122,17 @@
 
     <script>
         {% block scripts %}{% endblock %}
-        {% autoescape off %}var session = {{ user_json }};{% endautoescape %}
-
+        {% autoescape off %}
+        var session = {{ user_json }};
+        $(function(){
+            var date;
+            $("[data-date]").each(function(x){
+                date = $(this).html();
+                debugger
+                $(this).html(moment(date,"YYYY-MM-DD HH:mm:ss").format('MMMM Do YYYY @  HH:mm:ss'))
+            })
+        })
+        {% endautoescape %}
     </script>
 </div>
 </body>
