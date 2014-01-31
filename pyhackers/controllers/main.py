@@ -251,14 +251,6 @@ def user():
 @main_app.route("/new", methods=['GET', 'POST'])
 @login_required
 def new_message():
-    if request.method == "POST":
-        logging.warn(request.form)
-        message = request.form.get('message')
-        code = request.form.get("code")
-
-        new_post(message, code, current_user_id(), nick=current_user.nick)
-        return jsonify({'ok': 1})
-
     return render_base_template("new_message.html")
 
 

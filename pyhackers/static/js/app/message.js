@@ -16,7 +16,33 @@
     };
 
     Message.prototype.showMessage = function(evt) {
-      return console.log("ok");
+      return vex.dialog.open({
+        message: "Whats up",
+        input: "<textarea rows=\"3\" name=\"message\" required ></textarea>",
+        buttons: [
+          $.extend({}, vex.dialog.buttons.YES, {
+            text: 'Post'
+          }), $.extend({}, vex.dialog.buttons.NO, {
+            text: 'Back',
+            "class": 'pull-left'
+          })
+        ],
+        callback: function(data) {
+          if (data === false) {
+            return console.log('Cancelled');
+          }
+          console.log('Username', data.message);
+          return $.post('/ajax/message/new', {
+            message: data.message
+          }, function() {
+            console.log("Ok");
+            return Messenger().post({
+              message: "Message has been sent",
+              type: "success"
+            });
+          });
+        }
+      });
     };
 
     return Message;

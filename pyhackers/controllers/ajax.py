@@ -4,11 +4,23 @@ from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
 from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick, new_discussion_follower, remove_discussion_follower
+from pyhackers.service.post import new_post
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user, get_user_timeline_by_nick, get_user_projects_by_nick
 
 
 ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
+
+@ajax_app.route("message/new", methods=("POST",))
+@login_required
+def new_message():
+    logging.warn(request.form)
+    message = request.form.get('message')
+    code = request.form.get("code")
+
+    new_post(message, code, current_user_id(), nick=current_user.nick)
+    return jsonify({'ok': 1})
+
 
 @ajax_app.route("followchannel", methods=("POST",))
 @login_required
