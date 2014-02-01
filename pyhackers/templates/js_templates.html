@@ -79,10 +79,16 @@
 </script>
 <script type="text/x-handlebars-template" id="message-template">
     {{#each message }}
-     <div class='row message-container' data-id={{ id }}>
+     <div class='row message-container' data-message-id="{{ id }}">
         <div class='front-action col-lg-2'>
-            <i class='fa fa-arrow-up fa-2x'></i>
-            <span class="label"> 1 </span>
+            <a href="#" data-trigger="upvote" class="{{#if upvoted }}orange{{/if}}">
+                <i class='fa fa-arrow-up fa-2x'></i>
+            </a>
+                {{#if stats.up_votes }}
+                <span class="label">{{ stats.up_votes }}</span>
+                {{else }}
+                <span class="label">-</span>
+                {{/if }}
         </div>
         <div class='col-lg-10 link-box' style="padding-left:0;">
             <div class='clear link-container row'>
@@ -109,9 +115,10 @@
 
 <script type="text/x-handlebars-template" id="discussion-template">
     {{#each discussions }}
-     <div class='row message-container'>
+     <div class='row message-container' data-message-id="{{ id }}">
         <div class='front-action col-lg-2'>
-            <i class='fa fa-arrow-up fa-2x'></i>
+            <a href="#" data-trigger="upvote">
+            <i class='fa fa-arrow-up fa-2x'></i></a>
             <span class="label"> 1 </span>
         </div>
         <div class='col-lg-10 link-box' style="padding-left:0;">

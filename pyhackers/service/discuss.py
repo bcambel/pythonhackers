@@ -24,7 +24,8 @@ def load_discussions_by_id(ids):
 
 
 def load_discussion(slug, discussion_id, current_user_id=None):
-    discussion, disc_posts, users, counters = discussion_messages(discussion_id)
+    discussion = Discussion.objects.get(id=discussion_id)
+    #discussion, disc_posts, users, counters = discussion_messages(discussion_id)
 
     try:
         message = Post.objects.get(id=discussion.post_id)
@@ -37,17 +38,23 @@ def load_discussion(slug, discussion_id, current_user_id=None):
     if current_user_id in followers:
         user = {'id': current_user_id, 'following': True}
 
+    try:
+        counters = DiscussionCounter.get(id=discussion_id)
+    except DoesNotExist:
+        counters = {'message_count': 1, 'user_count': 1, 'view_count': 0}
+
     # TODO: Utterly we will place this into a background job (more like log processed counter)
-    dc = DiscussionCounter.get(id=discussion_id)
-    dc.view_count += 1
-    dc.save()
+    Event.discussion_view(current_user_id, discussion_id)
 
-    return discussion, disc_posts, message, counters, user
+    return discussion, [], message, counters, user
 
 
-def discussion_messages(discussion_id, after_message_id=None, limit=100):
+def discussion_messages(discussion_id, after_message_id=None, limit=100, current_user_id=None):
+    logging.warn("Requesting: {} After: {}".format(discussion_id, after_message_id))
+
     discussion = Discussion.objects.get(id=discussion_id)
-    if after_message_id:
+
+    if after_message_id is not None:
         post_filter = DiscussionPost.objects.filter(disc_id=discussion_id,
                                                     post_id__gt=after_message_id)
     else:
@@ -59,7 +66,8 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100):
     user_ids = list(set([x[1] for x in disc_post_lists]))
     users = load_user_profiles(user_ids)
 
-    disc_posts = load_posts(post_ids)
+    logging.warn("Looking for posts: {}".format(post_ids))
+    disc_posts = load_posts(post_ids, current_user_id=current_user_id)
     for post in disc_posts:
         u = filter(lambda x: x.id == post.user_id, users)
 
@@ -131,7 +139,8 @@ def new_discussion_message(discussion_id, text, current_user_id, nick=''):
 
     UserDiscussion.create(user_id=current_user_id, discussion_id=discussion_id)
 
-    DiscussionPost.create(disc_id=discussion_id, post_id=p.id, user_id=current_user_id)
+    dp = DiscussionPost.create(disc_id=discussion_id, post_id=p.id, user_id=current_user_id)
+    dp.save()
 
     disc_counter = DiscussionCounter(id=discussion_id)
     disc_counter.message_count += 1

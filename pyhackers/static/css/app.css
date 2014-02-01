@@ -4,6 +4,7 @@ html, body {
 body{
     background-color: #f3f8fb;
 }
+
 ul{
     list-style-type: none;
     padding-left:0;
@@ -22,7 +23,11 @@ div#page-wrap {
     font-size:14px;
 }
 .message-container{
-    border-bottom: 1px solid #d3d3d3;
+    /*border-bottom: 1px solid #d3d3d3;*/
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+
 }
 .footer ul li {
     margin-right:20px;
@@ -37,7 +42,7 @@ div#page-wrap {
 }
 
 #body #main .container, #body #main .container-fluid{
-    background-color:white;
+    background-color:transparent;
     border-radius: 5px;
     /*padding-left:50px;*/
     padding-top:20px;
@@ -304,6 +309,20 @@ h4 a {
 
 .discussion .header{
 
+}
+.discussion-message{
+    padding:20px;
+    font-size:18px;
+}
+.discussion-head{
+    background-color: white;
+    border-radius: 10px;
+    padding:20px;
+    margin-bottom:10px;
+}
+
+.links .front-action a.orange i{
+    color:orange;
 }
 
 .related{

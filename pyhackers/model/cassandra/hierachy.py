@@ -46,6 +46,8 @@ class Post(MBase):
     flagged = columns.Boolean(default=False)
     deleted = columns.Boolean(default=False)
 
+    stats = columns.Map(columns.Ascii, columns.Integer)
+
     published_at = columns.DateTime(default=dt.utcnow())
 
     def to_dict(self):
@@ -63,7 +65,9 @@ class Post(MBase):
                 'deleted': self.deleted,
                 'published_at': self.published_at,
                 'ago': self.ago,
-                'user': {'id': self.user_id, 'nick': self.user_nick}
+                'user': {'id': self.user_id, 'nick': self.user_nick},
+                'stats': self.__dict__.get('statistics', {}),
+                'upvoted': self.__dict__.get('upvoted', False),
         }
 
     @property

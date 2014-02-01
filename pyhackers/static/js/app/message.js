@@ -10,8 +10,26 @@
 
     Message.prototype.listen = function() {
       var _this = this;
-      return $(document).on('click', '[data-trigger="message"]', function(evt) {
+      $(document).on('click', '[data-trigger="message"]', function(evt) {
         return _this.showMessage(evt);
+      });
+      return $(document).on('click', '[data-trigger="upvote"]', function(evt) {
+        return _this.upvote(evt);
+      });
+    };
+
+    Message.prototype.upvote = function(evt) {
+      var messageId;
+      $(evt.target).css({
+        color: 'orange'
+      });
+      messageId = $(evt.currentTarget).parents('[data-message-id]').attr("data-message-id");
+      evt.stopPropagation();
+      evt.preventDefault();
+      return $.post("/ajax/message/" + messageId + "/upvote", {
+        message: messageId
+      }, function(data) {
+        return console.log(data);
       });
     };
 

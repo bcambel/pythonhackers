@@ -2,7 +2,7 @@ import logging
 import time
 from datetime import datetime as dt
 from flask import request, render_template as template_render
-from flask.ext.login import current_user
+from flask.ext.login import current_user, AnonymousUserMixin
 from json import dumps
 import calendar
 from pyhackers.config import config
@@ -51,9 +51,10 @@ def render_template(*args, **kwargs):
 
 
 def current_user_id():
-    if isinstance(current_user, int):
-        user_id = current_user
+    if isinstance(current_user, AnonymousUserMixin):
+        return None
     else:
-        user_id = current_user.id
-
-    return user_id
+        if hasattr(current_user, 'id'):
+            return current_user.id
+        else:
+            return None

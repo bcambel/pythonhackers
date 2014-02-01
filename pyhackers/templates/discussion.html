@@ -9,16 +9,21 @@
 <div class="container">
     <div class="row-fluid">
         <div class="discussion col-lg-8">
-            <div class="header">
 
-                <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}"><h3>{{ discussion.title }}</h3></a>
+                <div class="discussion-head row">
 
-                <hr/>
-
-                <div class="linklist links clearfix">
+                <h2>
+                <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">
+                    {{ discussion.title }}
+                </a>
+                </h2>
+                <div class="discussion-message">
                     {% autoescape off %}
                     {{ message.html }}
-                    <hr/>
+                    {% endautoescape %}
+                    </div>
+                    </div>
+                <div class="linklist links clearfix">
                     <div class="messages clearfix">
                         <div class="clearfix">
                             <form class="form-inline" action="/ajax/discuss/message/new" data-remote="true"
@@ -37,42 +42,10 @@
                     </div>
                     <hr/>
                     <div class="posts">
-                        {% for p in posts %}
-                            <div class='row message-container'>
-                                <div class='front-action col-lg-2'>
-                                    <i class='fa fa-arrow-up fa-2x'></i>
-                                    <span class="label"> 1 </span>
-                                </div>
-                                <div class='col-lg-10 link-box' style="padding-left:0;">
-                                    <div class='clear link-container row'>
-                                        <div class='col-lg-11'>
-                                            <div class="message">
-                                                {{ p.html }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class='row' style="padding-top:5px;">
-                                        <div class='col-lg-5'>
-                                            <a href="#post" class="link-discuss">{{ p.ago }}m</a>
-                                            {#<a href="#comments" class='link-discuss'>Comments:&nbsp;<b>{{ link.comment }}</b></a>#}
-                                            <a href="/user/{{ p.user.nick }}">@{{ p.user.nick }}</a>
-                                        </div>
-
-                                        <div class="col-6" style="text-align: right">
-                                            <a href="#/tag/flask" class='tag' style="">
-                                                <span class="">#Flask</span>
-                                            </a>
-                                            <a href="#/tag/ajax" class='tag'><span class="">#AJAX</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
                     </div>
-                    {% endautoescape %}
-                </div>
-            </div>
 
+
+                </div>
 
             <div class="footer">
 

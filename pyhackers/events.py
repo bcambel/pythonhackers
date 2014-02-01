@@ -1,5 +1,5 @@
 from rq import Queue, Connection
-from pyhackers.worker.message import foo
+from pyhackers.worker.message import new_message_worker
 from pyhackers.job_scheduler import worker_queue as q
 
 
@@ -18,7 +18,7 @@ class Event(object):
     @classmethod
     def message(cls, user, message, context):
         """A user sent a message"""
-        q.enqueue(foo, args=(user, message, context), result_ttl=0)
+        q.enqueue(new_message_worker, args=(user, message, context), result_ttl=0)
         pass
 
     @classmethod
@@ -65,6 +65,12 @@ class Event(object):
     def share_link(cls, user, link):
         """A user shared a link"""
 
+    @classmethod
+    def discussion_view(cls, current_user_id, discussion_id):
+        pass
+        #dc = DiscussionCounter.get(id=discussion_id)
+        #dc.view_count += 1
+        #dc.save()
 
 # { type: FollowUser, user: { id: 3 }, target: { type: user, id : 4 } }
 # { type: FollowProject, user: { id: 3 }, target: { type: project, id : 5 } }

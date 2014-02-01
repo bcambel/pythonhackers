@@ -57,6 +57,6 @@ class MessageWorker():
         self.wait()
 
 
-def foo(user, message, context):
+def new_message_worker(user, message, context):
     logging.warn("[WORKER][FOO] {} - {} - {}".format(user, message, context))
     MessageWorker(user, message, context).run()

@@ -112,6 +112,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/underscore-min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ static_route }}/js/jquery.autosize.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/vex.combined.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/messenger/messenger.min.js" type="text/javascript"></script>
     <script src="{{ static_route }}/js/messenger/messenger-theme-future.js" type="text/javascript"></script>
@@ -134,9 +135,9 @@
             var date;
             $("[data-date]").each(function(x){
                 date = $(this).html();
-                debugger
                 $(this).html(moment(date,"YYYY-MM-DD HH:mm:ss").format('MMMM Do YYYY @  HH:mm:ss'))
-            })
+            });
+            $('textarea').autosize();
         })
         {% endautoescape %}
     </script>

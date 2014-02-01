@@ -9,6 +9,17 @@ class @Message
     listen : () ->
         $(document).on 'click', '[data-trigger="message"]', (evt) =>
             @showMessage(evt)
+        $(document).on 'click', '[data-trigger="upvote"]', (evt) =>
+            @upvote(evt)
+
+    upvote: (evt) ->
+        $(evt.target).css({color:'orange'})
+        messageId = $(evt.currentTarget).parents('[data-message-id]').attr("data-message-id")
+        evt.stopPropagation()
+        evt.preventDefault()
+        $.post("/ajax/message/#{messageId}/upvote", {message:messageId}, (data) ->
+            console.log data
+        )
 
 
     showMessage : (evt) =>
