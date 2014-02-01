@@ -6,7 +6,7 @@ from pyhackers.events import Event
 from pyhackers.utils import markdown_to_html
 
 
-def load_posts(post_ids,current_user_id=None):
+def load_posts(post_ids, current_user_id=None):
     """
     Select multiple posts from the service.
     We will definitely need to [mem]Cache these records to do a fast lookup batch query.
