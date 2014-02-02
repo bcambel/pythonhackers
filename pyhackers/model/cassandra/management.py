@@ -51,6 +51,10 @@ def create(cassa_key_space='pyhackers'):
     sync_table(DiscussionCounter)
     sync_table(DiscussionFollower)
 
+    sync_table(GithubProject)
+    sync_table(GithubUser)
+    sync_table(GithubUserList)
+
 
 def test_insert():
     from datetime import datetime as dt

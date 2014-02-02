@@ -198,6 +198,7 @@ class Discussion(MBase):
     def published_date(self):
         return format_date(self.published_at)
 
+
 class DiscussionPost(MBase):
     disc_id = columns.BigInt(primary_key=True)
     post_id = columns.BigInt(primary_key=True)
@@ -294,3 +295,48 @@ class PostReply(MBase):
     post_id = columns.BigInt(primary_key=True)
     reply_post_id = columns.BigInt(primary_key=True)
 
+
+class GithubProject(MBase):
+    id = columns.Integer(primary_key=True)
+    full_name = columns.Text(index=True)
+    description = columns.Text()
+    homepage = columns.Text()
+    fork = columns.Boolean()
+    forks_count = columns.Integer()
+    language = columns.Text()
+    master_branch = columns.Text()
+    name = columns.Text()
+    network_count = columns.Integer()
+    open_issues = columns.Integer()
+    url = columns.Text()
+    watchers_count = columns.Integer()
+    is_py = columns.Boolean()
+    owner = columns.Integer()
+    hide = columns.Boolean(default=False)
+
+
+class GithubUser(MBase):
+    nick = columns.Text(primary_key=True)
+    id = columns.Integer(index=True)
+    email = columns.Text()
+    followers = columns.Integer()
+    following = columns.Integer()
+    image = columns.Text()
+    blog = columns.Text()
+    bio = columns.Text()
+    company = columns.Text()
+    location = columns.Text()
+    name = columns.Text()
+    url = columns.Text()
+    utype = columns.Text()
+    public_gists = columns.Integer()
+    public_repos = columns.Integer()
+    # Ref user info does not contain all the information.
+    full_profile = columns.Boolean(default=True)
+
+
+class GithubUserList(MBase):
+    user = columns.Text(primary_key=True)
+    starred = columns.List(value_type=columns.Text)
+    following = columns.List(value_type=columns.Text)
+    followers = columns.List(value_type=columns.Text)

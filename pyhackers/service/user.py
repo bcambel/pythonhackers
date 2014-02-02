@@ -7,9 +7,7 @@ from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
 from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost, UserDiscussion
-from pyhackers.apps.idgen import idgen_client
 from pyhackers.sentry import sentry_client
-import simplejson as json
 from pyhackers.job_scheduler import worker_queue
 
 
@@ -208,7 +206,6 @@ def get_user_projects_by_nick(nick):
     return user, os_projects
 
 
-
 def get_user_timeline_by_nick(nick):
     try:
         user = CsUser.filter(nick=nick).first()
@@ -226,17 +223,13 @@ def get_user_timeline_by_nick(nick):
 def load_github_data():
     return
     access_token, config = None
-    from github import Github
-    g = Github(access_token,
-               client_id=config.get("github", 'client_id'),
-               client_secret=config.get("github", 'client_secret'), per_page=100)
+
+
 
     user = g.get_user("mitsuhiko")
     #TODO: Create a task to fetch all the other information..
 
-    starred = user.get_starred()
-    for s in starred:
-         print s.full_name, s.watchers
+
 
     pub_events = user.get_public_events()
 
