@@ -119,8 +119,9 @@
       });
     },
     formSubmitter: function() {
-      $('form[data-remote]').submit(function(evt) {
-        var $this, action, postData;
+      return $('form[data-remote]').submit(function(evt) {
+        var $form, $this, action, postData;
+        $form = $(this);
         evt.preventDefault();
         evt.stopPropagation();
         Application.captureSubmit($(evt.currentTarget));
@@ -131,9 +132,12 @@
         $this = $(this);
         action = $this.attr("action");
         postData = $this.serializeArray();
-        return $.post(action, postData);
+        return $.post(action, postData).done(function(data) {
+          return $form.trigger("ajax:success", [data]);
+        }).fail(function() {
+          return $form.trigger("ajax:error", []);
+        });
       });
-      return $('[data-toggle="tooltip"]').tooltip();
     }
   };
 

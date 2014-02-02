@@ -17,6 +17,8 @@
       if (this.discussion_id == null) {
         return;
       }
+      $(document).on("ajax:success", "#discussion-message", this.onDiscussionMessage);
+      $(document).on("ajax:error", "#discussion-message", this.onDiscussionMessageError);
       window.setInterval(this.reload, 10000);
       return this.reload();
     };
@@ -32,6 +34,30 @@
         return $(".posts").append(_this.template({
           message: data.posts
         }));
+      });
+    };
+
+    Discuss.prototype.onDiscussionMessageError = function(event) {
+      return Messenger().post({
+        message: "Something went wrong! Try again",
+        type: "error"
+      });
+    };
+
+    Discuss.prototype.onDiscussionMessage = function(event, data) {
+      var $form;
+      if (!data.id) {
+        Messenger().post({
+          message: "Something went wrong! Try again",
+          type: "error"
+        });
+        return;
+      }
+      $form = $(event.currentTarget);
+      $form.find("textarea").val("");
+      return Messenger().post({
+        message: "Message has been sent!",
+        type: "success"
       });
     };
 

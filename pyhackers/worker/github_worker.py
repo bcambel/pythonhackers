@@ -68,8 +68,7 @@ class RegistrationGithubWorker():
                 hide=False,
             )
 
-                #print s.full_name, s.watchers
-
+            #print s.full_name, s.watchers
 
         self.github_user_detail.starred = projects
         self.github_user_detail.save()
@@ -116,28 +115,26 @@ class RegistrationGithubWorker():
         #return
 
         for nick in missing_ids:
-
             user = self.g.get_user(nick)
 
             logging.warn("Creating user [{}]".format(nick))
 
-
             GithubUser(nick=user.login,
                        id=user.id,
-                              email=user.email,
-                              followers=user.followers,
-                              following=user.following,
-                              image=user.avatar_url,
-                              blog=user.blog,
-                              bio=user.bio,
-                              company=user.company,
-                              location=user.location,
-                              name=user.name,
-                              url=user.url,
-                              utype=user.type,
-                              public_repos=user.public_repos,
-                              public_gists=user.public_gists,).save()
-            #ghuser.save()
+                       email=user.email,
+                       followers=user.followers,
+                       following=user.following,
+                       image=user.avatar_url,
+                       blog=user.blog,
+                       bio=user.bio,
+                       company=user.company,
+                       location=user.location,
+                       name=user.name,
+                       url=user.url,
+                       utype=user.type,
+                       public_repos=user.public_repos,
+                       public_gists=user.public_gists, ).save()
+
             logging.warn("User[{}]created".format(nick))
 
 

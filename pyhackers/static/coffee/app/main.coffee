@@ -126,6 +126,7 @@ Application = {
     formSubmitter : () ->
 
         $('form[data-remote]').submit (evt) ->
+            $form = $(@)
             evt.preventDefault()
             evt.stopPropagation()
             Application.captureSubmit($(evt.currentTarget))
@@ -138,10 +139,13 @@ Application = {
             action = $this.attr("action")
             postData = $this.serializeArray()
 
-            $.post(action, postData)
+            $.post(action, postData,)
+                .done((data) ->
+                    $form.trigger("ajax:success", [data])
+                ).fail( () ->
+                    $form.trigger("ajax:error", [])
+                )
 
-
-        $('[data-toggle="tooltip"]').tooltip()
 }
 
 
