@@ -1,12 +1,19 @@
 import logging
+from datetime import datetime as dt
+from dateutil import parser as dt_parser
 #from cqlengine import BatchQuery
 from cqlengine.query import DoesNotExist
 from pyhackers.config import config
 from pyhackers.model.user import User, SocialUser
-from pyhackers.model.cassandra.hierachy import (GithubProject, GithubUserList, GithubUser,
-                                                User as CsUser, Post as CsPost, UserPost as CsUserPost, UserFollower as CsUserFollower,
-                                                UserTimeLine)
+from pyhackers.model.cassandra.hierachy import (GithubProject,
+                                                GithubUserList,
+                                                GithubUser,
+                                                GithubEvent,
+                                                )
 from github import Github
+import requests
+
+GITHUB_URL = "https://api.github.com/{}?client_id={}&client_secret={}"
 
 
 class RegistrationGithubWorker():
@@ -137,14 +144,60 @@ class RegistrationGithubWorker():
 
             logging.warn("User[{}]created".format(nick))
 
+    def get_user_timeline(self):
+        user = self.github_user.login
+
+        url = GITHUB_URL.format("users/{}/received_events/public".format(user),
+                                self.client_id, self.client_secret)
+
+        def get_json_request(endpoint):
+            r = requests.get(endpoint)
+
+            json_resp = r.json()
+            logging.warn(r.headers)
+            next_link = r.headers.get("link")
+            next_request_url = None
+
+            if next_link is not None and len(next_link) > 0:
+                try:
+                    next_request_url = next_link.split(";")[0].replace("<", "").replace(">", "")
+                except:
+                    next_request_url = None
+
+            logging.warn("NextUp: {}".format(next_link))
+
+            for event in json_resp:
+                id = int(event.get("id", None))
+                type = event.get("type", None)
+                actor = event.get("actor", None)
+                actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
+                repo = event.get("repo", None)
+                repo_str = "{},{}".format(repo.get("id", ""), repo.get("login"))
+                public = event.get("public", None)
+                created_at = dt_parser.parse(event.get("created_at", dt.utcnow()))
+                org = event.get("org", None)
+                org_str = None
+                if org is not None:
+                    org_str = "{},{}".format(org.get("id", ""), org.get("login"))
+
+                GithubEvent.create(id=id, type=type, actor=actor_str,org=org_str, created_at=created_at)
+
+                logging.warn("{}[{}] {}".format(type, actor, id))
+
+            if next_request_url is not None:
+                get_json_request(next_request_url)
+
+
+        get_json_request(url)
 
     def run(self):
         self.get_user_details_from_db()
         self.init_github()
-        self.get_starred_projects()
-        self.get_following_users()
-        self.get_follower_users()
-        self.save_discovered_users()
+        #self.get_starred_projects()
+        #self.get_following_users()
+        #self.get_follower_users()
+        #self.save_discovered_users()
+        self.get_user_timeline()
         pass
 
 

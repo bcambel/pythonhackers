@@ -340,3 +340,11 @@ class GithubUserList(MBase):
     starred = columns.List(value_type=columns.Text)
     following = columns.List(value_type=columns.Text)
     followers = columns.List(value_type=columns.Text)
+
+
+class GithubEvent(MBase):
+    id = columns.BigInt(primary_key=True)
+    type = columns.Text()
+    actor = columns.Text()
+    org = columns.Text()
+    created_at = columns.DateTime()

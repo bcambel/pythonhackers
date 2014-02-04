@@ -54,6 +54,7 @@ def create(cassa_key_space='pyhackers'):
     sync_table(GithubProject)
     sync_table(GithubUser)
     sync_table(GithubUserList)
+    sync_table(GithubEvent)
 
 
 def test_insert():

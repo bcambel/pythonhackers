@@ -3,7 +3,7 @@ import ConfigParser
 import os
 
 logging.basicConfig(format='[%(asctime)s](%(filename)s#%(lineno)d)%(levelname)-7s %(message)s',
-                    level=logging.NOTSET)
+                    level=logging.INFO)
 
 config = ConfigParser.RawConfigParser()
 
