@@ -32,6 +32,7 @@ class RegistrationGithubWorker():
         self.github_user = None
         self.github_user_detail = None
         self.users_discovered = set()
+        self.previous_link = None
 
     def get_user_details_from_db(self):
         user = User.query.get(self.user_id)
@@ -144,51 +145,78 @@ class RegistrationGithubWorker():
 
             logging.warn("User[{}]created".format(nick))
 
+    def _create_event(self, json_resp):
+        for event in json_resp:
+            event_id = int(event.get("id", None))
+            event_type = event.get("type", None)
+            actor = event.get("actor", None)
+            actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
+            repo = event.get("repo", None)
+            repo_str = "{},{}".format(repo.get("id", ""), repo.get("name"))
+            public = event.get("public", None)
+            created_at = dt_parser.parse(event.get("created_at", dt.utcnow()))
+            org = event.get("org", None)
+            org_str = None
+            if org is not None:
+                org_str = "{},{}".format(org.get("id", ""), org.get("login"))
+
+            GithubEvent.create(id=event_id, type=event_type,
+                               actor=actor_str, org=org_str,
+                               repo=repo_str, created_at=created_at)
+
     def get_user_timeline(self):
+        """
+        Fetch events from github
+        """
         user = self.github_user.login
 
         url = GITHUB_URL.format("users/{}/received_events/public".format(user),
                                 self.client_id, self.client_secret)
+        session = requests.session()
 
-        def get_json_request(endpoint):
-            r = requests.get(endpoint)
+        def paged_json_request(endpoint):
+            """
+            Recursively fetch the events
+            response headers contain ['link'] which is the next or previous page url.
+            """
+            r = session.get(endpoint)
 
             json_resp = r.json()
-            logging.warn(r.headers)
+            logging.debug(r.headers)
             next_link = r.headers.get("link")
-            next_request_url = None
+
+            logging.debug(next_link)
 
             if next_link is not None and len(next_link) > 0:
                 try:
-                    next_request_url = next_link.split(";")[0].replace("<", "").replace(">", "")
-                except:
+
+                    link_parts = next_link.split(";")
+                    next_url = link_parts[0]
+                    direction = link_parts[1]
+
+                    if "prev" in direction:
+                        return
+
+                    next_request_url = next_url.replace("<", "").replace(">", "")
+
+                    if self.previous_link == next_request_url:
+                        return
+
+                    self.previous_link = next_request_url
+
+                except Exception, ex:
+                    logging.error(ex)
                     next_request_url = None
+            else:
+                logging.warn(40 * "=")
+                logging.warn("No more next link")
+                return
 
-            logging.warn("NextUp: {}".format(next_link))
+            self._create_event(json_resp)
 
-            for event in json_resp:
-                id = int(event.get("id", None))
-                type = event.get("type", None)
-                actor = event.get("actor", None)
-                actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
-                repo = event.get("repo", None)
-                repo_str = "{},{}".format(repo.get("id", ""), repo.get("login"))
-                public = event.get("public", None)
-                created_at = dt_parser.parse(event.get("created_at", dt.utcnow()))
-                org = event.get("org", None)
-                org_str = None
-                if org is not None:
-                    org_str = "{},{}".format(org.get("id", ""), org.get("login"))
+            paged_json_request(next_request_url)
 
-                GithubEvent.create(id=id, type=type, actor=actor_str,org=org_str, created_at=created_at)
-
-                logging.warn("{}[{}] {}".format(type, actor, id))
-
-            if next_request_url is not None:
-                get_json_request(next_request_url)
-
-
-        get_json_request(url)
+        paged_json_request(url)
 
     def run(self):
         self.get_user_details_from_db()

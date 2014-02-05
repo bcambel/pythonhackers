@@ -347,4 +347,5 @@ class GithubEvent(MBase):
     type = columns.Text()
     actor = columns.Text()
     org = columns.Text()
+    repo = columns.Text()
     created_at = columns.DateTime()
