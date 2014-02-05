@@ -72,3 +72,6 @@ def start():
     #'entrepreneurship','StartUp','SaaS','github','ycombinator','techstars',
     #'cassandra','mysql','mongodb','quora',
     #'scala','erlang','golang','python','entrepreneur','marketing'])
+
+if __name__ == "__main__":
+    start()

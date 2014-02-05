@@ -31,4 +31,5 @@ six==1.5.2
 slugify==0.0.1
 thrift==0.9.1
 times==0.6.2
+tweepy==2.2
 wsgiref==0.1.2
