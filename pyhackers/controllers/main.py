@@ -11,7 +11,9 @@ from pyhackers.service.post import new_post
 from pyhackers.service.channel import follow_channel, load_channel, get_channel_list
 from pyhackers.service.project import project_follow, load_project
 from pyhackers.service.user import get_profile, get_profile_by_nick, follow_user, load_user
-from flask.ext.wtf import Form, TextField, PasswordField, Required
+from flask_wtf import Form
+from wtforms import TextField, PasswordField
+from wtforms.validators import Required
 from flask import request, Blueprint, redirect, jsonify, abort
 from flask.ext.login import current_user, logout_user, login_required
 from datetime import datetime as dt
