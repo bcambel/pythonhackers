@@ -5,10 +5,10 @@ import textwrap
 import threading
 import time
 #from pyhackers.utils import files_in
-from kafka.client import KafkaClient
-from kafka.consumer import SimpleConsumer
+#from kafka.client import KafkaClient
+#from kafka.consumer import SimpleConsumer
 from twisted.internet import reactor, task
-from autobahn.websocket import WebSocketServerProtocol, WebSocketServerFactory, listenWS
+from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory, listenWS
 import simplejson as json
 import redis
 from os import listdir

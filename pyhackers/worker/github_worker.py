@@ -3,6 +3,7 @@ from datetime import datetime as dt
 from dateutil import parser as dt_parser
 #from cqlengine import BatchQuery
 from cqlengine.query import DoesNotExist
+from pyhackers.common import unix_time
 from pyhackers.config import config
 from pyhackers.model.user import User, SocialUser
 from pyhackers.model.cassandra.hierachy import (GithubProject,
@@ -12,6 +13,7 @@ from pyhackers.model.cassandra.hierachy import (GithubProject,
                                                 )
 from github import Github
 import requests
+import simplejson
 
 GITHUB_URL = "https://api.github.com/{}?client_id={}&client_secret={}"
 
@@ -148,21 +150,25 @@ class RegistrationGithubWorker():
     def _create_event(self, json_resp):
         for event in json_resp:
             event_id = int(event.get("id", None))
-            event_type = event.get("type", None)
+            event_type = event.get("type", "").replace("Event","")
             actor = event.get("actor", None)
             actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
             repo = event.get("repo", None)
-            repo_str = "{},{}".format(repo.get("id", ""), repo.get("name"))
+            repo_str = None
+            if repo is not None:
+                repo_str = "{},{}".format(repo.get("id", ""), repo.get("name"))
             public = event.get("public", None)
-            created_at = dt_parser.parse(event.get("created_at", dt.utcnow()))
+            created_at = unix_time( dt_parser.parse(event.get("created_at", dt.utcnow())).replace(tzinfo=None), float=False)
             org = event.get("org", None)
             org_str = None
             if org is not None:
                 org_str = "{},{}".format(org.get("id", ""), org.get("login"))
 
+            payload = event.get("payload", {})
+
             GithubEvent.create(id=event_id, type=event_type,
                                actor=actor_str, org=org_str,
-                               repo=repo_str, created_at=created_at)
+                               repo=repo_str, created_at=created_at, payload= simplejson.dumps(payload))
 
     def get_user_timeline(self):
         """

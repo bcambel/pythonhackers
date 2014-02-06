@@ -348,4 +348,5 @@ class GithubEvent(MBase):
     actor = columns.Text()
     org = columns.Text()
     repo = columns.Text()
-    created_at = columns.DateTime()
+    created_at = columns.Float()
+    payload = columns.Text()

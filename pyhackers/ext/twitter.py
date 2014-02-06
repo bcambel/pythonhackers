@@ -67,6 +67,8 @@ def start():
     api = API(auth)
     friend_ids = api.friends_ids()
     stream = Stream(auth, l)
+    logging.warn(friend_ids)
+    friend_ids = [str(i) for i in friend_ids]
     #        ,track=['startup','entrepreneurship','marketing','SEO']
     stream.filter(follow=friend_ids, track=['clojure']) #,track=[
     #'entrepreneurship','StartUp','SaaS','github','ycombinator','techstars',
