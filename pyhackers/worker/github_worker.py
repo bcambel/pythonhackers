@@ -41,7 +41,6 @@ class RegistrationGithubWorker():
         social_account = SocialUser.query.get(self.social_account_id)
         self.access_token = social_account.access_token
 
-
     def init_github(self):
         self.g = Github(self.access_token,
                         client_id=self.client_id,
@@ -147,10 +146,11 @@ class RegistrationGithubWorker():
 
             logging.warn("User[{}]created".format(nick))
 
-    def _create_event(self, json_resp):
+    @staticmethod
+    def _create_event(json_resp):
         for event in json_resp:
             event_id = int(event.get("id", None))
-            event_type = event.get("type", "").replace("Event","")
+            event_type = event.get("type", "").replace("Event", "")
             actor = event.get("actor", None)
             actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
             repo = event.get("repo", None)
@@ -158,7 +158,8 @@ class RegistrationGithubWorker():
             if repo is not None:
                 repo_str = "{},{}".format(repo.get("id", ""), repo.get("name"))
             public = event.get("public", None)
-            created_at = unix_time( dt_parser.parse(event.get("created_at", dt.utcnow())).replace(tzinfo=None), float=False)
+            created_at = unix_time(dt_parser.parse(event.get("created_at", dt.utcnow())).replace(tzinfo=None),
+                                   float=False)
             org = event.get("org", None)
             org_str = None
             if org is not None:
@@ -168,7 +169,7 @@ class RegistrationGithubWorker():
 
             GithubEvent.create(id=event_id, type=event_type,
                                actor=actor_str, org=org_str,
-                               repo=repo_str, created_at=created_at, payload= simplejson.dumps(payload))
+                               repo=repo_str, created_at=created_at, payload=simplejson.dumps(payload))
 
     def get_user_timeline(self):
         """
@@ -227,12 +228,12 @@ class RegistrationGithubWorker():
     def run(self):
         self.get_user_details_from_db()
         self.init_github()
-        #self.get_starred_projects()
-        #self.get_following_users()
-        #self.get_follower_users()
-        #self.save_discovered_users()
+        self.get_starred_projects()
+        self.get_following_users()
+        self.get_follower_users()
+        self.save_discovered_users()
         self.get_user_timeline()
-        pass
+        # TODO: Generate User Stories
 
 
 def new_github_registration(user_id, social_account_id):

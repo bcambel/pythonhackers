@@ -4,6 +4,8 @@ from raven.base import DummyClient
 import logging
 from pyhackers.app import app
 
+sentry_client = None
+
 
 def init(app):
     global sentry_client
