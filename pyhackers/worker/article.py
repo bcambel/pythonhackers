@@ -15,6 +15,7 @@ from pyhackers.sentry import sentry_client as error_reporter
 from pyhackers.common.timelimit import timelimit, TimeoutError
 from pyhackers.common.stringutils import safe_str, max_length_field, non_empty_str, safe_filename
 from pyhackers.db import DB as session
+from pyhackers.model.feed import Post, Feed, FeedHistory
 
 
 pp = pprint.PrettyPrinter(indent=6)
@@ -26,23 +27,6 @@ entry_attributes = ['author', 'feedburner_origlink', 'id', 'href', 'published_pa
 feed_attributes = ['title', 'language', 'description', 'href', 'updated_parsed', 'version', 'author', 'link']
 general_attributes = ['etag', 'status']
 
-
-class Post:
-    id = 0
-
-
-class Feed:
-    id = 0
-
-
-class FeedHistory:
-    id = 0
-
-
-def test(url):
-    get_feed(url)
-
-
 code_status_results = {
     0: "?",
     2: "DONE",
@@ -50,10 +34,6 @@ code_status_results = {
     4: "NF",
     5: "ERROR"
 }
-
-
-def task(name, args):
-    pass
 
 
 def get_feed(rss_url, stats=False):
@@ -76,9 +56,9 @@ def get_feed(rss_url, stats=False):
             return False
 
         if len(post_ids) > 0:
-            logging.info("Saved %d posts for %s" % (len(post_ids), safe_str(rss_url)))
+            logging.info(u"Saved %d posts for %s" % (len(post_ids), safe_str(rss_url)))
         else:
-            logging.info("No Posts saved for %s" % safe_str(rss_url))
+            logging.info(u"No Posts saved for %s" % safe_str(rss_url))
 
         for id in post_ids:
             if stats:
@@ -88,11 +68,11 @@ def get_feed(rss_url, stats=False):
     except Exception, ex:
         error_dict = {"rss_url": safe_str(rss_url)}
 
-        logging.warn("{0}Exception Occured:{1}{0}".format((20 * "="), ex.message))
+        logging.warn(u"{0}Exception Occured:{1}{0}".format((20 * "="), ex.message))
         try:
             error_reporter.captureException(**error_dict)
         except Exception, error_reporter_exception:
-            print error_reporter_exception
+            logging.exception(error_reporter_exception)
 
 
 def url_hash(url):
@@ -192,7 +172,7 @@ def download_feed_return_objects(rss_url):
     feed_parser_results, success = get_rss(rss_url)
 
     if feed_parser_results is None:
-        error_reporter.captureMessage('Feed Parser results is None', **dict(rss_url=rss_url))
+        error_reporter.captureMessage(u'Feed Parser results is None', **dict(rss_url=rss_url))
         yield None
         return
 
@@ -300,8 +280,6 @@ def download_feed_return_objects(rss_url):
 
             if not should_skip:
                 new_post_count += 1
-                #				post_indexer.index(rss_post)
-                #				print "%s - %s [SAVE]" % (rss_post.post_id_hash,safe_str(rss_post.title))
                 yield rss_post
 
     feed_history = FeedHistory(id=uuid.uuid1(),
@@ -330,8 +308,6 @@ def get_object_attr_values(anyobj):
         yield (attr, value)
 
 
-
-
 def current_dir(file=__file__):
     return os.path.dirname(os.path.abspath(file))
 
@@ -351,9 +327,6 @@ def get_current_timeout():
 @timelimit(get_current_timeout)
 def download_rss(url):
     return feedparser.parse(url)
-
-
-
 
 
 def get_rss(url):
