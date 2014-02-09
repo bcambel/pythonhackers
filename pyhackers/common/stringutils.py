@@ -1,6 +1,6 @@
 # coding=utf-8
 import htmlentitydefs
-import anyjson
+import json
 import unicodedata as ud
 
 
@@ -37,7 +37,7 @@ def safe_filename(filename):
 
 
 def safe_obj_str(my_obj):
-    return anyjson.serialize(my_obj)
+    return json.dumps(my_obj)
 
 
 def max_length_field(instance, name, length):

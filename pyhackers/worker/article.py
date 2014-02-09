@@ -400,7 +400,7 @@ def extract_rss_results(feed, url=''):
             elif isinstance(content, basestring):
                 content_html = content
             else:
-                error_reporter.captureMessage("Content has weird setup")
+                logging.warn("Content has weird setup")
                 content_html = ''
 
         if hasattr(entry, "description") and not len(content_html):
@@ -413,12 +413,14 @@ def extract_rss_results(feed, url=''):
                 elif isinstance(content_html, basestring):
                     pass
                 else:
-                    print "What the fuck is this type? %s " % type(content_html)
+                    logging.warn("What the fuck is this type? %s " % type(content_html))
+
 
         bsoup = BeautifulSoup(content_html)
+
         html_text = content_html
         if bsoup is not None and len(bsoup.contents) > 0:
-            html_text = "".join([c.__unicode__() for c in bsoup.contents])
+            html_text = "".join([unicode(c) for c in bsoup.contents])
 
         feed_entry['content'] = html_text
 
@@ -426,10 +428,12 @@ def extract_rss_results(feed, url=''):
             if hasattr(entry, attr):
                 val = entry[attr]
                 if val is not None and isinstance(val, basestring):
-                    bsoup2 = BeautifulSoup(val)
-                    val = "".join([c.__unicode__() for c in bsoup2.contents]) if bsoup2 is not None and len(
-                        bsoup2.contents) > 0 else val
-                    val = val
+                    logging.warn(u"{} => {}".format(attr, val))
+
+                    #bsoup2 = BeautifulSoup(val)
+                    #val = "".join([unicode(c) for c in bsoup2.contents]) if bsoup2 is not None and len(
+                    #    bsoup2.contents) > 0 else val
+                    #val = val
 
                 feed_entry[attr] = val
 
