@@ -3,7 +3,7 @@ from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
 import time
-from pyhackers.common import unix_time, format_date
+from pyhackers.utils import unix_time, format_date
 
 
 class MBase(Model):

@@ -15,7 +15,7 @@ from pyhackers.sentry import sentry_client as error_reporter
 from pyhackers.common.timelimit import timelimit, TimeoutError
 from pyhackers.common.stringutils import safe_str, max_length_field, non_empty_str, safe_filename
 from pyhackers.db import DB as session
-from pyhackers.model.feed import Post, Feed, FeedHistory
+#from pyhackers.model.feed import Post, Feed, FeedHistory
 
 
 pp = pprint.PrettyPrinter(indent=6)

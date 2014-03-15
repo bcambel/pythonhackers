@@ -1,9 +1,7 @@
 import logging
 from datetime import datetime as dt
-import markdown2
 from pyhackers.db import DB as db
-from pyhackers.common import format_date
-from pyhackers.utils import markdown_to_html
+from pyhackers.utils import markdown_to_html, format_date
 
 
 class Tutorial(db.Model):

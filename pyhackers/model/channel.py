@@ -1,5 +1,5 @@
 from pyhackers.db import DB as db
-from pyhackers.common import format_date
+from pyhackers.utils import format_date
 
 
 class Channel(db.Model):

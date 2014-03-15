@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime, Text, ForeignKe
 from sqlalchemy.dialects import postgresql
 from sqlalchemy import event
 from pyhackers.db import DB as db
-from pyhackers.common import format_date
+from pyhackers.utils import format_date
 from datetime import datetime as dt
 
 
