@@ -1,4 +1,4 @@
-#  [![pythonhackers](http://pythonhackers.com/gitbeacon?_=2)](https://github.com/pythonhackers/pythonhackers)
+# PythonHackers
 
 
 ![u](https://travis-ci.org/pythonhackers/pythonhackers.png?branch=master)
@@ -15,11 +15,6 @@ pip install -r requirements.txt
 
 That will do the job for you.
 
-Support PythonHackers
-----------------------
 
-<iframe style="border: 0; margin: 0; padding: 0;"
-        src="https://www.gittip.com/bcambel/widget.html"
-        width="48pt" height="22pt"></iframe>
 
 
