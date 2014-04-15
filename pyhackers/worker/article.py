@@ -162,6 +162,11 @@ def cut_clean_etag(etag, max_len=50):
 
 
 def download_feed_return_objects(rss_url):
+    """
+    The piece of code must be removed from this earth, refactored nicely.
+    It does everything. Checks if RSS exists, calls RSS fetcher,
+    iterates through RSS feed items, creates Post object(s), inserts into FeedHistory.
+    """
     try:
         feed_obj = rss_exists(rss_url)
     except:

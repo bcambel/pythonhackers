@@ -21,7 +21,7 @@ GITHUB_URL = "https://api.github.com/{}?client_id={}&client_secret={}"
 class RegistrationGithubWorker():
     """
     Once a user registers via GitHub, we will fetch the stars/watching projects
-    following users/followers
+    following users/followers, events that the user will see their event stream.
     """
 
     def __init__(self, user_id, social_account_id, config):
@@ -118,15 +118,15 @@ class RegistrationGithubWorker():
         logging.warn(found_id_list)
         logging.warn(self.users_discovered)
 
-        logging.warn("[{}] users are found".format(len(self.users_discovered)))
-        logging.warn("[{}] users are missing".format(len(missing_ids)))
+        logging.warn(u"[{}] users are found".format(len(self.users_discovered)))
+        logging.warn(u"[{}] users are missing".format(len(missing_ids)))
 
         #return
 
         for nick in missing_ids:
             user = self.g.get_user(nick)
 
-            logging.warn("Creating user [{}]".format(nick))
+            logging.warn(u"Creating user [{}]".format(nick))
 
             GithubUser(nick=user.login,
                        id=user.id,
@@ -144,7 +144,7 @@ class RegistrationGithubWorker():
                        public_repos=user.public_repos,
                        public_gists=user.public_gists, ).save()
 
-            logging.warn("User[{}]created".format(nick))
+            logging.warn(u"User[{}]created".format(nick))
 
     @staticmethod
     def _create_event(json_resp):
@@ -155,11 +155,15 @@ class RegistrationGithubWorker():
             actor_str = "{},{}".format(actor.get("id", ""), actor.get("login"))
             repo = event.get("repo", None)
             repo_str = None
+
             if repo is not None:
                 repo_str = "{},{}".format(repo.get("id", ""), repo.get("name"))
+
             public = event.get("public", None)
-            created_at = unix_time(dt_parser.parse(event.get("created_at", dt.utcnow())).replace(tzinfo=None),
-                                   float=False)
+
+            created_at = unix_time(dt_parser.parse(
+                event.get("created_at", dt.utcnow())).replace(tzinfo=None),
+                float=False)
             org = event.get("org", None)
             org_str = None
             if org is not None:
