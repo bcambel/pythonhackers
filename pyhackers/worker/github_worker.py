@@ -3,7 +3,7 @@ from datetime import datetime as dt
 from dateutil import parser as dt_parser
 #from cqlengine import BatchQuery
 from cqlengine.query import DoesNotExist
-from pyhackers.common import unix_time
+from pyhackers.utils import unix_time
 from pyhackers.config import config
 from pyhackers.model.user import User, SocialUser
 from pyhackers.model.cassandra.hierachy import (GithubProject,

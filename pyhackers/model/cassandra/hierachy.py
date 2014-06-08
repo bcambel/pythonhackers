@@ -198,7 +198,7 @@ class Discussion(MBase):
 
     @property
     def published_date(self):
-        return format_date(epoch_to_date(self.published_at*1000))
+        return epoch_to_date(self.published_at*1000)
 
 
 class DiscussionPost(MBase):
@@ -351,4 +351,4 @@ class GithubEvent(MBase):
     org = columns.Text()
     repo = columns.Text()
     created_at = columns.Float()
-    payload = columns.Text()
+    payload = columns.Text()    
