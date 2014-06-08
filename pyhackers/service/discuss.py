@@ -68,10 +68,11 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100, current
 
     logging.warn("Looking for posts: {}".format(post_ids))
     disc_posts = load_posts(post_ids, current_user_id=current_user_id)
+
     for post in disc_posts:
         u = filter(lambda x: x.id == post.user_id, users)
 
-        post.user = u[0] if u is not None else None
+        post.user = u[0] if u is not None and len(u) > 0 else None
 
     try:
         counters = DiscussionCounter.get(id=discussion_id)
