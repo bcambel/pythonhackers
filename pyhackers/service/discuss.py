@@ -92,7 +92,6 @@ def new_discussion(title, text, current_user_id=None):
     d.post_id = post_id
     d.message_count = 1
     d.title = title
-    d.published_at = dt.utcnow()
     d.user_count = 1
     d.users = {current_user_id}
     d.slug = slug
