@@ -88,7 +88,6 @@ def follow_discussion(discussion_id):
     return jsonify({'ok': True})
 
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
-@login_required
 def discussion_messages_ctrl(discussion_id):
     after_id = request.args.get("after_id", -1)
     try:

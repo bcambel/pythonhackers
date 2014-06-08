@@ -48,7 +48,7 @@ class Post(MBase):
 
     stats = columns.Map(columns.Ascii, columns.Integer)
 
-    published_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
     def to_dict(self):
         return {'id': unicode(self.id),
@@ -63,7 +63,7 @@ class Post(MBase):
                 'spam': self.spam,
                 'flagged': self.flagged,
                 'deleted': self.deleted,
-                'published_at': self.published_at,
+                'published_at': self.created_at,
                 'ago': self.ago,
                 'user': {'id': self.user_id, 'nick': self.user_nick},
                 'stats': self.__dict__.get('statistics', {}),
@@ -72,7 +72,9 @@ class Post(MBase):
 
     @property
     def ago(self):
-        result = int(int(int(time.time() - unix_time(self.published_at, float=True))) / 60.0)
+        if self.created_at is None:
+            return "some time ago"
+        result = int(int(int(time.time() - self.created_at)) / 60.0)
         abb = "m"
 
         if result > (60 * 24):
@@ -288,7 +290,7 @@ class PostVote(MBase):
     post_id = columns.BigInt(primary_key=True, partition_key=True)
     user_id = columns.Integer(primary_key=True)
     positive = columns.Boolean(default=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class PostReply(MBase):

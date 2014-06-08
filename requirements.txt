@@ -32,7 +32,7 @@ raven==4.0.4
 redis==2.9.1
 requests==1.2.3
 rq==0.3.13
-simplejson==3.3.2
+simplejson==3.3.2   
 simplekv==0.7.1.dev1
 six==1.5.2
 slugify==0.0.1

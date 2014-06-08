@@ -180,7 +180,7 @@ def get_profile_by_nick(nick):
         try:
             user = User.query.filter_by(nick=nick)
 
-            return user, [], [], []
+            return user, [], []
         except:
             return None
 
