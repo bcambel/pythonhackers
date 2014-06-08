@@ -198,7 +198,7 @@ class Discussion(MBase):
 
     @property
     def published_date(self):
-        return format_date(self.published_at)
+        return format_date(epoch_to_date(self.published_at*1000))
 
 
 class DiscussionPost(MBase):
