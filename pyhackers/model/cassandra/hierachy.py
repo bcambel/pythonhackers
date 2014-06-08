@@ -3,7 +3,7 @@ from cqlengine import columns
 from cqlengine.models import Model
 from datetime import datetime as dt
 import time
-from pyhackers.utils import unix_time, format_date
+from pyhackers.utils import unix_time, format_date, epoch_to_date
 
 
 class MBase(Model):
@@ -108,7 +108,7 @@ class Topic(MBase):
     name = columns.Text()
     description = columns.Text()
     last_message_id = columns.BigInt(required=False)
-    last_message_time = columns.DateTime(default=dt.utcnow())
+    last_message_time = columns.BigInt(default=unix_time(dt.utcnow()))
     main_topic = columns.Boolean(default=False)
     parent_topic = columns.Integer(required=False)
     subtopics = columns.Set(value_type=columns.Integer)
@@ -141,8 +141,8 @@ class User(MBase):
     nick = columns.Text(required=True, index=True)
 
     extended = columns.Map(columns.Text, columns.Text)
-    registered_at = columns.DateTime(default=dt.utcnow())
-    created_at = columns.DateTime(default=dt.utcnow())
+    registered_at = columns.BigInt(default=unix_time(dt.utcnow()))
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
     def to_dict(self):
         return {
@@ -181,7 +181,7 @@ class Discussion(MBase):
     users = columns.Set(value_type=columns.Integer)
     post_id = columns.BigInt()
     last_message = columns.BigInt()
-    published_at = columns.DateTime(default=dt.utcnow())
+    published_at = columns.BigInt(default=unix_time(dt.utcnow()))
     topic_id = columns.Integer(required=False)
 
     def to_dict(self):
@@ -192,7 +192,7 @@ class Discussion(MBase):
             'user_id': self.user_id,
             'post_id': unicode(self.post_id),
             'last_message': unicode(self.last_message),
-            'published_at': format_date(self.published_at),
+            'published_at': epoch_to_date(self.published_at),
             'topic_id': unicode(self.topic_id) if self.topic_id is not None else None,
         }
 
@@ -213,7 +213,7 @@ class DiscussionFollower(MBase):
     """
     disc_id = columns.BigInt(primary_key=True)
     user_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class UserTimeLine(MBase):
@@ -246,7 +246,7 @@ class UserFollower(MBase):
     """
     user_id = columns.Integer(primary_key=True)
     follower_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class UserFollowing(MBase):
@@ -255,25 +255,25 @@ class UserFollowing(MBase):
     """
     user_id = columns.Integer(primary_key=True)
     following_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class ProjectFollower(MBase):
     project_id = columns.Integer(primary_key=True)
     user_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class PostFollower(MBase):
     post_id = columns.TimeUUID(primary_key=True)
     user_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class ChannelFollower(MBase):
     channel_id = columns.Integer(primary_key=True)
     user_id = columns.Integer(primary_key=True)
-    created_at = columns.DateTime(default=dt.utcnow())
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
 
 
 class ChannelTimeLine(MBase):

@@ -128,6 +128,7 @@
     {% endif %}
 
     <script>
+        vex.defaultOptions.className = 'vex-theme-os';
         {% block scripts %}{% endblock %}
         {% autoescape off %}
         var session = {{ user_json }};
