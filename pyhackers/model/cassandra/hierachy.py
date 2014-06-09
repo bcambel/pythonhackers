@@ -351,4 +351,4 @@ class GithubEvent(MBase):
     org = columns.Text()
     repo = columns.Text()
     created_at = columns.Float()
-    payload = columns.Text()    
+    payload = columns.Text()

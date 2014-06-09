@@ -3,8 +3,12 @@ from datetime import datetime as dt
 from dateutil import parser as dt_parser
 #from cqlengine import BatchQuery
 from cqlengine.query import DoesNotExist
+
 from pyhackers.utils import unix_time
 from pyhackers.config import config
+from pyhackers.app import start_app
+start_app(soft=True)
+
 from pyhackers.model.user import User, SocialUser
 from pyhackers.model.cassandra.hierachy import (GithubProject,
                                                 GithubUserList,
@@ -247,5 +251,5 @@ def new_github_registration(user_id, social_account_id):
 
 
 if __name__ == "__main__":
-    #new_github_registration(12,5)
-    new_github_registration(14, 13)
+    new_github_registration(12,13)
+    #new_github_registration(14, 13)

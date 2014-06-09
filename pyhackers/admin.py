@@ -49,13 +49,13 @@ def _href(kls, model, name, url=None):
     .format(original, title))
 
 
-def _img(field, ctx, model, name):
+def _img(field, view, ctx, model, name, *args):
     original = getattr(model, field)
     return Markup('<img src="{0}" />'.format(original))
 
 
-def _nick_href(field, ctx, model, name):
-    return _href(ctx,model, name, url='https://github.com')
+def _nick_href(view, ctx, model, name):
+    return _href(ctx, model, name, url='https://github.com')
 
 
 class ProtectedModelView(ModelView, ProtectedView):
