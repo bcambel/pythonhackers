@@ -1,7 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="modal" style="display:block;position:relative;">
+        <div class="modal-dialog">
+            <form class="form-inline" action="/ajax/message/new"
+                  data-remote="true"
+                  method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">What's on your mind about Python ?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+
+                        <div class="clearfix" style="width:100%;">
+
+                            <textarea name='message' class="form-control input" rows="5"
+                                      placeholder="An awesome reply is waiting here" style="width:99%;"></textarea>
+
+                        </div>
+
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        {#        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </form>
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <div class="links container">
+
         <div id='timeline' class="col-lg-10 linklist row">
 
         </div>
@@ -13,38 +46,46 @@
     $(function(){
     var $template = window.Handlebars.compile($("#message-template").html());
     var msgs = [
-        {
-        user: {nick: 'bcambel'},
-        ago:'34m ago',
-        html: '<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Daniel Greenfield</a> wrote a blog post&nbsp;'+
-            '<a class="link" href="http://pydanny.com/awesome-slugify-human-readable-url-slugs-from-any-string.html">awesome-slugify: Human-readable URL slugs from any string</a>',
-        },{
-        user: {nick: 'bcambel'},
-        ago:'34m ago',
-        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;<a class="link" href="">Django</a> has a new release&nbsp;' +
-            '<a class="link" href="https://github.com/django/django/releases/tag/1.7a1">1.7a1: Tag 1.7a1</a>'
-        },
-        {
-        user: {nick: 'progrium'},
-        ago:'19h ago',
-        html: '<i class="fa fa-twitter"></i>&nbsp;<a class="link" href="">Jeff Lindsay</a> SystemsLive podcast with @TimothyFitz talking about Flynn and any other topic you bring up <a href="http://mixlr.com/systemslive/chat" class="link">http://mixlr.com/systemslive/chat</a> '
-        },
     {
-        user: {nick: 'progrium'},
-        ago:'19h ago',
-        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-plus"></i>&nbsp;<a class="link" href="">Jeff Lindsay</a> created a new repository. <a href="https://github.com/ipython/sloan-2013-reports" class="link">Sloan 2013 Reports</a> '
-        },
-        {
-        user: {nick: 'bcambel'},
-        ago:'34m ago',
-        html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<a class="link" href="">jezdez</a> starred&nbsp;' +
-            '<a class="link" href="https://github.com/mailgun/flanker">Mailgun / Flanker</a>'
-        },
-        {
-        user: {nick: 'bcambel'},
-        ago:'34m ago',
-        html:'<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Jesse Noller</a> wrote a blog post&nbsp;'+
-            '<a class="link" href="http://jessenoller.com/blog/2013/4/15/joining-rackspace"> Joining Rackspace</a>'}]
+    user: {nick: 'bcambel'},
+    ago:'34m ago',
+    html: '<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Daniel Greenfield</a> wrote a blog post&nbsp;
+    '+
+    '<a class="link" href="http://pydanny.com/awesome-slugify-human-readable-url-slugs-from-any-string.html">awesome-slugify:
+    Human-readable URL slugs from any string</a>',
+    },{
+    user: {nick: 'bcambel'},
+    ago:'34m ago',
+    html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-bullhorn"></i>&nbsp;<a class="link" href="">Django</a>
+    has a new release&nbsp;' +
+    '<a class="link" href="https://github.com/django/django/releases/tag/1.7a1">1.7a1: Tag 1.7a1</a>'
+    },
+    {
+    user: {nick: 'progrium'},
+    ago:'19h ago',
+    html: '<i class="fa fa-twitter"></i>&nbsp;<a class="link" href="">Jeff Lindsay</a> SystemsLive podcast with
+    @TimothyFitz talking about Flynn and any other topic you bring up
+    <a href="http://mixlr.com/systemslive/chat" class="link">http://mixlr.com/systemslive/chat</a> '
+    },
+    {
+    user: {nick: 'progrium'},
+    ago:'19h ago',
+    html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-plus"></i>&nbsp;
+    <a class="link" href="">Jeff Lindsay</a> created a new repository.
+    <a href="https://github.com/ipython/sloan-2013-reports" class="link">Sloan 2013 Reports</a> '
+    },
+    {
+    user: {nick: 'bcambel'},
+    ago:'34m ago',
+    html: '<i class="fa fa-github-alt"></i>&nbsp;<i class="fa fa-star"></i>&nbsp;<a class="link" href="">jezdez</a>
+    starred&nbsp;' +
+    '<a class="link" href="https://github.com/mailgun/flanker">Mailgun / Flanker</a>'
+    },
+    {
+    user: {nick: 'bcambel'},
+    ago:'34m ago',
+    html:'<i class="fa fa-file-text-o"></i>&nbsp;<a href="" class="link">Jesse Noller</a> wrote a blog post&nbsp;'+
+    '<a class="link" href="http://jessenoller.com/blog/2013/4/15/joining-rackspace"> Joining Rackspace</a>'}]
     $('#timeline').append($template({message: msgs}));
     });
 {% endblock %}

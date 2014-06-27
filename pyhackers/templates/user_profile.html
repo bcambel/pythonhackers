@@ -3,14 +3,21 @@
 {% from "widgets/user_image_list.html" import image_list_macro %}
 
 {% block content %}
-    <input type="hidden" id="user_nick" value="{{ profile.nick }}" />
-    <input type="hidden" id="active_module" value="{{ module }}" />
+    <input type="hidden" id="user_nick" value="{{ profile.nick }}"/>
+    <input type="hidden" id="active_module" value="{{ module }}"/>
 
     <div class='container'>
         <div class='col-lg-3 right-border fullheight'>
+            <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"> @{{ profile.nick }}</h3>
+  </div>
+  <div class="panel-body">
+
             <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
-             <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
-            <h5>@{{ profile.nick }}</h5>
+
+            <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+
             <hr/>
 
             <form method="post" action="/ajax/followuser" data-remote>
@@ -20,45 +27,70 @@
                     <i class='fa fa-heart'></i>&nbsp;&nbsp;&nbsp;Follow
                 </button>
             </form>
-            <hr/>
+             </div>
+</div>
             <div class="clearfix">
-                Followers: <br/>
-                {{ image_list_macro(followers) }}
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Followers</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ image_list_macro(followers) }}
+                    </div>
+                </div>
+
             </div>
-            <hr/>
+
             <div class="clearfix">
-                Following: <br/>
-                {{ image_list_macro(following) }}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Following</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ image_list_macro(following) }}
+                    </div>
+                </div>
+
             </div>
 
 
         </div>
         <div class='col-lg-8 left-border'>
+            <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Panel title</h3>
+  </div>
+  <div class="panel-body">
+
+
             <ul id="user-tab" class="nav nav-tabs">
-              <li class="active"><a href="#timeline-container" data-toggle="tab">Timeline</a></li>
-              <li><a href="#projects" data-toggle="tab">Projects</a></li>
-              <li><a href="#discussions-container" data-toggle="tab">Discussions</a></li>
+                <li class="active"><a href="#timeline-container" data-toggle="tab">Timeline</a></li>
+                <li><a href="#projects" data-toggle="tab">Projects</a></li>
+                <li><a href="#discussions-container" data-toggle="tab">Discussions</a></li>
             </ul>
 
-        <div class="tab-content">
-          <div class="tab-pane fade in active link-container" id="timeline-container">
-              <div class="links container">
-                <div id='timeline' class="linklist row">
+            <div class="tab-content">
+                <div class="tab-pane fade in active link-container" id="timeline-container">
+                    <div class="links">
+                        <div id='timeline' class="linklist row">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane frame" id="projects">
 
                 </div>
-            </div>
-          </div>
-          <div class="tab-pane frame" id="projects">
+                <div class="tab-pane" id="discussions-container">
+                    <div class="links">
+                        <div id='discussions' class="linklist row">
 
-          </div>
-          <div class="tab-pane" id="discussions-container">
-              <div class="links container">
-                <div id='discussions' class="linklist row">
-
+                        </div>
+                    </div>
                 </div>
             </div>
-          </div>
         </div>
+</div>
         </div>
     </div>
 {% endblock %}

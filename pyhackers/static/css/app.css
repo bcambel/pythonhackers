@@ -314,11 +314,21 @@ h4 a {
     padding:20px;
     font-size:18px;
 }
-.discussion-head{
+.discussion-head, .discussions{
     background-color: white;
     border-radius: 10px;
-    padding:20px;
+    padding-bottom:20px;
     margin-bottom:10px;
+}
+
+.discussions .part{
+    margin-bottom:10px;
+    border-bottom:1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.discussions .part a{
+    font-size:16px;
 }
 
 .links .front-action a.orange i{

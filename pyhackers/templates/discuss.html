@@ -3,97 +3,144 @@
 {% block content %}
 
     <div class="container">
-    <h1>Discussions</h1>
+    {#    <h1>Discussions</h1>#}
     <div class="row-fluid">
 
         <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="float:left;">Discussions</h3>
+
+                    <div class="btn-group pull-right " data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="options" id="option1"> Latest
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" id="option2"> Today
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" id="option3"> This week
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" id="option3"> This month
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" id="option3"> This year
+                        </label>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+
+                </div>
+                <div class="panel-body">
 
 
-            <div class=" discussions">
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>General</h3>
-                        <a href="/discuss/topic/python">See all</a>
+                    <hr/>
+                    <div class="discussions">
+                        {% for dis in discussions %}
+                            <div class="part">
+                                <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
+                                    {{ dis.title }}
+                                </a>
+                            </div>
+                        {% endfor %}
                     </div>
-
-                    <p>General discussions about Python</p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Flask </h3>
-                        <a href="/discuss/topic/flask">See all</a>
-                    </div>
-
-
-                    <p>Talk about awesome Flask</p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Django</h3>
-                        <a href="/discuss/topic/flask">See all</a>
-                    </div>
-                    <p>Talk about awesome Django</p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>SQLAlchemy</h3>
-                        <a href="/discuss/topic/flask">See all</a>
-                    </div>
-                    <p>All your database operation</p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Tornado</h3>
-                        <a href="/discuss/topic/tornado">See all</a>
-                    </div>
-                    <p>Lighting Python Web Server and Framework</p>
                 </div>
 
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Celery</h3>
-                        <a href="/discuss/topic/celery">See all</a>
-                    </div>
-                    <p>
-                        Your tasks in Celery's hand
-                    </p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Plone</h3>
-                        <a href="/discuss/topic/plone">See all</a>
-                    </div>
-                    <p>
-                        Best CMS for Python
-                    </p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>Pandas</h3>
-                        <a href="/discuss/topic/pandas">See all</a>
-                    </div>
-                    <p>
-                        Data science
-                    </p>
-                </div>
-                <div class="col-lg-6 topic row-fluid">
-                    <div class="col-lg-12 header">
-                        <h3>NumPy & SciPy</h3>
-                        <a href="/discuss/topic/numpy-scipy">See all</a>
-                    </div>
-                    <p>
-                        Master of numbers, mathematics, data
-                    </p>
-                </div>
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>General</h3>#}
+                {#                        <a href="/discuss/topic/python">See all</a>#}
+                {#                    </div>#}
+                {##}
+                {#                    <p>General discussions about Python</p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Flask </h3>#}
+                {#                        <a href="/discuss/topic/flask">See all</a>#}
+                {#                    </div>#}
+                {##}
+                {##}
+                {#                    <p>Talk about awesome Flask</p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Django</h3>#}
+                {#                        <a href="/discuss/topic/flask">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>Talk about awesome Django</p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>SQLAlchemy</h3>#}
+                {#                        <a href="/discuss/topic/flask">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>All your database operation</p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Tornado</h3>#}
+                {#                        <a href="/discuss/topic/tornado">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>Lighting Python Web Server and Framework</p>#}
+                {#                </div>#}
+                {##}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Celery</h3>#}
+                {#                        <a href="/discuss/topic/celery">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>#}
+                {#                        Your tasks in Celery's hand#}
+                {#                    </p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Plone</h3>#}
+                {#                        <a href="/discuss/topic/plone">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>#}
+                {#                        Best CMS for Python#}
+                {#                    </p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>Pandas</h3>#}
+                {#                        <a href="/discuss/topic/pandas">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>#}
+                {#                        Data science#}
+                {#                    </p>#}
+                {#                </div>#}
+                {#                <div class="col-lg-6 topic row-fluid">#}
+                {#                    <div class="col-lg-12 header">#}
+                {#                        <h3>NumPy & SciPy</h3>#}
+                {#                        <a href="/discuss/topic/numpy-scipy">See all</a>#}
+                {#                    </div>#}
+                {#                    <p>#}
+                {#                        Master of numbers, mathematics, data#}
+                {#                    </p>#}
+                {#                </div>#}
             </div>
         </div>
-         <div class="col-lg-4">
+        <div class="col-lg-4">
             <a href="#discuss-dialog" class="btn btn-primary">Start a discussion</a>
-            {% for dis in discussions %}
-                <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
-                    {{ dis.title }}
-                </a>
-            {% endfor %}
+            <hr />
+            <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Topics</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+
+        <li><a href="/discuss/topic/flask">Flask</a></li>
+        <li><a href="/discuss/topic/flask">Django</a></li>
+        <li><a href="/discuss/topic/flask">NumPy</a></li>
+    </ul>
+  </div>
+</div>
+
+
         </div>
         {#        <div class="col-lg-8 col-lg-offset-2">#}
         {#            #}
