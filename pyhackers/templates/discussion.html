@@ -10,41 +10,58 @@
     <div class="row-fluid">
         <div class="discussion col-lg-8">
 
-            <div class="discussion-head row">
 
+                <div class="panel panel-default">
+  <div class="panel-heading">
                 <h3>
                     <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">
                         {{ discussion.title }}
                     </a>
                 </h3>
 
-                <div class="discussion-message">
-                    {% autoescape off %}
+  </div>
+  <div class="panel-body">
+    {% autoescape off %}
                     {{ message.html }}
                     {% endautoescape %}
-                </div>
-            </div>
+  </div>
+</div>
+
+
+            
             <div class="linklist links clearfix">
                 <div class="posts">
                 </div>
                 <hr/>
-                <div class="messages clearfix">
-                    <div class="clearfix">
-                        <form id="discussion-message" class="form-inline" action="/ajax/discuss/message/new"
-                              data-remote="true"
-                              method="post">
-                            <div class="input-group">
-                                <textarea name='text' class="form-control input" rows="1"
-                                          placeholder="An awesome reply is waiting here"></textarea>
-                                <input type="hidden" name="id" value="{{ discussion.id }}"/>
+                <form id="discussion-message" class="form" action="/ajax/discuss/message/new" data-remote="true"
+                                method="post">
+                <div class="panel panel-default">
 
-                                    <span class="input-group-btn">
-                                        <button class="pull-right btn btn-default">Post</button>
-                                    </span>
-                            </div>
-                        </form>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Your answer</h3>
                     </div>
+                    <div class="panel-body">
+                        <div class="messages clearfix">
+                            <div class="form-group">
+
+
+
+                                    <textarea name='text' class="form-control input-block-level" rows="3"
+                                              placeholder="An awesome reply is waiting here"></textarea>
+                                    <input type="hidden" name="id" value="{{ discussion.id }}"/>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button type='submit' class="pull-right btn btn-default">Post</button>
+                        <div class="clearfix">&nbsp;</div>
+                    </div>
+
                 </div>
+</form>
+
             </div>
 
             <div class="footer">
