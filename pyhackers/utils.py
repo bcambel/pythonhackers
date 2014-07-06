@@ -37,7 +37,7 @@ def time_with_ms(date):
 def epoch_to_date(milliseconds):
     seconds = milliseconds / 1000
 
-    return (dt.utcfromtimestamp(seconds) + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%S")
+    return (dt.utcfromtimestamp(seconds) + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def nice_number(n):

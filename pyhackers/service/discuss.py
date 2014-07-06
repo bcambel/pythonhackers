@@ -12,15 +12,38 @@ from slugify import slugify
 
 from datetime import datetime as dt
 
+default_counter = {'message_count': 1, 'user_count': 1, 'view_count': 0}
 
 def load_discussions():
     discussions = Discussion.objects.all().limit(50)
+
+    disc_ids = [disc.id for disc in discussions]
+
+    logging.warn(disc_ids)
+
+    counter_data = DiscussionCounter.filter(id__in=disc_ids)
+
+    counter_map = {c.id: c for c in counter_data}
+
+    logging.warn("Counter Data: %s", counter_map)
+
+    for disc in discussions:
+        disc.counter = counter_map.get(disc.id, default_counter)
 
     return discussions
 
 
 def load_discussions_by_id(ids):
     return Discussion.objects.filter(id__in=ids).limit(50)
+
+
+def load_discussion_counter(discussion_id):
+    try:
+        counters = DiscussionCounter.get(id=discussion_id)
+    except DoesNotExist:
+        counters = default_counter
+
+    return counters
 
 
 def load_discussion(slug, discussion_id, current_user_id=None):
@@ -38,10 +61,8 @@ def load_discussion(slug, discussion_id, current_user_id=None):
     if current_user_id in followers:
         user = {'id': current_user_id, 'following': True}
 
-    try:
-        counters = DiscussionCounter.get(id=discussion_id)
-    except DoesNotExist:
-        counters = {'message_count': 1, 'user_count': 1, 'view_count': 0}
+    counters = load_discussion_counter(discussion_id)
+
 
     # TODO: Utterly we will place this into a background job (more like log processed counter)
     Event.discussion_view(current_user_id, discussion_id)

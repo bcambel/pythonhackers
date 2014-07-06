@@ -11,56 +11,49 @@
         <div class="discussion col-lg-8">
 
 
-                <div class="panel panel-default">
-  <div class="panel-heading">
-                <h3>
-                    <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">
-                        {{ discussion.title }}
-                    </a>
-                </h3>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>
+                        <a href="/discuss/{{ discussion.slug }}/{{ discussion.id }}">
+                            {{ discussion.title }}
+                        </a>
+                    </h3>
 
-  </div>
-  <div class="panel-body">
-    {% autoescape off %}
+                </div>
+                <div class="panel-body">
+                    {% autoescape off %}
                     {{ message.html }}
                     {% endautoescape %}
-  </div>
-</div>
+                </div>
+            </div>
 
 
-            
             <div class="linklist links clearfix">
                 <div class="posts">
                 </div>
                 <hr/>
                 <form id="discussion-message" class="form" action="/ajax/discuss/message/new" data-remote="true"
-                                method="post">
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Your answer</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="messages clearfix">
-                            <div class="form-group">
-
-
-
+                      method="post">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Your answer</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="messages clearfix">
+                                <div class="form-group">
                                     <textarea name='text' class="form-control input-block-level" rows="3"
                                               placeholder="An awesome reply is waiting here"></textarea>
                                     <input type="hidden" name="id" value="{{ discussion.id }}"/>
-
-
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button type='submit' class="pull-right btn btn-default">Post</button>
-                        <div class="clearfix">&nbsp;</div>
-                    </div>
+                        <div class="panel-footer">
+                            <button type='submit' class="pull-right btn btn-default">Post</button>
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
 
-                </div>
-</form>
+                    </div>
+                </form>
 
             </div>
 
@@ -122,30 +115,29 @@
             </div>
 
 
+            <hr/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Related discussions</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="related-discussions">
+                        {% for rel in related_discussions %}
+                            <li>
+                                <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
+                                    {{ rel.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <h4></h4>
 
-        <hr/>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Related discussions</h3>
-            </div>
-            <div class="panel-body">
-                <ul class="related-discussions">
-                    {% for rel in related_discussions %}
-                        <li>
-                            <a href="/discuss/{{ rel.slug }}/{{ rel.id }}">
-                                {{ rel.title }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
-        <h4></h4>
-
+        <div class="clearfix"></div>
     </div>
     <div class="clearfix"></div>
-</div>
-<div class="clearfix"></div>
 
 
 </div>

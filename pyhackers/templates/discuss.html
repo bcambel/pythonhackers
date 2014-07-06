@@ -6,7 +6,7 @@
     {#    <h1>Discussions</h1>#}
     <div class="row-fluid">
 
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title" style="float:left;">Discussions</h3>
@@ -32,126 +32,63 @@
 
                 </div>
                 <div class="panel-body">
+                    <a href="#discuss-dialog" class="btn btn-primary pull-right">Start a discussion</a>
 
-
-                    <hr/>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            Topics
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">Flask</a></li>
+                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">Django</a></li>
+                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">NumPy</a></li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <hr />
                     <div class="discussions">
-                        {% for dis in discussions %}
-                            <div class="part">
-                                <a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
-                                    {{ dis.title }}
-                                </a>
-                                <span data-date="{{ dis.published_date }}">{{ dis.published_date }}</span>
-                            </div>
-                        {% endfor %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td>Post</td>
+                                <td>Msg</td>
+                                <td>Follower</td>
+                                <td>View</td>
+                                <td>Pub</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for dis in discussions %}
+                                <tr>
+                                    <td><a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
+                                        {{ dis.title }}
+                                    </a></td>
+                                    <td>{{ dis.counter.message_count }}</td>
+                                    <td>{{ dis.counter.follower_count }}</td>
+                                    <td>{{ dis.counter.view_count }}</td>
+                                    <td><span data-date="{{ dis.published_date }}">{{ dis.published_date }}</span></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="part">
+                        </div>
+
                     </div>
                 </div>
-
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>General</h3>#}
-                {#                        <a href="/discuss/topic/python">See all</a>#}
-                {#                    </div>#}
-                {##}
-                {#                    <p>General discussions about Python</p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Flask </h3>#}
-                {#                        <a href="/discuss/topic/flask">See all</a>#}
-                {#                    </div>#}
-                {##}
-                {##}
-                {#                    <p>Talk about awesome Flask</p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Django</h3>#}
-                {#                        <a href="/discuss/topic/flask">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>Talk about awesome Django</p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>SQLAlchemy</h3>#}
-                {#                        <a href="/discuss/topic/flask">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>All your database operation</p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Tornado</h3>#}
-                {#                        <a href="/discuss/topic/tornado">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>Lighting Python Web Server and Framework</p>#}
-                {#                </div>#}
-                {##}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Celery</h3>#}
-                {#                        <a href="/discuss/topic/celery">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>#}
-                {#                        Your tasks in Celery's hand#}
-                {#                    </p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Plone</h3>#}
-                {#                        <a href="/discuss/topic/plone">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>#}
-                {#                        Best CMS for Python#}
-                {#                    </p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>Pandas</h3>#}
-                {#                        <a href="/discuss/topic/pandas">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>#}
-                {#                        Data science#}
-                {#                    </p>#}
-                {#                </div>#}
-                {#                <div class="col-lg-6 topic row-fluid">#}
-                {#                    <div class="col-lg-12 header">#}
-                {#                        <h3>NumPy & SciPy</h3>#}
-                {#                        <a href="/discuss/topic/numpy-scipy">See all</a>#}
-                {#                    </div>#}
-                {#                    <p>#}
-                {#                        Master of numbers, mathematics, data#}
-                {#                    </p>#}
-                {#                </div>#}
             </div>
         </div>
-        <div class="col-lg-4">
-            <a href="#discuss-dialog" class="btn btn-primary">Start a discussion</a>
-            <hr />
-            <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Topics</h3>
-  </div>
-  <div class="panel-body">
-    <ul>
 
-        <li><a href="/discuss/topic/flask">Flask</a></li>
-        <li><a href="/discuss/topic/flask">Django</a></li>
-        <li><a href="/discuss/topic/flask">NumPy</a></li>
-    </ul>
-  </div>
-</div>
-
-
-        </div>
-        {#        <div class="col-lg-8 col-lg-offset-2">#}
-        {#            #}
-        {#        </div>#}
     </div>
 
 {% endblock %}
 
 {% block script_links %}
-    <script src="/static/js/app/discuss.js?ts={{ cache_buster }}"
+    <script src="/static/js/app/discuss.js?ts={{ cache_buster }}"></script>
 {% endblock %}
 
 {% block head %}

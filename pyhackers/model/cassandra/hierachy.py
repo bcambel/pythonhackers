@@ -200,6 +200,11 @@ class Discussion(MBase):
     def published_date(self):
         return epoch_to_date(self.published_at*1000)
 
+    @property
+    def published_date_str(self):
+        d = epoch_to_date(self.published_at*1000)
+        return d.strftime("%y%m%d %H%M%S")
+
 
 class DiscussionPost(MBase):
     disc_id = columns.BigInt(primary_key=True)

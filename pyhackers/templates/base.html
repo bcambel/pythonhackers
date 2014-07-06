@@ -135,13 +135,16 @@
         {% autoescape off %}
         var session = {{ user_json }};
         $(function(){
-            var date;
+            var date, fn;
+            window.setTimeout( function(){
             $("[data-date]").each(function(x){
                 date = $(this).html();
+                console.log(date);
                 $(this).html(moment(date,"YYYY-MM-DD HH:mm:ss").format('MMMM Do YYYY @  HH:mm:ss'))
-            });
+            })},1000);
+
             $('textarea').autosize();
-        })
+        });
         {% endautoescape %}
     </script>
 </div>
