@@ -12,7 +12,7 @@ class @Discuss
 
         $(document).on("ajax:success","#discussion-message", @onDiscussionMessage)
         $(document).on("ajax:error","#discussion-message", @onDiscussionMessageError)
-        window.setInterval(@reload, 10000)
+        window.setInterval(@reload, 30000)
         do @reload
 
     reload: () =>
@@ -49,8 +49,16 @@ class @Discuss
 
     discussDialog: () =>
         $template = $($("#discuss-template").html())
+        topics_html = []
+
+        _.each(topics, (t) ->
+            topics_html.push("<option value='#{t.slug}'>#{t.name}</option>")
+        )
+        debugger
+        $template.find('[name="topic"]').html(topics_html.join(" "))
 
         $(body).append($template)
+
         $template.modal()
 
     discussionFollowAction: () ->

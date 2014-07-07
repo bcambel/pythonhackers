@@ -113,6 +113,12 @@ class Topic(MBase):
     parent_topic = columns.Integer(required=False)
     subtopics = columns.Set(value_type=columns.Integer)
 
+    def to_dict(self):
+        return {
+            'slug': self.slug,
+            'name': self.name
+        }
+
 
 class TopicDiscussion(MBase):
     topic_id = columns.Integer(primary_key=True, required=False)

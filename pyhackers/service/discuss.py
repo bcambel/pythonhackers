@@ -5,6 +5,7 @@ from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost, DiscussionCounter, UserDiscussion, \
     User as CsUser, DiscussionFollower
 from pyhackers.service.post import new_post, load_posts
+from pyhackers.service.topic import topic_slug_to_id, load_topics
 from pyhackers.service.user import load_user_profiles
 from pyhackers.utils import markdown_to_html
 
@@ -26,8 +27,14 @@ def load_discussions():
     counter_map = {c.id: c for c in counter_data}
 
     logging.warn("Counter Data: %s", counter_map)
+    topics = {t.id: t for t in load_topics()}
 
     for disc in discussions:
+
+        topic = topics.get(disc.topic_id, None)
+        if topic is not None:
+            disc.topic_name = topic.name
+            disc.topic_slug = topic.slug
         disc.counter = counter_map.get(disc.id, default_counter)
 
     return discussions
@@ -103,7 +110,7 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100, current
     return discussion, disc_posts, users, counters
 
 
-def new_discussion(title, text, current_user_id=None):
+def new_discussion(title, text, current_user_id=None, topic=None):
     disc_id = idgen_client.get()
     post_id = idgen_client.get()
 
@@ -115,6 +122,7 @@ def new_discussion(title, text, current_user_id=None):
     d.message_count = 1
     d.title = title
     d.user_count = 1
+    d.topic_id = topic_slug_to_id(topic) if topic is not None else 0
     d.users = {current_user_id}
     d.slug = slug
 

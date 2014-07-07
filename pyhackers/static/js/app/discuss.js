@@ -19,7 +19,7 @@
       }
       $(document).on("ajax:success", "#discussion-message", this.onDiscussionMessage);
       $(document).on("ajax:error", "#discussion-message", this.onDiscussionMessageError);
-      window.setInterval(this.reload, 10000);
+      window.setInterval(this.reload, 30000);
       return this.reload();
     };
 
@@ -62,8 +62,14 @@
     };
 
     Discuss.prototype.discussDialog = function() {
-      var $template;
+      var $template, topics_html;
       $template = $($("#discuss-template").html());
+      topics_html = [];
+      _.each(topics, function(t) {
+        return topics_html.push("<option value='" + t.slug + "'>" + t.name + "</option>");
+      });
+      debugger;
+      $template.find('[name="topic"]').html(topics_html.join(" "));
       $(body).append($template);
       return $template.modal();
     };

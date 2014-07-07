@@ -34,26 +34,28 @@
                 <div class="panel-body">
                     <a href="#discuss-dialog" class="btn btn-primary pull-right">Start a discussion</a>
 
-                    <div class="dropdown">
+                    <div class="dropdown pull-left">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
                                 data-toggle="dropdown">
                             Topics
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">Flask</a></li>
-                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">Django</a></li>
-                            <li role="presentation"><a role="menuitem" href="/discuss/topic/flask">NumPy</a></li>
+                            {% for t in topics %}
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/discuss/topic/{{ t.slug }}">{{ t.name }}</a></li>
+                            {% endfor %}
                             <li role="presentation" class="divider"></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/discuss/home">General</a></li>
                         </ul>
                     </div>
+                    <div class="clearfix">&nbsp;</div>
                     <hr />
                     <div class="discussions">
                         <table class="table table-striped">
                             <thead>
                             <tr>
                                 <td>Post</td>
+                                <td>Topic</td>
                                 <td>Msg</td>
                                 <td>Follower</td>
                                 <td>View</td>
@@ -66,6 +68,7 @@
                                     <td><a href="/discuss/{{ dis.slug }}/{{ dis.id }}" style="display: block;   ">
                                         {{ dis.title }}
                                     </a></td>
+                                    <td><a class="label label-info" href='/discuss/topic/{{ dis.topic_slug }}'>{{ dis.topic_name }}</a></td>
                                     <td>{{ dis.counter.message_count }}</td>
                                     <td>{{ dis.counter.follower_count }}</td>
                                     <td>{{ dis.counter.view_count }}</td>

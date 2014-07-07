@@ -134,6 +134,7 @@
         {% block scripts %}{% endblock %}
         {% autoescape off %}
         var session = {{ user_json }};
+        var topics = {{ topics_json }};
         $(function(){
             var date, fn;
             window.setTimeout( function(){
@@ -144,6 +145,7 @@
             })},1000);
 
             $('textarea').autosize();
+
         });
         {% endautoescape %}
     </script>

@@ -4,6 +4,7 @@ from flask.ext.login import login_required, current_user
 from pyhackers.cache import cache
 from pyhackers.helpers import render_template, render_base_template, current_user_id
 from pyhackers.service.discuss import new_discussion, load_discussion, new_discussion_message, load_discussions
+from pyhackers.service.topic import load_topics
 
 discuss_app = Blueprint('discuss', __name__, template_folder='templates', url_prefix='/discuss/')
 
@@ -11,8 +12,8 @@ discuss_app = Blueprint('discuss', __name__, template_folder='templates', url_pr
 @discuss_app.route('home')
 def index():
     discussions = load_discussions()
-
-    return render_base_template('discuss.html', discussions=discussions)
+    topics = load_topics()
+    return render_base_template('discuss.html', discussions=discussions,topics=topics)
 
 
 @discuss_app.route('top')
@@ -45,11 +46,13 @@ def new():
     if request.method == "POST":
         title = request.form.get("title", '')
         text = request.form.get("text", '')
+        topic = request.form.get("topic", None)
+
         logging.warn(request.form)
-        logging.warn(u"Text:{} -  Title: {}".format(text, title))
+        logging.warn(u"Text:{} -  Title: {} Topic {}".format(text, title, topic))
         #raise ValueError("Test")
 
-        discuss_id, slug = new_discussion(title, text, current_user_id())
+        discuss_id, slug = new_discussion(title, text, current_user_id(), topic=topic)
         return redirect("/discuss/{}/{}".format(slug, discuss_id))
         #return jsonify({'id': str(discuss_id), 'slug': slug})
 

@@ -7,6 +7,7 @@ from json import dumps
 import calendar
 from pyhackers.config import config
 from pyhackers.service.channel import get_channel_list
+from pyhackers.service.topic import load_topics_jsonable
 
 purge_key = config.get("app", 'purge_key')
 debug = config.get("app", "debug")
@@ -30,6 +31,7 @@ def render_base_template(*args, **kwargs):
     kwargs.update(**{'__v__': int(time.time()),
                      'user': active_user,
                      'user_json': user_data,
+                     'topics_json': dumps(load_topics_jsonable()),
                      'channels': get_channel_list(),
                      'PROD': PRODUCTION,
                      'logged_in': bool(is_logged),

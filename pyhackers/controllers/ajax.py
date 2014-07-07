@@ -69,8 +69,9 @@ def follow():
 def new_discussion_message_ctrl():
     text = request.form.get("text")
     id = request.form.get("id")
+
     discussion_id = id
-    message_id = new_discussion_message(discussion_id, text, current_user_id(), nick=current_user.nick)
+    message_id = new_discussion_message(discussion_id, text, current_user_id(), nick=current_user.nick,topic=topic)
 
     return jsonify({'id': message_id})
 
