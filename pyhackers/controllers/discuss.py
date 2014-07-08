@@ -3,8 +3,8 @@ from flask import request, jsonify, Blueprint, redirect, abort, make_response
 from flask.ext.login import login_required, current_user
 from pyhackers.cache import cache
 from pyhackers.helpers import render_template, render_base_template, current_user_id
-from pyhackers.service.discuss import new_discussion, load_discussion, new_discussion_message, load_discussions
-from pyhackers.service.topic import load_topics
+from pyhackers.service.discuss import new_discussion, load_discussion, new_discussion_message, load_discussions, load_discussions_by_topic_id
+from pyhackers.service.topic import load_topics, topic_slug_to_id
 
 discuss_app = Blueprint('discuss', __name__, template_folder='templates', url_prefix='/discuss/')
 
@@ -37,8 +37,12 @@ def discussion_ctrl(slug, id):
 
 @discuss_app.route('topic/<regex(".+"):slug>')
 def discuss_topic_ctrl(slug):
-    response = make_response("ok")
-    return response
+    #response = make_response("ok")
+    id = topic_slug_to_id(slug)
+    discussions = load_discussions_by_topic_id(id, slug )
+    topics = load_topics()
+    return render_base_template('discuss.html', discussions=discussions,topics=topics)
+    #return response
 
 @discuss_app.route('new', methods=('GET', 'POST'))
 @login_required

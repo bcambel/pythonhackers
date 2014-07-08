@@ -188,7 +188,7 @@ class Discussion(MBase):
     post_id = columns.BigInt()
     last_message = columns.BigInt()
     published_at = columns.BigInt(default=unix_time(dt.utcnow()))
-    topic_id = columns.Integer(required=False)
+    topic_id = columns.Integer(required=False, index=True)
 
     def to_dict(self):
         return {

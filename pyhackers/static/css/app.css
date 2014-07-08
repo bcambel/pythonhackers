@@ -20,13 +20,14 @@ div#page-wrap {
     /*max-height: 69px;*/
     overflow-y:hidden;
     color:dimgray;
-    font-size:14px;
+    font-size:15px;
 }
 .message-container{
     /*border-bottom: 1px solid #d3d3d3;*/
     background-color: white;
     border-radius: 10px;
     margin-bottom: 10px;
+    border: 1px solid #ddd;
 
 }
 .footer ul li {

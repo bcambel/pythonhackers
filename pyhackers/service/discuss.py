@@ -40,6 +40,19 @@ def load_discussions():
     return discussions
 
 
+def load_discussions_by_topic_id(topic_id, topic_name):
+    discussions = Discussion.objects.filter(topic_id=topic_id).allow_filtering()
+    disc_ids = [disc.id for disc in discussions]
+    counter_data = DiscussionCounter.filter(id__in=disc_ids)
+    counter_map = {c.id: c for c in counter_data}
+
+    for disc in discussions:
+        disc.topic_name = topic_name
+        disc.topic_slug = topic_name
+        disc.counter = counter_map.get(disc.id, default_counter)
+
+    return discussions
+
 def load_discussions_by_id(ids):
     return Discussion.objects.filter(id__in=ids).limit(50)
 

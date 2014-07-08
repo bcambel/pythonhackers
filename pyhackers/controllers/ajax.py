@@ -71,7 +71,7 @@ def new_discussion_message_ctrl():
     id = request.form.get("id")
 
     discussion_id = id
-    message_id = new_discussion_message(discussion_id, text, current_user_id(), nick=current_user.nick,topic=topic)
+    message_id = new_discussion_message(discussion_id, text, current_user_id(), nick=current_user.nick)
 
     return jsonify({'id': message_id})
 
