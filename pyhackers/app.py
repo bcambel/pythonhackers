@@ -88,11 +88,13 @@ def start_app(soft=False):
     from pyhackers.controllers.oauth.ghub import github_bp
     from pyhackers.controllers.discuss import discuss_app
     from pyhackers.controllers.ajax import ajax_app
+    from pyhackers.controllers.post import post_app
 
     app.register_blueprint(github_bp)
     app.register_blueprint(main_app)
     app.register_blueprint(discuss_app)
     app.register_blueprint(ajax_app)
+    app.register_blueprint(post_app)
 
     @app.route("/site-map")
     def site_map():

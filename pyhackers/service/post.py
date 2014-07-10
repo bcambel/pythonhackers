@@ -84,3 +84,7 @@ def upvote_message(message_id, current_user_id=None):
         pc.save()
 
     Event.up_vote(current_user_id,message_id)
+
+def load_post_by_id(id):
+    post = Post.objects.get(id=id)
+    return post
