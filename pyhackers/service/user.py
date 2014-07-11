@@ -1,6 +1,5 @@
 import logging
 from cqlengine.query import DoesNotExist
-from pyhackers.service.post import load_posts
 from pyhackers.worker.hipchat import notify_registration
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
@@ -132,6 +131,9 @@ def load_user(user_id, current_user=None):
     """
     Loads all the details about the user including Followers/Following/OpenSource projects list.
     """
+    if user_id is None:
+        return None
+
     logging.warn("Loading user {}".format(user_id))
     user = User.query.get(user_id)
 
@@ -204,20 +206,6 @@ def get_user_projects_by_nick(nick):
             OpenSourceProject.stars.desc()).all()
 
     return user, os_projects
-
-
-def get_user_timeline_by_nick(nick):
-    try:
-        user = CsUser.filter(nick=nick).first()
-    except DoesNotExist, dne:
-        user = None
-
-    if user is None:
-        return
-
-    posts = [p.post_id for p in UserPost.objects.filter(user_id=user.id).order_by('-post_id').limit(5)]
-
-    return user, reversed(load_posts(posts)or [])
 
 
 def load_github_data():

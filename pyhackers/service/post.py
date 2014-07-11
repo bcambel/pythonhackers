@@ -4,7 +4,7 @@ from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import Post, PostVote, PostCounter
 from pyhackers.events import Event
 from pyhackers.utils import markdown_to_html
-
+from pyhackers.service.user import load_user
 
 def load_posts(post_ids, current_user_id=None):
     """
@@ -87,4 +87,11 @@ def upvote_message(message_id, current_user_id=None):
 
 def load_post_by_id(id):
     post = Post.objects.get(id=id)
-    return post
+    user_data = load_user(post.user_id)
+    user = None
+
+    if user_data is not None:
+        user, _, _ = user_data
+
+
+    return post, user

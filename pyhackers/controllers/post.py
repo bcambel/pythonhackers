@@ -10,11 +10,11 @@ post_app = Blueprint('post', __name__, template_folder='templates', url_prefix='
 @post_app.route('<regex(".+"):id>')
 def post(id):
     logging.warn(id)
-    post = load_post_by_id(id)
-    return render_base_template("post.html",post=post)
+    post,user = load_post_by_id(id)
+    return render_base_template("post.html",post=post,post_user=user)
 
 @post_app.route('<regex(".+"):id>/replies')
 def post_replies(id):
     logging.warn(id)
-    post = load_post_by_id(id)
-    return render_base_template("post.html",post=post)
+    post,user = load_post_by_id(id)
+    return render_base_template("post.html",post=post,post_user=user)

@@ -24,12 +24,12 @@ def top():
 @discuss_app.route('<regex(".+"):slug>/<regex(".+"):id>')
 def discussion_ctrl(slug, id):
     discussion_data = load_discussion(slug, id, current_user_id())
-    discussion, disc_posts, message, counters, user = discussion_data
+    discussion, disc_posts, message, counters, disc_user = discussion_data
     related_discussions = load_discussions()
 
     return render_base_template("discussion.html", discussion=discussion,
                                 message=message,
-                                discussion_user=user,
+                                discussion_user=disc_user,
                                 posts=[],
                                 counters=counters,
                                 related_discussions=related_discussions,

@@ -3,10 +3,11 @@ import logging
 from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
-from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick, new_discussion_follower, remove_discussion_follower
+from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick, new_discussion_follower, remove_discussion_follower, delete_discussion
 from pyhackers.service.post import new_post, upvote_message
 from pyhackers.service.project import project_follow
-from pyhackers.service.user import follow_user, get_user_timeline_by_nick, get_user_projects_by_nick
+from pyhackers.service.user import follow_user, get_user_projects_by_nick
+from pyhackers.service.timeline import get_user_timeline_by_nick
 
 
 ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
@@ -75,6 +76,12 @@ def new_discussion_message_ctrl():
 
     return jsonify({'id': message_id})
 
+
+@ajax_app.route('discuss/<regex(".+"):discussion_id>/delete', methods=('POST',))
+@login_required
+def delete_discussion_ctrl(discussion_id):
+    logging.warn("Deleting discussion {}".format(discussion_id))
+    return jsonify({'result': delete_discussion(discussion_id, current_user_id())})
 
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/follow', methods=('POST',))
 @login_required

@@ -6,7 +6,7 @@ from pyhackers.model.cassandra.hierachy import Post, Discussion, DiscussionPost,
     User as CsUser, DiscussionFollower
 from pyhackers.service.post import new_post, load_posts
 from pyhackers.service.topic import topic_slug_to_id, load_topics
-from pyhackers.service.user import load_user_profiles
+from pyhackers.service.user import load_user_profiles, load_user
 from pyhackers.utils import markdown_to_html
 
 from slugify import slugify
@@ -76,10 +76,14 @@ def load_discussion(slug, discussion_id, current_user_id=None):
         message = {}
 
     followers = [d.user_id for d in DiscussionFollower.objects.filter(disc_id=discussion_id)]
-    user = {}
+    user_data = load_user(discussion.user_id)
+    user = None
 
-    if current_user_id in followers:
-        user = {'id': current_user_id, 'following': True}
+    if user_data is not None:
+        user, _, _ = user_data
+
+    #if current_user_id in followers:
+    #    user = {'id': current_user_id, 'following': True}
 
     counters = load_discussion_counter(discussion_id)
 
@@ -222,3 +226,17 @@ def remove_discussion_follower(discussion_id, current_user_id):
         dc.save()
     except DoesNotExist:
         pass
+
+def delete_discussion(discussion_id, current_user_id):
+    discussion = Discussion.objects.get(id=discussion_id)
+
+    logging.warn("Disc: {} DiscUser: {} vs {}".format(discussion_id, discussion.user_id,current_user_id))
+
+    if discussion.user_id == current_user_id:
+        try:
+            discussion.delete()
+            return True
+        except Exception, ex:
+            logging.exception(ex)
+
+    return False

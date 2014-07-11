@@ -145,7 +145,6 @@ class UserCounter(MBase):
 class User(MBase):
     id = columns.Integer(primary_key=True)
     nick = columns.Text(required=True, index=True)
-
     extended = columns.Map(columns.Text, columns.Text)
     registered_at = columns.BigInt(default=unix_time(dt.utcnow()))
     created_at = columns.BigInt(default=unix_time(dt.utcnow()))

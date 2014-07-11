@@ -70,12 +70,12 @@
 
 
                     {#            <a href="/post/{{ discussion.post_id }}">{{ discussion.post_id }}</a>#}
-                    <!-- {{ user }} -->
+                    <!-- {{ discussion_user }} -->
                     <h4 class="inline">
-                        <a href="/user/{{ user.nick }}">
-                            <img src="{{ user.picture }}" style="width:40px;height:40px;margin-right:10px;"/>
+                        <a href="/user/{{ discussion_user.nick }}">
+                            <img src="{{ discussion_user.pic_url }}" style="width:40px;height:40px;margin-right:10px;"/>
                             <span class="gray" style="font-size:12px;">by</span>
-                            <span class="link">{{ user.nick }}</span>
+                            <span class="link">{{ discussion_user.nick }}</span>
                         </a>
                     </h4>
                     <span data-date="{{ discussion.published_date }}">{{ discussion.published_date }}</span>
