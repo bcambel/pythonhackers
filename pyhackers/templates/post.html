@@ -2,27 +2,43 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="col-lg-8">
+<div class="container-fluid">
+    <div class="col-lg-6 col-lg-offset-3">
         <div class="panel panel-default">
-                <div class="panel-heading">
-                     <a href="/user/{{ post_user.nick }}">
-                            <img src="{{ post_user.pic_url }}" style="width:40px;height:40px;margin-right:10px;"/>
-                            <span class="link">{{ post_user.nick }}</span>
+            <div class="panel-heading">
+                <a href="/user/{{ post_user.nick }}">
+                    <img src="{{ post_user.pic_url }}" style="width:40px;height:40px;margin-right:10px;"/>
+                    <span class="link">{{ post_user.nick }}</span>
 
-                        </a>
-                    <span class="gray" style="font-size:12px;">wrote at</span>
-                            <span class="gray" data-date-epoch="{{ post.created_at }}">{{ post.created_at }}</span>
-                </div>
-                <div class="panel-body">
+                </a>
+                <span class="gray" style="font-size:12px;">wrote at</span>
+                <span class="gray" data-date-epoch="{{ post.created_at }}">{{ post.created_at }}</span>
+            </div>
+            <div class="panel-body">
+                <div class="post">
                     {% autoescape off %}
                     {{ post.html }}
                     {% endautoescape %}
+                </div>
+{#                <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>#}
+                <a href="#" data-action='delete' class='link-discuss'>Delete</a>
+            </div>
+            <div class="panel-footer">
+                <textarea name='text' class="form-control input-block-level" rows="1"
+                                              placeholder="reply to @{{ post_user.nick }}"></textarea>
+            </div>
+        </div>
+
+        <div class="replies">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    No replies yet.
 
                 </div>
             </div>
+        </div>
 
-            </div>
+    </div>
 </div>
 
 

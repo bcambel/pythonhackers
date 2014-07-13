@@ -137,6 +137,7 @@ def new_discussion(title, text, current_user_id=None, topic=None):
     d.id = disc_id
     d.post_id = post_id
     d.message_count = 1
+    d.user_id = current_user_id
     d.title = title
     d.user_count = 1
     d.topic_id = topic_slug_to_id(topic) if topic is not None else 0

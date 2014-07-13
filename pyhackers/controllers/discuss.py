@@ -23,6 +23,7 @@ def top():
 
 @discuss_app.route('<regex(".+"):slug>/<regex(".+"):id>')
 def discussion_ctrl(slug, id):
+
     discussion_data = load_discussion(slug, id, current_user_id())
     discussion, disc_posts, message, counters, disc_user = discussion_data
     related_discussions = load_discussions()
@@ -56,7 +57,8 @@ def new():
         logging.warn(u"Text:{} -  Title: {} Topic {}".format(text, title, topic))
         #raise ValueError("Test")
 
-        discuss_id, slug = new_discussion(title, text, current_user_id(), topic=topic)
+        discuss_id, slug = new_discussion(title, text, current_user.id, topic=topic)
+
         return redirect("/discuss/{}/{}".format(slug, discuss_id))
         #return jsonify({'id': str(discuss_id), 'slug': slug})
 

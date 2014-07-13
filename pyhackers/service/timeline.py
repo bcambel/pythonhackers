@@ -11,6 +11,6 @@ def get_user_timeline_by_nick(nick):
     if user is None:
         return
 
-    posts = [p.post_id for p in UserPost.objects.filter(user_id=user.id).order_by('-post_id').limit(5)]
+    posts = [p.post_id for p in UserPost.objects.filter(user_id=user.id).order_by('-post_id').limit(50)]
 
-    return user, reversed(load_posts(posts)or [])
+    return user, load_posts(posts)

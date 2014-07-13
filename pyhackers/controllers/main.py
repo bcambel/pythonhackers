@@ -331,6 +331,9 @@ def tutorial(nick, slug):
 
 @main_app.route("/authenticate")
 def authenticate():
-    return render_base_template('authenticate.html')
+    return redirect("/oauth/github")
 
+@main_app.route("/login")
+def login():
+    return render_base_template('authenticate.html')
 
