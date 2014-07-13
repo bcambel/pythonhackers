@@ -82,8 +82,8 @@ def load_discussion(slug, discussion_id, current_user_id=None):
     if user_data is not None:
         user, _, _ = user_data
 
-    #if current_user_id in followers:
-    #    user = {'id': current_user_id, 'following': True}
+    if current_user_id in followers and user is not None:
+        user.following = True
 
     counters = load_discussion_counter(discussion_id)
 
@@ -117,7 +117,7 @@ def discussion_messages(discussion_id, after_message_id=None, limit=100, current
     for post in disc_posts:
         u = filter(lambda x: x.id == post.user_id, users)
 
-        post.user = u[0] if u is not None and len(u) > 0 else None
+        post.user = u[0].to_dict() if u is not None and len(u) > 0 else None
 
     try:
         counters = DiscussionCounter.get(id=discussion_id)

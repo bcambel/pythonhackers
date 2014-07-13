@@ -82,11 +82,48 @@
 </div>
 </script>
 <script type="text/x-handlebars-template" id="message-template">
+{{#each message }}
+    <div class='panel panel-default'  data-message-id="{{ id }} ">
+    <div class='panel-heading' style='position:relative'>
+        <div class='front-action'>
+            <a href="#" data-trigger="upvote" class="orange" title='Upvote'>
+                <i class='fa fa-arrow-up fa-2x {{#if upvoted }}orange{{/if}}'></i>
+            </a>
+            <span>
+            {{#if stats.up_votes }}
+                <span class="label">{{ stats.up_votes }}</span>
+                {{else }}
+                <span class="label">-</span>
+                {{/if }}
+        </div>
+        <a href="/user/{{ user.nick }}">
+            @{{ user.nick }}</a> wrote <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
+
+    </div>
+        <div class='panel-body'>
+
+             <div class="message">
+                        {{{ html }}}
+                    </div>
+        </div>
+        <div class='panel-footer hidden'>
+            <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>
+
+
+                    <a href="/post/{{ id }}" class="link-discuss">{{ comment }} Details</a>
+                    <a href="#" data-action='delete' class='link-discuss'>Delete</a>
+
+        </div>
+    </div>
+{{/each}}
+</script>
+
+<script type="text/x-handlebars-template" id="message-template2">
     {{#each message }}
      <div class='clearfix message-container' data-message-id="{{ id }}">
         <div class='front-action col-lg-2'>
-            <a href="#" data-trigger="upvote" class="{{#if upvoted }}orange{{/if}}">
-                <i class='fa fa-arrow-up fa-2x'></i>
+            <a href="#" data-trigger="upvote" class="">
+                <i class='fa fa-arrow-up fa-2x {{#if upvoted }}orange{{/if}}'></i>
             </a>
                 {{#if stats.up_votes }}
                 <span class="label">{{ stats.up_votes }}</span>

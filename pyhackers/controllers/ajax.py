@@ -109,7 +109,7 @@ def discussion_messages_ctrl(discussion_id):
     discussion_dict = discussion.to_dict()
     discussion_dict.update(**counters.to_dict())
 
-    return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts]}) #, 'users' : users})
+    return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts] , 'users' : [u.to_dict() for u in users]})
 
 
 @ajax_app.route('user/<regex(".+"):nick>/projects')
