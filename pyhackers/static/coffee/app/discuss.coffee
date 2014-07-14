@@ -22,10 +22,24 @@ class @Discuss
             (data) =>
                 console.log(data)
                 @lastMessage = data.discussion.last_message
+                current_user_id = if PythonHackers.session then PythonHackers.session.id else -1
+
+                _.each data.posts, (p) ->
+                    p.can_delete = p.user.id == current_user_id
 
                 $(".posts").append(@template(
                     message: data.posts
                 ))
+
+                @hideShowTrick()
+        )
+
+    hideShowTrick: () =>
+
+        $("[data-message-id]").on("mouseenter", () ->
+            $(this).find(".panel-footer").removeClass("hidden")
+        ).on("mouseleave", () ->
+            $(this).find(".panel-footer").addClass("hidden")
         )
 
     onDiscussionMessageError: (event) ->

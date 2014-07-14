@@ -6,6 +6,7 @@
     function Discuss(discussion_id) {
       this.discussion_id = discussion_id;
       this.discussDialog = __bind(this.discussDialog, this);
+      this.hideShowTrick = __bind(this.hideShowTrick, this);
       this.reload = __bind(this.reload, this);
       this.init = __bind(this.init, this);
       this.lastMessage = null;
@@ -29,11 +30,25 @@
         _: new Date().getTime(),
         after_id: this.lastMessage || -1
       }, function(data) {
+        var current_user_id;
         console.log(data);
         _this.lastMessage = data.discussion.last_message;
-        return $(".posts").append(_this.template({
+        current_user_id = PythonHackers.session ? PythonHackers.session.id : -1;
+        _.each(data.posts, function(p) {
+          return p.can_delete = p.user.id === current_user_id;
+        });
+        $(".posts").append(_this.template({
           message: data.posts
         }));
+        return _this.hideShowTrick();
+      });
+    };
+
+    Discuss.prototype.hideShowTrick = function() {
+      return $("[data-message-id]").on("mouseenter", function() {
+        return $(this).find(".panel-footer").removeClass("hidden");
+      }).on("mouseleave", function() {
+        return $(this).find(".panel-footer").addClass("hidden");
       });
     };
 

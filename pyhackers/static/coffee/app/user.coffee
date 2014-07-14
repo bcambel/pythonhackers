@@ -58,7 +58,17 @@ class User
                 $timeline.html(@postTemplate(
                     message: data.timeline
                 ))
+                @hideShowTrick()
         )
+
+    hideShowTrick: () =>
+
+        $("[data-message-id]").on("mouseenter", () ->
+            $(this).find(".panel-footer").removeClass("hidden")
+        ).on("mouseleave", () ->
+            $(this).find(".panel-footer").addClass("hidden")
+        )
+
     loadDiscussions: () ->
         $discussions= $("#discussions")
         $.getJSON("/ajax/user/#{@user_nick}/discussions",

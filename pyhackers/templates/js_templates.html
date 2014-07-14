@@ -83,7 +83,7 @@
 </script>
 <script type="text/x-handlebars-template" id="message-template">
 {{#each message }}
-    <div class='panel panel-default'  data-message-id="{{ id }} ">
+    <div class='panel panel-default'  data-message-id="{{ id }} " data-user-id="{{ user.id }}">
     <div class='panel-heading' style='position:relative'>
         <div class='front-action'>
             <a href="#" data-trigger="upvote" class="orange" title='Upvote'>
@@ -108,15 +108,16 @@
         </div>
         <div class='panel-footer hidden'>
             <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>
-
-
-                    <a href="/post/{{ id }}" class="link-discuss">{{ comment }} Details</a>
-                    <a href="#" data-action='delete' class='link-discuss'>Delete</a>
-
+            <a href="#" data-action='repost' class='link-discuss'><i class="fa fa-retweet"></i>&nbsp;Repost</a>
+                    <a href="/post/{{ id }}" class="link-discuss"><i class="fa fa-bars"></i>&nbsp;{{ comment }} Details</a>
+                    {{#if can_delete }}
+                    <a href="#" data-action='delete' class='link-discuss'><i class="fa fa-times"></i>&nbsp;Delete</a>
+                    {{/if}}
         </div>
     </div>
 {{/each}}
 </script>
+
 
 <script type="text/x-handlebars-template" id="message-template2">
     {{#each message }}
