@@ -4,13 +4,14 @@ from flask.ext.login import login_required, current_user
 from pyhackers.helpers import current_user_id
 from pyhackers.service.channel import follow_channel
 from pyhackers.service.discuss import new_discussion_message, discussion_messages, get_user_discussion_by_nick, new_discussion_follower, remove_discussion_follower, delete_discussion
-from pyhackers.service.post import new_post, upvote_message
+from pyhackers.service.post import new_post, upvote_message, edit_post, load_post_by_id, delete_post
 from pyhackers.service.project import project_follow
 from pyhackers.service.user import follow_user, get_user_projects_by_nick
 from pyhackers.service.timeline import get_user_timeline_by_nick
 
 
 ajax_app = Blueprint('ajax', __name__, url_prefix='/ajax/')
+
 
 @ajax_app.route('message/<regex(".+"):message_id>/upvote', methods=("POST",))
 @login_required
@@ -83,6 +84,7 @@ def delete_discussion_ctrl(discussion_id):
     logging.warn("Deleting discussion {}".format(discussion_id))
     return jsonify({'result': delete_discussion(discussion_id, current_user_id())})
 
+
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/follow', methods=('POST',))
 @login_required
 def follow_discussion(discussion_id):
@@ -94,6 +96,7 @@ def follow_discussion(discussion_id):
         remove_discussion_follower(discussion_id, current_user_id())
 
     return jsonify({'ok': True})
+
 
 @ajax_app.route('discuss/<regex(".+"):discussion_id>/messages', methods=('GET',))
 def discussion_messages_ctrl(discussion_id):
@@ -109,7 +112,9 @@ def discussion_messages_ctrl(discussion_id):
     discussion_dict = discussion.to_dict()
     discussion_dict.update(**counters.to_dict())
 
-    return jsonify({'discussion': discussion_dict , 'posts': [p.to_dict() for p in disc_posts] , 'users' : [u.to_dict() for u in users]})
+    return jsonify({'discussion': discussion_dict,
+                    'posts': [p.to_dict() for p in disc_posts],
+                    'users': [u.to_dict() for u in users]})
 
 
 @ajax_app.route('user/<regex(".+"):nick>/projects')
@@ -121,7 +126,8 @@ def user_projects(nick):
     user, projects = _
     start = 0
 
-    return jsonify({'user': user.to_dict(), 'projects': [f.to_dict(index=start + i + 1) for i, f in enumerate(projects)]})
+    return jsonify({'user': user.to_dict(),
+                    'projects': [f.to_dict(index=start + i + 1) for i, f in enumerate(projects)]})
 
 
 @ajax_app.route('user/<regex(".+"):nick>/timeline')
@@ -133,7 +139,8 @@ def user_timeline(nick):
 
     user, timeline = _
 
-    return jsonify({'user': user.to_dict(), 'timeline': [t.to_dict() for t in timeline]})
+    return jsonify({'user': user.to_dict(),
+                    'timeline': [t.to_dict() for t in timeline]})
 
 
 @ajax_app.route('user/<regex(".+"):nick>/discussions')
@@ -146,4 +153,32 @@ def user_discussion(nick):
 
     user, discussions = _
 
-    return jsonify({'user': user.to_dict(), 'discussions': [t.to_dict() for t in discussions]})
+    return jsonify({'user': user.to_dict(),
+                    'discussions': [t.to_dict() for t in discussions]})
+
+
+@ajax_app.route('post/<regex(".+"):id>/edit', methods=('POST',))
+def edit_post_ctrl(id):
+    text = request.form.get("message")
+
+    success = edit_post(id, text, current_user)
+    post_data = None
+
+    if success:
+        post,user = load_post_by_id(id)
+        post_data = post.to_dict()
+
+    return jsonify({'ok': success, 'data': post_data })
+
+@ajax_app.route('post/<regex(".+"):id>')
+def load_post(id):
+    post,user = load_post_by_id(id)
+
+    return jsonify({'data': post.to_dict()})
+
+@ajax_app.route('post/<regex(".+"):id>/delete', methods=("POST",))
+@login_required
+def delete_post_ctrl(id):
+    success = delete_post(id, current_user)
+
+    return jsonify({'ok': success})

@@ -61,7 +61,6 @@
       return $.getJSON("/ajax/user/" + this.user_nick + "/projects", {
         _: new Date().getTime()
       }, function(data) {
-        console.log(data);
         return $projects.html(_this.projectTemplate({
           projects: data.projects
         }));
@@ -76,7 +75,11 @@
         _: new Date().getTime(),
         after_id: this.lastMessage || -1
       }, function(data) {
-        console.log(data);
+        var current_user_id;
+        current_user_id = PythonHackers.session ? PythonHackers.session.id : -1;
+        _.each(data.posts, function(p) {
+          return p.can_delete = p.user.id === current_user_id;
+        });
         $timeline.html(_this.postTemplate({
           message: data.timeline
         }));

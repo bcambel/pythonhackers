@@ -125,7 +125,7 @@ Application = {
 
     formSubmitter : () ->
 
-        $('form[data-remote]').submit (evt) ->
+        $(document).on "submit" , 'form[data-remote]' , (evt) ->
             $form = $(@)
             evt.preventDefault()
             evt.stopPropagation()

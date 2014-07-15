@@ -4,7 +4,10 @@
 
   this.Message = (function() {
     function Message() {
+      this.editMessage = __bind(this.editMessage, this);
+      this.deleteMessage = __bind(this.deleteMessage, this);
       this.showMessage = __bind(this.showMessage, this);
+      this.editTemplate = window.Handlebars.compile($.trim($("#edit-message-template").html()));
       this.listen();
     }
 
@@ -13,8 +16,14 @@
       $(document).on('click', '[data-trigger="message"]', function(evt) {
         return _this.showMessage(evt);
       });
-      return $(document).on('click', '[data-trigger="upvote"]', function(evt) {
+      $(document).on('click', '[data-trigger="upvote"]', function(evt) {
         return _this.upvote(evt);
+      });
+      $(document).on('click', '[data-action="edit-message"]', function(evt) {
+        return _this.editMessage(evt);
+      });
+      return $(document).on('click', '[data-action="delete-message"]', function(evt) {
+        return _this.deleteMessage(evt);
       });
     };
 
@@ -61,6 +70,42 @@
           });
         }
       });
+    };
+
+    Message.prototype.deleteMessage = function(evt) {
+      var $target, href;
+      $target = $(evt.target);
+      href = $target.attr("href");
+      $.post(href, {}, function(response) {
+        if (response.ok) {
+          return $target.parents("[data-message-id]").remove();
+        }
+      });
+      evt.stopPropagation();
+      return evt.preventDefault();
+    };
+
+    Message.prototype.editMessage = function(evt) {
+      var $messageContainer, $messagePanel, messageId,
+        _this = this;
+      $messagePanel = $(evt.target).parents('[data-message-id]');
+      messageId = $messagePanel.attr('data-message-id');
+      $messageContainer = $messagePanel.find(".panel-body .message");
+      $messageContainer.html(this.editTemplate({
+        id: messageId
+      }));
+      $.getJSON("/ajax/post/" + messageId, function(response) {
+        return $messageContainer.find("textarea").val(response.data.text).autosize();
+      });
+      $messageContainer.find("form").on("ajax:success", function(evt, response) {
+        if (response.ok) {
+          return $messageContainer.html(response.data.html);
+        } else {
+          return alert("Failed to update.");
+        }
+      });
+      evt.stopPropagation();
+      return evt.preventDefault();
     };
 
     return Message;

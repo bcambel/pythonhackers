@@ -85,6 +85,7 @@ def upvote_message(message_id, current_user_id=None):
 
     Event.up_vote(current_user_id,message_id)
 
+
 def load_post_by_id(id):
     post = Post.objects.get(id=id)
     user_data = load_user(post.user_id)
@@ -95,3 +96,28 @@ def load_post_by_id(id):
 
 
     return post, user
+
+
+def delete_post(id, current_user):
+    post = Post.objects.get(id=id)
+    if post.user_id == current_user.id:
+        post.deleted = True
+        post.save()
+        # Schedule the event to delete..
+        return True
+    else:
+        return False
+
+
+def edit_post(id, text, current_user):
+    logging.warn(u"ID:{} Text:{}".format(id, text))
+    html = markdown_to_html(text)
+    post = Post.objects.get(id=id)
+    if post.user_id == current_user.id:
+        post.text = text
+        post.html = html
+        post.save()
+        return True
+    else:
+        return False
+

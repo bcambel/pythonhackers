@@ -39,10 +39,11 @@ class User
     loadProjects: () ->
         $projects = $("#projects")
 
+
         $.getJSON("/ajax/user/#{@user_nick}/projects",
             {_: new Date().getTime()},
             (data) =>
-                console.log(data)
+#                console.log(data)
                 $projects.html(@projectTemplate(
                     projects: data.projects
                 ))
@@ -51,10 +52,15 @@ class User
     loadTimeline: () ->
         $timeline = $("#timeline")
 
+
         $.getJSON("/ajax/user/#{@user_nick}/timeline",
             {_: new Date().getTime(), after_id: @lastMessage or -1},
             (data) =>
-                console.log(data)
+#                console.log(data)
+                current_user_id = if PythonHackers.session then PythonHackers.session.id else -1
+                _.each data.posts, (p) ->
+                    p.can_delete = p.user.id == current_user_id
+
                 $timeline.html(@postTemplate(
                     message: data.timeline
                 ))

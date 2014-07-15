@@ -119,7 +119,7 @@
       });
     },
     formSubmitter: function() {
-      return $('form[data-remote]').submit(function(evt) {
+      return $(document).on("submit", 'form[data-remote]', function(evt) {
         var $form, $this, action, postData;
         $form = $(this);
         evt.preventDefault();

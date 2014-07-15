@@ -23,7 +23,6 @@ class PostCounter(MBase):
 class Post(MBase):
     id = columns.BigInt(index=True, primary_key=True)
     user_id = columns.Integer(required=True, index=True, partition_key=True)
-    # TODO: would be a terrible update if the nick is changed ever.
     user_nick = columns.Text()
     text = columns.Text(required=True)
     html = columns.Text(required=False)
@@ -67,8 +66,7 @@ class Post(MBase):
                 'ago': self.ago,
                 'user': {'id': self.user_id, 'nick': self.user_nick},
                 'stats': self.__dict__.get('statistics', {}),
-                'upvoted': self.__dict__.get('upvoted', False),
-        }
+                'upvoted': self.__dict__.get('upvoted', False)}
 
     @property
     def ago(self):

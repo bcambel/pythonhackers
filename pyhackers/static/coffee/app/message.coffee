@@ -4,6 +4,7 @@
 
 class @Message
     constructor: ()->
+        @editTemplate = window.Handlebars.compile($.trim($("#edit-message-template").html()))
         do @listen
 
     listen : () ->
@@ -11,6 +12,11 @@ class @Message
             @showMessage(evt)
         $(document).on 'click', '[data-trigger="upvote"]', (evt) =>
             @upvote(evt)
+        $(document).on 'click', '[data-action="edit-message"]', (evt) =>
+            @editMessage(evt)
+
+        $(document).on 'click', '[data-action="delete-message"]', (evt) =>
+            @deleteMessage(evt)
 
     upvote: (evt) ->
         $(evt.target).css({color:'orange'})
@@ -43,6 +49,39 @@ class @Message
                         message:"Message has been sent"
                         type:"success"
                 )
+
+    deleteMessage: (evt) =>
+        $target = $(evt.target)
+        href = $target.attr("href")
+
+        $.post href, {} , (response) ->
+            if response.ok
+                $target.parents("[data-message-id]").remove()
+
+        evt.stopPropagation()
+        evt.preventDefault()
+
+    editMessage: (evt) =>
+
+        $messagePanel = $(evt.target).parents('[data-message-id]')
+        messageId = $messagePanel.attr('data-message-id')
+
+        $messageContainer = $messagePanel.find(".panel-body .message")
+
+        $messageContainer.html(@editTemplate({id: messageId}))
+
+        $.getJSON "/ajax/post/#{messageId}", (response) =>
+            $messageContainer.find("textarea").val(response.data.text).autosize()
+
+        $messageContainer.find("form").on "ajax:success", (evt, response) =>
+            if response.ok
+                $messageContainer.html(response.data.html)
+            else
+                alert("Failed to update.")
+
+        evt.stopPropagation()
+        evt.preventDefault()
+
 
 jQuery ->
     msg = new Message()

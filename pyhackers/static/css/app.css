@@ -309,6 +309,7 @@ h4 a {
 .message{
     display: inline-block;
     font-family: 'Questrial', sans-serif;
+    width:100%;
 }
 .message p{
     display: inline-block;
@@ -365,7 +366,6 @@ a i.orange{
 }
 
 .discussions .topic h3{
-
     display: inline-block;
     padding-top:5px;
     margin-top:0;
@@ -397,4 +397,8 @@ a i.orange{
 
 .post p{
     margin-bottom:1.7rem;
+}
+
+.post .panel-footer a {
+    margin-right:10px;
 }

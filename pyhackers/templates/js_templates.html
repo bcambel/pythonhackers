@@ -83,77 +83,39 @@
 </script>
 <script type="text/x-handlebars-template" id="message-template">
 {{#each message }}
-    <div class='panel panel-default'  data-message-id="{{ id }} " data-user-id="{{ user.id }}">
-    <div class='panel-heading' style='position:relative'>
-        <div class='front-action'>
-            <a href="#" data-trigger="upvote" class="orange" title='Upvote'>
-                <i class='fa fa-arrow-up fa-2x {{#if upvoted }}orange{{/if}}'></i>
-            </a>
-            <span>
-            {{#if stats.up_votes }}
-                <span class="label">{{ stats.up_votes }}</span>
-                {{else }}
-                <span class="label">-</span>
-                {{/if }}
+    <div class='panel panel-default post'  data-message-id="{{ id }}" data-user-id="{{ user.id }}">
+        <div class='panel-heading' style='position:relative'>
+            <div class='front-action'>
+                <a href="#" data-trigger="upvote" class="orange" title='Upvote'>
+                    <i class='fa fa-arrow-up fa-2x {{#if upvoted }}orange{{/if}}'></i>
+                </a>
+                <span>
+                {{#if stats.up_votes }}
+                    <span class="label">{{ stats.up_votes }}</span>
+                    {{else }}
+                    <span class="label">-</span>
+                    {{/if }}
+            </div>
+            <a href="/user/{{ user.nick }}">
+                @{{ user.nick }}</a> wrote <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
+
         </div>
-        <a href="/user/{{ user.nick }}">
-            @{{ user.nick }}</a> wrote <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
-
-    </div>
         <div class='panel-body'>
-
              <div class="message">
                         {{{ html }}}
-                    </div>
+             </div>
         </div>
         <div class='panel-footer hidden'>
             <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>
             <a href="#" data-action='repost' class='link-discuss'><i class="fa fa-retweet"></i>&nbsp;Repost</a>
                     <a href="/post/{{ id }}" class="link-discuss"><i class="fa fa-bars"></i>&nbsp;{{ comment }} Details</a>
                     {{#if can_delete }}
-                    <a href="#" data-action='delete' class='link-discuss'><i class="fa fa-times"></i>&nbsp;Delete</a>
+                    <a href="/ajax/post/{{ id }}/delete" data-action='delete-message' class='link-discuss'><i class="fa fa-times"></i>&nbsp;Delete</a>
+                    <a href="/post/{{ id }}/edit" data-action='edit-message' class='link-discuss'><i class="fa fa-edit"></i>&nbsp;Edit</a>
                     {{/if}}
         </div>
     </div>
 {{/each}}
-</script>
-
-
-<script type="text/x-handlebars-template" id="message-template2">
-    {{#each message }}
-     <div class='clearfix message-container' data-message-id="{{ id }}">
-        <div class='front-action col-lg-2'>
-            <a href="#" data-trigger="upvote" class="">
-                <i class='fa fa-arrow-up fa-2x {{#if upvoted }}orange{{/if}}'></i>
-            </a>
-                {{#if stats.up_votes }}
-                <span class="label">{{ stats.up_votes }}</span>
-                {{else }}
-                <span class="label">-</span>
-                {{/if }}
-        </div>
-        <div class='col-lg-10 link-box' style="padding-left:0;">
-            <div class='clear link-container row'>
-                <div class='col-lg-12'>
-                    <div class="message">
-                        {{{ html }}}
-                    </div>
-                </div>
-            </div>
-            <div class='row'>
-                <div class='col-lg-5'>
-                    <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
-                    <a href="/user/{{ user.nick }}"> by @{{ user.nick }}</a>
-                    <a href="/post/{{ id }}" class="link-discuss">{{ comment }} Details</a>
-                    <a href="#" data-action='delete' class='link-discuss'>Delete</a>
-                </div>
-
-                <div class="col-6" style="text-align: right">
-                </div>
-            </div>
-        </div>
-    </div>
-    {{/each}}
 </script>
 
 <script type="text/x-handlebars-template" id="discussion-template">
@@ -189,5 +151,13 @@
     </div>
     {{/each}}
 </script>
-
+<script type="text/x-handlebars-template" id="edit-message-template">
+<div class="clearfix" style="width:100%;">
+    <form method="POST" action="/ajax/post/{{ id }}/edit" data-remote="true">
+    <textarea name='message' class="form-control input" rows="2"
+                                      placeholder="An awesome reply is waiting here" style="width:99%;"></textarea>
+                                      <button type="submit" class="btn btn-primary">Post</button>
+                                      </form>
+</div>
+</script>
 {% endraw %}
