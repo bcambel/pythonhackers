@@ -35,7 +35,8 @@
         _this.lastMessage = data.discussion.last_message;
         current_user_id = PythonHackers.session ? PythonHackers.session.id : -1;
         _.each(data.posts, function(p) {
-          return p.can_delete = p.user.id === current_user_id;
+          p.can_delete = p.user.id === current_user_id;
+          return p.display_context = false;
         });
         $(".posts").append(_this.template({
           message: data.posts

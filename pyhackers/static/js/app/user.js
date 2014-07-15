@@ -77,8 +77,9 @@
       }, function(data) {
         var current_user_id;
         current_user_id = PythonHackers.session ? PythonHackers.session.id : -1;
-        _.each(data.posts, function(p) {
-          return p.can_delete = p.user.id === current_user_id;
+        _.each(data.timeline, function(p) {
+          p.can_delete = p.user.id === current_user_id;
+          return p.display_context = p.discussion_id === !null || p.discussion_id !== "" ? true : false;
         });
         $timeline.html(_this.postTemplate({
           message: data.timeline

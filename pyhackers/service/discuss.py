@@ -66,7 +66,11 @@ def load_discussion_counter(discussion_id):
     return counters
 
 
-def load_discussion(slug, discussion_id, current_user_id=None):
+def load_discussions_header(ids):
+    return Discussion.objects.filter(id__in=ids)
+
+
+def load_discussion(discussion_id, current_user_id=None):
     discussion = Discussion.objects.get(id=discussion_id)
     #discussion, disc_posts, users, counters = discussion_messages(discussion_id)
 

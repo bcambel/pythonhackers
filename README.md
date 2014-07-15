@@ -14,7 +14,3 @@ pip install -r requirements.txt
 ```
 
 That will do the job for you.
-
-
-
-

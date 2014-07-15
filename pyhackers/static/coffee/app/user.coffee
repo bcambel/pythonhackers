@@ -58,8 +58,10 @@ class User
             (data) =>
 #                console.log(data)
                 current_user_id = if PythonHackers.session then PythonHackers.session.id else -1
-                _.each data.posts, (p) ->
+
+                _.each data.timeline, (p) ->
                     p.can_delete = p.user.id == current_user_id
+                    p.display_context = if p.discussion_id is not null or p.discussion_id != "" then true else false
 
                 $timeline.html(@postTemplate(
                     message: data.timeline

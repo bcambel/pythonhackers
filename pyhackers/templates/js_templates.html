@@ -81,6 +81,7 @@
   </div>
 </div>
 </script>
+
 <script type="text/x-handlebars-template" id="message-template">
 {{#each message }}
     <div class='panel panel-default post'  data-message-id="{{ id }}" data-user-id="{{ user.id }}">
@@ -98,6 +99,9 @@
             </div>
             <a href="/user/{{ user.nick }}">
                 @{{ user.nick }}</a> wrote <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
+                {{#if display_context  }}
+                in <a href='/discuss/{{ discussion_slug }}/{{ discussion_id }}/'>{{ discussion_name }}</a>
+                {{/if}}
 
         </div>
         <div class='panel-body'>
@@ -106,8 +110,7 @@
              </div>
         </div>
         <div class='panel-footer hidden'>
-            <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>
-            <a href="#" data-action='repost' class='link-discuss'><i class="fa fa-retweet"></i>&nbsp;Repost</a>
+
                     <a href="/post/{{ id }}" class="link-discuss"><i class="fa fa-bars"></i>&nbsp;{{ comment }} Details</a>
                     {{#if can_delete }}
                     <a href="/ajax/post/{{ id }}/delete" data-action='delete-message' class='link-discuss'><i class="fa fa-times"></i>&nbsp;Delete</a>
@@ -117,6 +120,7 @@
     </div>
 {{/each}}
 </script>
+
 
 <script type="text/x-handlebars-template" id="discussion-template">
     {{#each discussions }}
@@ -161,3 +165,6 @@
 </div>
 </script>
 {% endraw %}
+
+{# <a href="#" data-action='reply' class='link-discuss'><i class="fa fa-reply"></i>&nbsp;Reply</a>  #}
+  {#          <a href="#" data-action='repost' class='link-discuss'><i class="fa fa-retweet"></i>&nbsp;Repost</a> #}

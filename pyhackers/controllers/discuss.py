@@ -22,9 +22,11 @@ def top():
 
 
 @discuss_app.route('<regex(".+"):slug>/<regex(".+"):id>')
-def discussion_ctrl(slug, id):
+@discuss_app.route('<regex(".+"):slug>/<regex(".+"):id>/')
+@discuss_app.route('<regex(".+"):id>/')
+def discussion_ctrl(id, slug=None):
 
-    discussion_data = load_discussion(slug, id, current_user_id())
+    discussion_data = load_discussion(id, current_user_id())
     discussion, disc_posts, message, counters, disc_user = discussion_data
     related_discussions = load_discussions()
 

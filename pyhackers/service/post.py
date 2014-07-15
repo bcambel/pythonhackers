@@ -13,6 +13,7 @@ def load_posts(post_ids, current_user_id=None):
     Of course also cache invalidation needs to be considered.
     """
     logging.warn("Ids===={}".format(post_ids))
+    # TODO: REWRITE THIS MESS!!
 
     # If list is not used, or any call that trigger __iter__ will end up with the query syntax
     # rather than the data itself.

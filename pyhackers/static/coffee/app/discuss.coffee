@@ -12,6 +12,8 @@ class @Discuss
 
         $(document).on("ajax:success","#discussion-message", @onDiscussionMessage)
         $(document).on("ajax:error","#discussion-message", @onDiscussionMessageError)
+#        $('#tags').tagsInput()
+
         window.setInterval(@reload, 30000)
         do @reload
 
@@ -26,6 +28,7 @@ class @Discuss
 
                 _.each data.posts, (p) ->
                     p.can_delete = p.user.id == current_user_id
+                    p.display_context = false
 
                 $(".posts").append(@template(
                     message: data.posts
