@@ -5,7 +5,7 @@ from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
 from pyhackers.model.action import Action, ActionType
 from pyhackers.db import DB as db
-from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost, UserDiscussion
+from pyhackers.model.cassandra.hierachy import User as CsUser, UserFollower, UserFollowing, UserProject, Project, UserPost, UserDiscussion, UserCounter
 from pyhackers.sentry import sentry_client
 from pyhackers.job_scheduler import worker_queue
 
@@ -159,6 +159,14 @@ def load_user(user_id, current_user=None):
         logging.warn(ex)
         sentry_client.captureException()
 
+    user_counts = UserCounter.objects.get(id=user_id)
+    if user_counts is not None:
+        count_info = user_counts.to_dict()
+
+        for key, counter in count_info.items():
+            setattr(user, "{}_count".format(key), counter)
+
+
     return user, user_followers, user_following
 
 
@@ -172,6 +180,7 @@ def get_profile_by_nick(nick):
 
     try:
         user = CsUser.filter(nick=nick).first()
+
     except Exception, ex:
         exception = True
         logging.exception(ex)
@@ -188,6 +197,8 @@ def get_profile_by_nick(nick):
 
     if user is None:
         return None
+
+
 
     return load_user(user.id)
 

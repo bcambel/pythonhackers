@@ -140,6 +140,17 @@ class UserCounter(MBase):
     up_vote_received = columns.Counter()
     down_vote_given = columns.Counter()
     down_vote_taken = columns.Counter()
+    messages = columns.Counter()
+
+    def to_dict(self):
+        return {
+            'followers': self.follower_count,
+            'following': self.following_count,
+            'karma': self.karma,
+            'upvotes': self.up_vote_received,
+            'downvotes': self.down_vote_taken,
+            'messages': self.messages
+        }
 
 
 class User(MBase):

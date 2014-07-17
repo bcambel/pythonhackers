@@ -98,9 +98,9 @@
                     {{/if }}
             </div>
             <a href="/user/{{ user.nick }}">
-                @{{ user.nick }}</a> wrote <a href="/post/{{ id }}" class="link-discuss">{{ ago }}</a>
+                @{{ user.nick }}</a> <span class="link-discuss">wrote</span> <a href="/post/{{ id }}" >{{ ago }}</a>
                 {{#if display_context  }}
-                in <a href='/discuss/{{ discussion_slug }}/{{ discussion_id }}/'>{{ discussion_name }}</a>
+                <span class="link-discuss">in</span> <a href='/discuss/{{ discussion_slug }}/{{ discussion_id }}/'>{{ discussion_name }}</a>
                 {{/if}}
 
         </div>

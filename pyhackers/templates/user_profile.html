@@ -9,31 +9,49 @@
     <div class='container'>
         <div class='col-lg-3 right-border fullheight'>
             <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title"> @{{ profile.nick }}</h3>
-  </div>
-  <div class="panel-body">
+                <div class="panel-heading">
+                    <h3 class="panel-title"> @{{ profile.nick }}</h3>
 
-            <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
 
-            <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
 
-            <hr/>
+                </div>
+                <div class="panel-body">
 
-            <form method="post" action="/ajax/followuser" data-remote>
-                <input type="hidden" name="id" value="{{ profile.id }}"/>
-                <input type="hidden" name="slug" value="{{ profile.nick }}"/>
-                <button type="submit" class='btn btn-success btn-md'>
-                    <i class='fa fa-heart'></i>&nbsp;&nbsp;&nbsp;Follow
-                </button>
-            </form>
-             </div>
-</div>
+                    <img src='{{ profile.pic_url }}&s=440' width="220" class='img-responsive img-rounded'/>
+
+                    <h3>{{ profile.first_name }} {{ profile.last_name }}</h3>
+
+                    {% if profile.id == current_user.id %}
+                    <span class="label label-danger">YOU</span>
+                    {% endif %}
+
+                    <p>
+                        <span class="">{{ profile.bio }}</span>
+                    </p>
+
+                    <hr/>
+
+                    <form method="post" action="/ajax/followuser" data-remote>
+                        <input type="hidden" name="id" value="{{ profile.id }}"/>
+                        <input type="hidden" name="slug" value="{{ profile.nick }}"/>
+                        <button type="submit" class='btn btn-success btn-md'>
+                            <i class='fa fa-heart'></i>&nbsp;&nbsp;&nbsp;Follow
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Messages: <span class="pull-right">{{ profile.messages_count }}</span>
+                        </h3>
+                        </div>
+                </div>
             <div class="clearfix">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Followers</h3>
+                        <h3 class="panel-title">Followers: <span class="pull-right">{{ profile.followers_count }}</span>
+                        </h3>
                     </div>
                     <div class="panel-body">
                         {{ image_list_macro(followers) }}
@@ -45,7 +63,8 @@
             <div class="clearfix">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Following</h3>
+                        <h3 class="panel-title">Following: <span class="pull-right">{{ profile.following_count }}</span>
+                        </h3>
                     </div>
                     <div class="panel-body">
                         {{ image_list_macro(following) }}
@@ -57,11 +76,11 @@
 
         </div>
         <div class='col-lg-8 left-border' style="padding-left:50px;">
-{#            <div class="panel panel-default">#}
-{#  <div class="panel-heading">#}
-{#    <h3 class="panel-title">Panel title</h3>#}
-{#  </div>#}
-{#  <div class="panel-body">#}
+            {#            <div class="panel panel-default">#}
+            {#  <div class="panel-heading">#}
+            {#    <h3 class="panel-title">Panel title</h3>#}
+            {#  </div>#}
+            {#  <div class="panel-body">#}
 
 
             <ul id="user-tab" class="nav nav-tabs">
@@ -88,9 +107,9 @@
                         </div>
                     </div>
                 </div>
-{#            </div>#}
-{#        </div>#}
-</div>
+                {#            </div>#}
+                {#        </div>#}
+            </div>
         </div>
     </div>
 {% endblock %}
