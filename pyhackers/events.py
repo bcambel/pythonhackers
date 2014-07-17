@@ -16,7 +16,7 @@ class Event(object):
         pass
 
     @classmethod
-    def message(cls, user, message, context):
+    def message(cls, user, message, context, **kwargs):
         """A user sent a message"""
         q.enqueue(new_message_worker, args=(user, message, context), result_ttl=0)
         pass

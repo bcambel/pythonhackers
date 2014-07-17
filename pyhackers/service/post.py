@@ -1,10 +1,11 @@
 import logging
 from cqlengine.query import DoesNotExist
 from pyhackers.idgen import idgen_client
-from pyhackers.model.cassandra.hierachy import Post, PostVote, PostCounter
+from pyhackers.model.cassandra.hierachy import Post, PostVote, PostCounter, PostReply
 from pyhackers.events import Event
 from pyhackers.utils import markdown_to_html
-from pyhackers.service.user import load_user
+from pyhackers.service.user import load_user, load_user_profiles
+
 
 def load_posts(post_ids, current_user_id=None):
     """
@@ -44,7 +45,7 @@ def load_posts(post_ids, current_user_id=None):
     return post_objects
 
 
-def new_post(text, code=None, current_user_id=None, post_id=None, nick=None):
+def new_post(text, code=None, current_user_id=None, post_id=None, nick=None, reply_to_id=None):
     logging.warn("Post is=>{}".format(post_id))
 
     html = markdown_to_html(text)
@@ -55,9 +56,13 @@ def new_post(text, code=None, current_user_id=None, post_id=None, nick=None):
     message.html = html
     message.user_id = current_user_id
     message.user_nick = nick
+    message.reply_to_id = reply_to_id
     message.save()
 
-    Event.message(current_user_id, message.id, None)
+    if reply_to_id is not None:
+        PostReply.create(reply_post_id=message.id,post_id=reply_to_id)
+
+    Event.message(current_user_id, message.id, None, reply_to_id=None)
 
 
 def upvote_message(message_id, current_user_id=None):
@@ -97,6 +102,21 @@ def load_post_by_id(id):
 
 
     return post, user
+
+def load_post_replies(id, current_user):
+    post_replies = PostReply.objects.filter(post_id=id)
+    post_ids = [post.reply_post_id for post in post_replies]
+    posts = load_posts(post_ids, current_user)
+
+    user_ids = [p.user_id for p in posts]
+    users = load_user_profiles(user_ids)
+
+    for post in posts:
+        u = filter(lambda x: x.id == post.user_id, users)
+
+        post.user = u[0].to_dict() if u is not None and len(u) > 0 else None
+
+    return posts
 
 
 def delete_post(id, current_user):

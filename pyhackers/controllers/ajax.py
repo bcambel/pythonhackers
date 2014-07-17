@@ -26,8 +26,9 @@ def new_message():
     logging.warn(request.form)
     message = request.form.get('message')
     code = request.form.get("code")
+    reply_to_id = request.form.get("reply_to_id", None)
 
-    new_post(message, code, current_user_id(), nick=current_user.nick)
+    new_post(message, code, current_user_id(), nick=current_user.nick, reply_to_id=reply_to_id)
     return jsonify({'ok': 1})
 
 
