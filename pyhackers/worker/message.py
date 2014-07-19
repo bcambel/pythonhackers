@@ -1,4 +1,5 @@
 import logging
+from cqlengine.query import DoesNotExist
 from pyhackers.model.cassandra.hierachy import (
     User as CsUser, Post as CsPost, UserPost as CsUserPost, UserFollower as CsUserFollower,
     UserTimeLine, UserCounter)
@@ -39,7 +40,11 @@ class MessageWorker():
     def update_counts(self):
         """Update user related counters"""
         # TODO: Exception Handle, create if not found. Move to separate
-        user_counter = UserCounter.objects.get(id=self.user_id)
+        try:
+            user_counter = UserCounter.objects.get(id=self.user_id)
+        except DoesNotExist:
+            user_counter = UserCounter.create(id=self.user_id)
+
         user_counter.messages += 1
         user_counter.save()
 
@@ -53,7 +58,6 @@ class MessageWorker():
 
         for follower in user_followers_q:
             UserTimeLine.create(user_id=follower.follower_id, post_id=post_id)
-
             count += 1
 
         logging.warn("Message [{}-{}] distributed to {} followers".format(self.message_id, post_id, count))

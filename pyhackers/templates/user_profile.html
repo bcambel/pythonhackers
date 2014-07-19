@@ -29,15 +29,24 @@
                         <span class="">{{ profile.bio }}</span>
                     </p>
 
+
+                    {% if profile.id != current_user.id %}
                     <hr/>
 
                     <form method="post" action="/ajax/followuser" data-remote>
                         <input type="hidden" name="id" value="{{ profile.id }}"/>
                         <input type="hidden" name="slug" value="{{ profile.nick }}"/>
-                        <button type="submit" class='btn btn-success btn-md'>
-                            <i class='fa fa-heart'></i>&nbsp;&nbsp;&nbsp;Follow
+                        {% if not following_user %}
+                        <button type="submit" class='btn btn-info btn-md'>
+                            <i class='fa fa-arrow'></i>&nbsp;&nbsp;&nbsp;Follow
                         </button>
+                        {% else %}
+                        <button type="submit" class='btn btn-success btn-md'>
+                            <i class='fa fa-check'></i>&nbsp;&nbsp;&nbsp;Following
+                        </button>
+                        {% endif %}
                     </form>
+                    {% endif %}
                 </div>
             </div>
             <div class="panel panel-default">

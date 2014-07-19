@@ -306,15 +306,23 @@ def user_profile(nick, module=None):
         active_module = module if module in ['timeline', 'projects', 'discussions'] else active_module
 
     _ = get_profile_by_nick(nick)
+    following_user = False
 
     if _ is not None:
         user, followers, following = _
+        if not current_user.is_anonymous:
+            follower_ids = [f.get('id') for f in followers]
+
+            if current_user.id in follower_ids:
+                following_user = True
+
     else:
         return abort(404)
 
     return render_base_template("user_profile.html",
                                 profile=user, followers=followers,
                                 following=following,
+                                following_user = following_user,
                                 module=active_module)
 
 
