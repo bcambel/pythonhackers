@@ -280,6 +280,9 @@ class UserFollowing(MBase):
 
 
 class ProjectFollower(MBase):
+    """
+    A user following a project
+    """
     project_id = columns.Integer(primary_key=True)
     user_id = columns.Integer(primary_key=True)
     created_at = columns.BigInt(default=unix_time(dt.utcnow()))
@@ -303,11 +306,17 @@ class ChannelTimeLine(MBase):
 
 
 class ProjectTimeLine(MBase):
+    """
+    All the messages that mentions the project or related discussion messages
+    """
     project_id = columns.Integer(primary_key=True)
     post_id = columns.BigInt(primary_key=True)
 
 
 class PostVote(MBase):
+    """
+    All upvotes/downvotes sent to a post
+    """
     post_id = columns.BigInt(primary_key=True, partition_key=True)
     user_id = columns.Integer(primary_key=True)
     positive = columns.Boolean(default=True)
@@ -315,6 +324,9 @@ class PostVote(MBase):
 
 
 class PostReply(MBase):
+    """
+    Reply post ID to a post
+    """
     post_id = columns.BigInt(primary_key=True)
     reply_post_id = columns.BigInt(primary_key=True)
 
@@ -339,6 +351,9 @@ class GithubProject(MBase):
 
 
 class GithubUser(MBase):
+    """
+    Users that are part of the Github world.
+    """
     nick = columns.Text(primary_key=True)
     id = columns.Integer(index=True)
     email = columns.Text()
@@ -373,3 +388,4 @@ class GithubEvent(MBase):
     repo = columns.Text()
     created_at = columns.Float()
     payload = columns.Text()
+

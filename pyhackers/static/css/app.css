@@ -383,6 +383,9 @@ a i.orange{
     padding-left:5px;
 }
 
+.discussions table.table tbody tr td a{
+    text-decoration: none ;
+}
 
 .modal .form-group{
     margin-right:0;
