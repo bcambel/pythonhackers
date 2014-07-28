@@ -1,8 +1,9 @@
 import logging
 from cqlengine.query import DoesNotExist
+from pyhackers.idgen import idgen_client
 from pyhackers.model.cassandra.hierachy import (
     User as CsUser, Post as CsPost, UserPost as CsUserPost, UserFollower as CsUserFollower,
-    UserTimeLine, UserCounter)
+    UserTimeLine, UserCounter, Story, StoryTypes, Feed)
 
 from pyhackers.util.textractor import Parser
 
@@ -30,11 +31,13 @@ class MessageWorker():
         logging.warn("Process: Message=>{}".format(self.message.id))
 
         post_id = self.message_id
+        story_id = idgen_client.get()
 
         CsUserPost.create(user_id=self.user_id, post_id=post_id)
+        Story.create(id=story_id, actor=self.user_id, type=StoryTypes.POST, target=self.message_id)
         user_followers_q = CsUserFollower.objects.filter(user_id=self.user_id).all()
 
-        self.distribute_messages(user_followers_q, post_id)
+        self.distribute_messages(user_followers_q, post_id, story_id)
         self.update_counts()
 
     def update_counts(self):
@@ -48,7 +51,7 @@ class MessageWorker():
         user_counter.messages += 1
         user_counter.save()
 
-    def distribute_messages(self, user_followers_q, post_id):
+    def distribute_messages(self, user_followers_q, post_id, story_id):
         """
         Pushing into the follower's stream
         big guys do it in batch ( 500 followers or so ) we are brave for now.
@@ -58,6 +61,7 @@ class MessageWorker():
 
         for follower in user_followers_q:
             UserTimeLine.create(user_id=follower.follower_id, post_id=post_id)
+            Feed.create(user=follower.follower_id, actor=self.user_id, story=story_id)
             count += 1
 
         logging.warn("Message [{}-{}] distributed to {} followers".format(self.message_id, post_id, count))

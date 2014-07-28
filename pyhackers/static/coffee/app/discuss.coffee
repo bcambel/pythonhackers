@@ -40,9 +40,9 @@ class @Discuss
     hideShowTrick: () =>
 
         $("[data-message-id]").on("mouseenter", () ->
-            $(this).find(".panel-footer").removeClass("hidden")
+            $(this).addClass("activated").find(".panel-footer").removeClass("hidden")
         ).on("mouseleave", () ->
-            $(this).find(".panel-footer").addClass("hidden")
+            $(this).removeClass("activated").find(".panel-footer").addClass("hidden")
         )
 
     onDiscussionMessageError: (event) ->

@@ -389,3 +389,34 @@ class GithubEvent(MBase):
     created_at = columns.Float()
     payload = columns.Text()
 
+
+class StoryTypes:
+    POST = 1
+    FOLLOW = 2
+    STAR = 4
+    MENTION = 8
+    DISCUSS = 16
+    JOIN = 32
+
+
+class Story(MBase):
+    """
+    A story is an event happened in the network.
+    User A followed User B
+    User A starred a project.
+    User A posted a message.
+    User A started a discussion
+    User A mentioned User B in a post(message) - What to do for multiple mentions ?
+    """
+    id = columns.BigInt(primary_key=True)
+    actor = columns.Integer(partition_key=True)
+    type = columns.Integer(required=True)
+    target = columns.BigInt()
+    payload = columns.Map(columns.Ascii, columns.Ascii)
+    created_at = columns.BigInt(default=unix_time(dt.utcnow()))
+
+
+class Feed(MBase):
+    story = columns.BigInt(primary_key=True)
+    user = columns.Integer(primary_key=True)
+    actor = columns.Integer(primary_key=True)

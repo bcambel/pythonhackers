@@ -1,9 +1,8 @@
-from rq import Queue, Connection
 from pyhackers.worker.message import new_message_worker
 from pyhackers.job_scheduler import worker_queue as q
 
 
-class Event(object):
+class Event:
 
     @classmethod
     def new_user(cls, user):

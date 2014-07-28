@@ -103,10 +103,10 @@ def load_post_by_id(id):
 
     return post, user
 
-def load_post_replies(id, current_user):
+def load_post_replies(id, current_user_id):
     post_replies = PostReply.objects.filter(post_id=id)
     post_ids = [post.reply_post_id for post in post_replies]
-    posts = load_posts(post_ids, current_user)
+    posts = load_posts(post_ids, current_user_id)
 
     user_ids = [p.user_id for p in posts]
     users = load_user_profiles(user_ids)
