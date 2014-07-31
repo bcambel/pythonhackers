@@ -1,5 +1,6 @@
 import logging
 from cqlengine.query import DoesNotExist
+from pyhackers.events import Event
 from pyhackers.worker.hipchat import notify_registration
 from pyhackers.model.user import SocialUser, User
 from pyhackers.model.os_project import OpenSourceProject
@@ -103,6 +104,7 @@ def follow_user(user_id, current_user):
     if success:
         UserFollower.create(user_id=user_id, follower_id=current_user.id)
         UserFollowing.create(user_id=current_user.id, following_id=user_id)
+        Event.follow_user(current_user.id, user_id)
 
     return success
 

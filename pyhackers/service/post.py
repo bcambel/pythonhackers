@@ -75,6 +75,8 @@ def upvote_message(message_id, current_user_id=None):
         already_vote = PostVote.objects.get(post_id=message_id, user_id=current_user_id)
         if already_vote.positive:
             return
+        else:
+            Event.up_vote(current_user_id, message_id)
     except DoesNotExist, dne:
         pass
 

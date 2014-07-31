@@ -397,7 +397,7 @@ class StoryTypes:
     MENTION = 8
     DISCUSS = 16
     JOIN = 32
-
+    UP_VOTE = 64
 
 class Story(MBase):
     """

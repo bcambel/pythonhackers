@@ -1,3 +1,5 @@
+from pyhackers.idgen import idgen_client
+from pyhackers.model.cassandra.hierachy import Story, StoryTypes
 from pyhackers.worker.message import new_message_worker
 from pyhackers.job_scheduler import worker_queue as q
 
@@ -7,28 +9,32 @@ class Event:
     @classmethod
     def new_user(cls, user):
         """A user is registered"""
+        Story.create(id=idgen_client.get(), actor=user.id, type=StoryTypes.JOIN)
         pass
 
     @classmethod
     def follow_user(cls, user, following):
         """A user followed another user"""
-        pass
+        following_id = following
+        Story.create(id=idgen_client.get(), actor=user.id, type=StoryTypes.FOLLOW, target=following_id)
+        # fetch all the followers of the actors.
+        # Let them know that our actor started to follow somebody.
 
     @classmethod
     def message(cls, user, message, context, **kwargs):
         """A user sent a message"""
         q.enqueue(new_message_worker, args=(user, message, context), result_ttl=0)
-        pass
 
     @classmethod
     def follow_project(cls, user, project):
         """A user started to follow a project"""
-        pass
+        Story.create(id=idgen_client.get(), actor=user.id, type=StoryTypes.STAR, target=project)
 
     @classmethod
     def discussion(cls, user, discussion):
         """A User started a discussion"""
-        pass
+        discussion_id = discussion
+        Story.create(id=idgen_client.get(), actor=user.id, type=StoryTypes.DISCUSS, target=discussion_id)
 
     @classmethod
     def reply(cls, user, context, message, reply_message):
@@ -38,6 +44,9 @@ class Event:
     @classmethod
     def up_vote(cls, user, message):
         """A User up-voted a message(or discussion)"""
+        message_id = message
+        user_id = user
+        Story.create(id=idgen_client.get(), actor=user_id, type=StoryTypes.UP_VOTE, target=message_id)
         pass
 
     @classmethod
@@ -70,11 +79,3 @@ class Event:
         #dc = DiscussionCounter.get(id=discussion_id)
         #dc.view_count += 1
         #dc.save()
-
-# { type: FollowUser, user: { id: 3 }, target: { type: user, id : 4 } }
-# { type: FollowProject, user: { id: 3 }, target: { type: project, id : 5 } }
-# { type: FollowChannel, user: { id: 3 }, target: { type: channel, id : 5 } }
-# { type: NewMessage, user: { id: 3 }, target: { type: message, id : 5 } }
-# { type: NewChannelMessage, user: { id: 3 }, target: { type: project, id : 5 } }
-# { type: NewDiscussion, user: { id: 3 }, target: { type: discussion, id : 5 } }
-# { type: DiscussionComment, user: { id: 3 }, discussion: { id: 1020 } target: { type: message, id : 5 } }
