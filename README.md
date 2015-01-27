@@ -1,7 +1,6 @@
 # PythonHackers
 
-
-![u](https://travis-ci.org/pythonhackers/pythonhackers.png?branch=master)
+## DEVELOPMENT MOVED TO http://github.com/bcambel/hackersome
 
 The open source Python community project at http://pythonhackers.com
 
